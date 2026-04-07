@@ -199,6 +199,10 @@ Do you already use an agent with built-in sandboxing?
         └── Any K8s cluster → agent-sandbox (kubernetes-sigs)
 ```
 
+## Safety & Alignment Research
+
+If you're doing AI safety research, RL training, capability evaluation, or adversarial red-teaming, see **[Sandboxing for AI Safety & Alignment Research](docs/safety-research.md)** — these contexts have fundamentally different containment requirements from general agent use.
+
 ## Full Landscape
 
 For a comprehensive technical comparison of all sandbox options — including cloud services, standalone tools, VM runtimes, OS primitives, and WebAssembly runtimes — see the full landscape below.

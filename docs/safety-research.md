@@ -1,0 +1,102 @@
+# Sandboxing for AI Safety & Alignment Research
+
+This guide covers sandbox selection for safety and alignment research, including RL training, capability evaluation, and adversarial red-teaming. These contexts have fundamentally different containment requirements — what's overkill for RL training may be dangerously insufficient for red-teaming.
+
+## Three research contexts
+
+### RL training
+
+**Goal:** Run many parallel agent instances, reset environments quickly, compute rewards.
+
+**Threat model:** Agents are typically small and early in training. Sophisticated escape attempts are unlikely. The main risks are accidental resource exhaustion and experiment contamination (shared state between runs).
+
+**What matters most:**
+- Fast environment reset (sub-second)
+- Massive parallelism (thousands of concurrent instances)
+- GPU access for training
+- Experiment isolation (independent state per run)
+- Reward computation outside the sandbox
+
+**Containment level:** Process-level or container isolation is typically sufficient. Hardware VM isolation adds latency and overhead that directly slows training loops.
+
+### Capability evaluation
+
+**Goal:** Test trained agents against benchmarks and tasks in controlled environments.
+
+**Threat model:** The agent is capable and may attempt unexpected actions, but isn't specifically optimized to escape. You need reliable containment and good observability of what the agent tried.
+
+**What matters most:**
+- Reliable filesystem and network isolation
+- Observability — what did the agent attempt, including denied actions?
+- Reproducibility — snapshot and replay scenarios
+- Credential isolation — eval environments often need API access, but the agent shouldn't see real keys
+
+**Containment level:** Hardened containers (gVisor, seccomp + read-only rootfs + dropped capabilities) or microVMs. Process-level sandboxing may be insufficient depending on agent capability.
+
+### Adversarial red-teaming
+
+**Goal:** Deliberately probe whether a capable agent can escape containment, exfiltrate data, or subvert its environment.
+
+**Threat model:** The agent is actively trying to escape. This is the hardest containment problem. Research has shown that frontier LLMs can reliably escape *misconfigured* Docker containers — but note the word "misconfigured." Properly hardened containers with gVisor are meaningfully different from default Docker, and the specific configuration matters more than the broad category.
+
+**What matters most:**
+- Strongest available isolation boundary
+- Escape detection and logging (not just prevention)
+- Side-channel awareness — even with perfect filesystem/network isolation, timing, cache state, and resource usage patterns are potential information channels
+- Audit trail with integrity guarantees the agent can't tamper with
+
+**Containment level:** Hardware VM isolation (Firecracker, Kata) is the minimum for studying highly capable agents. For the most sensitive work, consider dedicated physical machines or NUMA-domain pinning to limit cache-based side channels — no software-only sandbox fully addresses information leakage.
+
+## Sandbox options by research context
+
+### RL training
+
+| Need | Options | Trade-offs |
+|------|---------|------------|
+| Fast resets | Firecracker snapshots (~28ms restore), Zeroboot COW forking (~0.8ms) | Zeroboot is much faster but unproven — **known CSPRNG concern**: random state is shared across COW forks, so experiments may not be independent unless you explicitly reseed. This can silently invalidate results. |
+| GPU + parallelism | Modal (50k+ concurrent, GPU support) | Cloud-only, closed source. The only sandbox option with GPU support. |
+| Eval + RL framework | OpenSandbox (Alibaba) | Explicitly designed for evaluation and RL training with multi-language SDKs. Very new (March 2026) — verify that RL support meets your specific needs before committing. |
+| Self-hosted scale | Firecracker + custom orchestration | Battle-tested (powers AWS Lambda) but requires building your own orchestration layer. No GPU passthrough. |
+
+**Reward computation architecture:** The reward signal must be computed in a trusted environment that observes sandbox state, not inside the sandbox where the agent could influence it. An agent that can affect its own reward — directly or via side effects visible to the reward function — is a fundamental alignment failure mode. Design your sandbox architecture with a clear trust boundary: the agent runs inside; the reward function runs outside, reading only a defined observation interface.
+
+### Capability evaluation
+
+| Need | Options | Trade-offs |
+|------|---------|------------|
+| Syscall-level observability | gVisor | Intercepts every syscall in user space via its Sentry kernel. You can instrument and log all agent-OS interaction. Practical caveat: logs are verbose — you'll need filtering infrastructure to extract meaningful signals. |
+| Credential isolation | nono | Credential proxy ensures API keys never enter the sandbox — the agent uses services without seeing the actual keys. Directly tests whether agents attempt credential exfiltration. |
+| Audit trail | nono | Cryptographic audit chain with Sigstore attestation. The agent cannot tamper with the record of what it did. |
+| Reproducibility | Firecracker snapshots, Fly Sprites (persistent) | Snapshot before evaluation, restore to replay. Fly Sprites offers persistent 100GB NVMe if you need durable eval environments. |
+| Controlled capability exposure | nono (L7 API filtering), Wasm/WASI (capability grants) | Gradually increase what the agent can access and study behavioral changes at each level. |
+
+### Adversarial red-teaming
+
+| Need | Options | Trade-offs |
+|------|---------|------------|
+| Hardware VM containment | Firecracker (with jailer), Kata Containers | Separate kernel per sandbox. Firecracker's jailer adds cgroup, namespace, and seccomp containment around the VMM process itself — defense in depth. |
+| Escape detection | gVisor (denied syscall logging), nono (boundary violation recording) | Most sandboxes silently block forbidden actions. These record them — critical for studying *what* the agent tried, not just that it was stopped. |
+| Network monitoring | nono (L7 filtering + logging), Anthropic srt (proxy with interactive approval) | See exactly what network endpoints the agent attempts to reach, including denied requests. |
+| Side-channel mitigation | Dedicated physical machines, NUMA pinning | Software-only sandboxes share CPU cache hierarchy. For studying highly capable agents, consider hardware-level isolation. No sandbox in this repo fully addresses information leakage. |
+
+## Maturity vs. security properties
+
+Several tools with excellent *design* for safety research have immature *implementations*. Both facts deserve equal weight:
+
+| Tool | Security properties | Maturity caveat |
+|------|-------------------|-----------------|
+| nono | Credential proxy, atomic rollback, cryptographic audit, capability-based isolation | Early alpha, not yet security-audited. Using an unaudited tool to contain agents whose behavior you're studying because it's uncertain is a tension worth acknowledging. |
+| Zeroboot | Sub-millisecond VM creation, hardware isolation | Not production-hardened. CSPRNG state sharing across forks is a research-correctness risk for RL. |
+| OpenSandbox | RL + evaluation framework, multi-language SDKs | Very new (March 2026). RL support claims are from Alibaba's documentation — verify independently. |
+| Firecracker | Hardware VM, snapshot/restore, jailer | Mature and battle-tested (AWS Lambda/Fargate). The safest bet for production safety research infrastructure. |
+| gVisor | Syscall interception, user-space kernel | Mature (Google, GKE). Production-proven. Observability requires custom instrumentation — it's a security runtime, not a research tool. |
+
+## What's missing from the landscape
+
+1. **No sandbox is designed for adversarial containment by default.** All assume the agent is trying to be helpful. A purpose-built safety research sandbox would treat the agent as potentially adversarial — monitoring escape attempts, alerting on anomalous behavior, recording all boundary interactions.
+
+2. **Escape study tooling doesn't exist.** Researchers studying escape behavior need to observe and replay escape attempts, not just prevent them. gVisor's syscall logging is the closest thing, but there's no turnkey "escape research sandbox."
+
+3. **Capability escalation isn't a first-class feature.** Safety research often involves gradually increasing capabilities to study behavioral transitions. You'd need to script this yourself using nono's capability model or WASI grants.
+
+4. **Side channels are unaddressed.** Every software sandbox in this repo shares some hardware state with the host. For the most capable agents, this may matter.
