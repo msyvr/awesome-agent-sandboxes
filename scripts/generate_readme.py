@@ -27,7 +27,6 @@ VALID_CATEGORIES = {
     "kubernetes",
     "dev-environment",
     "abstraction",
-    "enterprise",
     "vm-runtime",
     "os-primitive",
     "wasm-runtime",
@@ -80,7 +79,6 @@ CATEGORY_ORDER = [
     ("kubernetes", "Kubernetes-Native"),
     ("dev-environment", "Development Environments"),
     ("abstraction", "Abstraction Layers"),
-    ("enterprise", "Enterprise / Multi-Purpose"),
     # Building blocks
     ("vm-runtime", "VM & Container Runtimes"),
     ("os-primitive", "OS-Level Sandboxing"),
@@ -96,7 +94,6 @@ CATEGORY_INTROS = {
     "kubernetes": "Sandbox solutions designed for Kubernetes clusters.",
     "dev-environment": "Development environment platforms that can be repurposed for agent isolation. These aren't agent-specific but provide usable isolation out of the box.",
     "abstraction": "SDKs and frameworks that abstract across multiple sandbox providers.",
-    "enterprise": "Broad-scope platforms covering agent sandboxing alongside evaluation, orchestration, or other capabilities.",
     "vm-runtime": "The underlying VM and container runtimes that sandbox products are built on. Use these if you're building your own sandbox infrastructure.",
     "os-primitive": "OS-level isolation primitives. These are building blocks — most users interact with them indirectly through higher-level tools.",
     "wasm-runtime": "WebAssembly runtimes providing language-level sandboxing. Architecturally elegant but require compiling tools to Wasm.",

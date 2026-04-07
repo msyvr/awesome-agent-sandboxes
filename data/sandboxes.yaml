@@ -268,7 +268,7 @@
   deployment_model: cloud
 
 - name: Koyeb
-  category: cloud-managed
+  category: dev-environment
   maintainer: Koyeb
   open_source: false
   license: null
@@ -844,7 +844,7 @@
 # =============================================================================
 
 - name: OpenSandbox
-  category: enterprise
+  category: standalone
   maintainer: Alibaba
   open_source: true
   license: null
@@ -870,7 +870,7 @@
   deployment_model: self-hosted
 
 - name: NanoClaw
-  category: enterprise
+  category: abstraction
   maintainer: Lazer and Gavriel Cohen
   open_source: true
   license: MIT
