@@ -383,7 +383,7 @@
   deployment_model: built-in
 
 - name: Docker Sandboxes
-  category: agent-integrated
+  category: standalone
   maintainer: Docker
   open_source: false
   license: null
