@@ -1,0 +1,1385 @@
+# Canonical structured data for all sandbox entries.
+# See the plan for schema documentation and controlled vocabularies.
+#
+# isolation_type values: kvm, microvm, container, gvisor, kata, v8-isolate,
+#   user-namespace, seatbelt, landlock, seccomp, wasm, process
+#
+# isolation_tier values: hardware-vm, microvm, container, process, wasm
+# adoption_effort values: zero-config, sign-up, install, compose
+# deployment_model values: cloud, local, built-in, self-hosted, kubernetes
+
+# =============================================================================
+# Cloud Managed Sandboxes
+# =============================================================================
+
+- name: E2B
+  category: cloud-managed
+  maintainer: E2B
+  open_source: true
+  license: Apache-2.0
+  url: https://e2b.dev
+  repo_url: https://github.com/e2b-dev/E2B
+  description: Cloud sandbox platform for AI agents using Firecracker microVMs via API/SDK.
+  isolation_type: [microvm]
+  capabilities:
+    - Firecracker microVM isolation
+    - ~150ms startup
+    - Filesystem isolation
+    - Network control
+    - Python/JS/TS SDKs
+    - Custom templates
+  requirements:
+    - Cloud-hosted managed service
+    - Free tier available
+  limitations:
+    - 24-hour session limit
+    - Cloud-only
+    - Ephemeral by default
+    - No GPU support
+  notes: >-
+    One of the earliest and most widely adopted agent sandbox platforms.
+    Docker MCP Catalog partnership.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Daytona
+  category: cloud-managed
+  maintainer: Daytona
+  open_source: true
+  license: Apache-2.0
+  url: https://www.daytona.io
+  repo_url: https://github.com/daytonaio/daytona
+  description: Docker/OCI container-based cloud sandboxes with native state management.
+  isolation_type: [container]
+  capabilities:
+    - Docker container isolation
+    - <60ms provisioning
+    - Configurable resources
+    - State management (stop/resume/archive)
+    - Python/JS/TS SDKs
+  requirements:
+    - Cloud-hosted managed service
+    - Usage-based pricing
+  limitations:
+    - Container-based (shared kernel, weaker isolation than microVMs)
+    - Newer platform
+  notes: >-
+    Pivoted from CDE space (Feb 2025). $31M Series A (Feb 2026).
+    State management (pause/resume) is a key differentiator vs. ephemeral-only platforms.
+  isolation_tier: container
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Modal
+  category: cloud-managed
+  maintainer: Modal Labs
+  open_source: false
+  license: null
+  url: https://modal.com/products/sandboxes
+  repo_url: null
+  description: Serverless cloud platform with sandbox product and best-in-class GPU support.
+  isolation_type: [microvm]
+  capabilities:
+    - Sub-second starts
+    - GPU workloads
+    - Network tunnels
+    - Per-sandbox egress policies
+    - 50k+ concurrent sessions
+  requirements:
+    - Cloud-hosted
+    - Python SDK
+    - Usage-based pricing
+  limitations:
+    - Closed source
+    - Cloud-only
+    - Python-centric SDK
+  notes: >-
+    Only major sandbox platform with GPU support — unique differentiator for
+    ML/AI workloads that need compute.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Runloop
+  category: cloud-managed
+  maintainer: Runloop
+  open_source: false
+  license: null
+  url: https://runloop.ai
+  repo_url: null
+  description: Enterprise-grade sandbox infrastructure (Devboxes) with SOC 2 compliance and 10k+ parallel instances.
+  isolation_type: [microvm]
+  capabilities:
+    - Blueprints and Snapshots
+    - Isolated cloud dev environments
+    - SOC 2 compliance
+    - High concurrency (10k+ parallel)
+  requirements:
+    - Cloud-hosted
+    - Enterprise pricing
+  limitations:
+    - Closed source
+    - Enterprise-focused
+  notes: >-
+    Enterprise compliance focus (SOC 2) differentiates from developer-oriented
+    alternatives. GA May 2025.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Northflank
+  category: cloud-managed
+  maintainer: Northflank
+  open_source: false
+  license: null
+  url: https://northflank.com
+  repo_url: null
+  description: Production-grade sandbox infrastructure using Kata Containers and gVisor at 2M+ isolated workloads/month.
+  isolation_type: [kata, gvisor]
+  capabilities:
+    - MicroVM via Kata + gVisor
+    - Unlimited session duration
+    - Any OCI image
+    - BYOC (bring your own cloud) deployment
+    - Resource limits
+    - Network controls
+  requirements:
+    - Cloud-hosted or BYOC
+    - Paid platform
+  limitations:
+    - Closed source
+    - More complex setup than simpler platforms
+  notes: >-
+    BYOC option is unusual in this space — most cloud sandboxes are
+    single-provider. Production-proven at scale (2M+ workloads/month).
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Fly Sprites
+  category: cloud-managed
+  maintainer: Fly.io
+  open_source: false
+  license: null
+  url: https://sprites.dev
+  repo_url: null
+  description: Persistent Firecracker microVMs for AI agent sessions with 100GB NVMe per sprite.
+  isolation_type: [microvm]
+  capabilities:
+    - Firecracker microVM isolation
+    - Persistent 100GB NVMe storage
+    - Checkpoint/restore (~300ms warm)
+    - Stateful across sessions
+    - ~$0.07/CPU-hour
+  requirements:
+    - Cloud-hosted
+    - API access
+    - 1-12s cold start
+  limitations:
+    - Cold starts slower than E2B
+    - Newer product (Jan 2026)
+  notes: >-
+    Persistence is the key differentiator — most sandboxes are ephemeral.
+    Checkpoint/restore enables warm resumption of long-running agent sessions.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: CodeSandbox SDK
+  category: cloud-managed
+  maintainer: CodeSandbox
+  open_source: false
+  license: null
+  url: https://codesandbox.io/sdk
+  repo_url: null
+  description: SDK for giving agents sandboxed MicroVM environments with parallel execution support.
+  isolation_type: [microvm]
+  capabilities:
+    - MicroVM isolation
+    - Parallel agent execution
+    - Web-dev environments
+    - File operations
+    - Port forwarding
+  requirements:
+    - Cloud-hosted
+    - SDK integration
+  limitations:
+    - Primarily web-dev focused
+  notes: >-
+    Well-established brand from the browser IDE space, expanding to agent use.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Bunnyshell AI Sandboxes
+  category: cloud-managed
+  maintainer: Bunnyshell
+  open_source: false
+  license: null
+  url: https://www.bunnyshell.com/ai-sandbox-environments/
+  repo_url: null
+  description: Firecracker sandboxes with ~100ms cold starts and MCP Server integration for Claude Code/Cursor/Windsurf.
+  isolation_type: [microvm]
+  capabilities:
+    - Firecracker isolation
+    - ~100ms cold starts
+    - Multi-language support
+    - MCP server integration
+    - Snapshots
+    - SDK
+  requirements:
+    - Cloud-hosted
+    - Paid tiers
+  limitations:
+    - AI sandbox is a newer product line
+  notes: >-
+    MCP server integration is notable — direct plugin for Claude Code,
+    Cursor, and Windsurf.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Vercel Sandbox
+  category: cloud-managed
+  maintainer: Vercel
+  open_source: false
+  license: null
+  url: https://vercel.com
+  repo_url: null
+  description: Firecracker microVM sandboxes for untrusted code, powering v0's code generation runtime.
+  isolation_type: [microvm]
+  capabilities:
+    - Firecracker microVMs
+    - Node.js + Python support
+    - Up to 45min execution
+    - Up to 8 vCPUs / 2GB per vCPU
+  requirements:
+    - Vercel account
+    - Cloud-hosted
+  limitations:
+    - Node.js and Python only
+    - 45-minute maximum execution
+    - Tightly coupled to Vercel ecosystem
+  notes: >-
+    Tightly integrated with Vercel deployment pipeline and v0.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Koyeb
+  category: cloud-managed
+  maintainer: Koyeb
+  open_source: false
+  license: null
+  url: https://www.koyeb.com
+  repo_url: null
+  description: Serverless platform with container-based sandbox capabilities and auto-scaling.
+  isolation_type: [container]
+  capabilities:
+    - Container isolation
+    - Auto-scaling
+    - CI/CD integration
+  requirements:
+    - Cloud-hosted
+    - Usage-based pricing
+  limitations:
+    - Not agent-specific
+    - General-purpose serverless platform
+  notes: >-
+    General-purpose serverless platform, not purpose-built for agents, but
+    usable for agent isolation out of the box with standard container workflows.
+  isolation_tier: container
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Cloudflare Dynamic Workers
+  category: cloud-managed
+  maintainer: Cloudflare
+  open_source: false
+  license: null
+  url: https://developers.cloudflare.com/sandbox/
+  repo_url: null
+  description: V8 isolate-based sandboxing at the edge, claiming 100x faster and more memory-efficient than containers.
+  isolation_type: [v8-isolate]
+  capabilities:
+    - V8 isolate isolation
+    - Millisecond startup
+    - MB-level memory per isolate
+    - globalOutbound for HTTP interception
+    - Credential injection without agent visibility
+  requirements:
+    - Cloudflare Workers paid plan
+    - "$0.002/unique Worker/day (waived during beta)"
+  limitations:
+    - JS/TS only (V8 runtime)
+    - Not for arbitrary Linux binaries
+    - Weaker isolation than microVMs
+  notes: >-
+    Unique edge-first approach using V8 isolates instead of containers/VMs.
+    Credential injection without agent visibility is a strong security feature.
+    Open beta early 2026.
+  isolation_tier: wasm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+# =============================================================================
+# Agent-Integrated Sandboxes
+# =============================================================================
+
+- name: Claude Code Sandbox
+  category: agent-integrated
+  maintainer: Anthropic
+  open_source: false
+  license: null
+  url: https://code.claude.com/docs/en/sandboxing
+  repo_url: null
+  description: Native OS-level sandboxing using bubblewrap (Linux) and Seatbelt/sandbox-exec (macOS), reducing permission prompts by 84%.
+  isolation_type: [user-namespace, seatbelt]
+  capabilities:
+    - Filesystem isolation (CWD read/write, block writes elsewhere)
+    - Network isolation (proxy-based domain allowlisting)
+    - OS-level enforcement
+  requirements:
+    - Claude Code CLI
+    - macOS or Linux
+  limitations:
+    - dangerouslyDisableSandbox escape hatch can be triggered by agent itself
+    - macOS sandbox-exec deprecated by Apple
+    - Shared kernel
+  notes: >-
+    Demonstrated escape by Ona (March 2026) via dangerouslyDisableSandbox flag.
+    Uses bubblewrap on Linux, Seatbelt on macOS — different mechanisms per OS.
+  isolation_tier: process
+  adoption_effort: zero-config
+  deployment_model: built-in
+
+- name: OpenAI Codex Sandbox
+  category: agent-integrated
+  maintainer: OpenAI
+  open_source: false
+  license: null
+  url: https://developers.openai.com/codex/concepts/sandboxing
+  repo_url: null
+  description: "Two modes: cloud (isolated containers, internet disabled during agent phase) and local CLI (Landlock + seccomp on Linux)."
+  isolation_type: [container, landlock, seccomp]
+  capabilities:
+    - "Cloud: isolated containers, two-phase runtime (setup with network, then offline agent)"
+    - "Cloud: per-project network lists, secrets removed before agent"
+    - "Local: Landlock + seccomp, workspace-only writes"
+  requirements:
+    - "Cloud: OpenAI account + GitHub"
+    - "Local: Linux kernel 5.13+"
+  limitations:
+    - Cloud requires GitHub integration
+    - Local is Linux-only
+    - Network disabled by default in agent phase
+  notes: >-
+    Only major agent with sandboxing enabled by default. Two-phase model
+    (online setup, offline agent) is a unique security architecture — the agent
+    never has network access during execution.
+  isolation_tier: container
+  adoption_effort: zero-config
+  deployment_model: built-in
+
+- name: Docker Sandboxes
+  category: agent-integrated
+  maintainer: Docker
+  open_source: false
+  license: null
+  url: https://docs.docker.com/ai/sandboxes/
+  repo_url: null
+  description: MicroVM sandboxes for AI coding agents, each with its own Docker daemon, filesystem, and network.
+  isolation_type: [microvm]
+  capabilities:
+    - MicroVM isolation (not regular containers)
+    - Dedicated Docker daemon per sandbox
+    - Filesystem and network isolation
+    - Supports Claude Code, Codex, Copilot, Gemini, Kiro
+  requirements:
+    - Docker Engine 29.1.5+ (Docker Desktop 4.58+)
+    - macOS or Linux
+  limitations:
+    - Experimental
+    - MicroVM overhead
+  notes: >-
+    Very new (March 2026). Multi-agent support is notable — works with most
+    major coding agents out of the box.
+  isolation_tier: microvm
+  adoption_effort: install
+  deployment_model: local
+
+# =============================================================================
+# Standalone / Self-Hosted Tools
+# =============================================================================
+
+- name: nono
+  category: standalone
+  maintainer: always-further
+  open_source: true
+  license: null
+  url: https://nono.sh
+  repo_url: https://github.com/always-further/nono
+  description: Kernel-enforced agent sandbox with credential proxy, atomic rollback, Sigstore attestation, and cryptographic audit chain.
+  isolation_type: [landlock, seatbelt]
+  capabilities:
+    - Kernel-level enforcement (Landlock on Linux, Seatbelt on macOS)
+    - Credential injection via proxy (keys never enter the sandbox)
+    - Atomic rollback with Merkle tree integrity
+    - Sigstore-based attestation of instruction files
+    - L7 API endpoint filtering
+    - Detach/reattach multiplexing
+    - Rust library with Python/TS/Go bindings
+  requirements:
+    - macOS, Linux, or WSL2
+    - "brew install nono or single binary"
+  limitations:
+    - Early alpha — not yet audited
+  notes: >-
+    Unique combination of properties no other tool offers: credential proxy
+    (API keys never enter the sandbox), attestation, and atomic rollback.
+    Easy setup (brew install, then nono run -- claude). Very active development.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: Anthropic sandbox-runtime (srt)
+  category: standalone
+  maintainer: Anthropic
+  open_source: true
+  license: null
+  url: https://github.com/anthropic-experimental/sandbox-runtime
+  repo_url: https://github.com/anthropic-experimental/sandbox-runtime
+  description: Lightweight sandboxing for arbitrary processes using bubblewrap (Linux) and Seatbelt (macOS), no container required.
+  isolation_type: [user-namespace, seatbelt]
+  capabilities:
+    - Filesystem isolation (directory-level)
+    - Network isolation (proxy-based domain filtering with interactive approval)
+    - Works for any process, agent, or MCP server
+  requirements:
+    - macOS or Linux
+    - No root required on Linux
+  limitations:
+    - Experimental/research preview
+    - Not production-hardened
+    - macOS sandbox-exec deprecation risk
+  notes: >-
+    Designed to sandbox any process, not just Claude Code. Interactive network
+    approval mode is useful for discovering what network access a tool actually needs.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: NVIDIA OpenShell
+  category: standalone
+  maintainer: NVIDIA
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/NVIDIA/OpenShell
+  repo_url: https://github.com/NVIDIA/OpenShell
+  description: Secure runtime for autonomous AI agents with kernel-level Landlock + seccomp enforcement and declarative YAML/OPA policies.
+  isolation_type: [landlock, seccomp]
+  capabilities:
+    - Landlock + seccomp kernel enforcement
+    - Declarative YAML policies
+    - OPA/Rego policy support
+    - Static + dynamic policies
+    - Filesystem/network/process isolation
+    - Containerized agent support
+  requirements:
+    - Linux
+    - Early preview
+  limitations:
+    - Early preview
+    - Linux only
+    - No macOS support
+  notes: >-
+    NVIDIA backing gives visibility. OPA/Rego policy support targets enterprise
+    governance workflows. Announced at GTC 2026.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: Agent Safehouse
+  category: standalone
+  maintainer: eugene1g
+  open_source: true
+  license: null
+  url: https://github.com/eugene1g/agent-safehouse
+  repo_url: https://github.com/eugene1g/agent-safehouse
+  description: macOS sandbox-exec profile system with deny-first policy, composable profiles, and pre-built agent configurations.
+  isolation_type: [seatbelt]
+  capabilities:
+    - macOS Seatbelt profile generation
+    - Deny-first policy
+    - Composable profile system
+    - Pre-built profiles for major coding agents
+    - Policy builder web tool
+    - Fine-grained HOME access control
+    - Symlink-aware path resolution
+  requirements:
+    - macOS only
+    - "brew install eugene1g/safehouse/agent-safehouse"
+  limitations:
+    - macOS only (permanently — sandbox-exec is Apple-specific)
+    - sandbox-exec deprecation risk
+  notes: >-
+    More mature than it appears — has CI tests, docs site, and thoughtful
+    profile composition. The most polished macOS-specific sandboxing option.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: scode
+  category: standalone
+  maintainer: Laurent Bindschaedler
+  open_source: true
+  license: null
+  url: https://binds.ch/blog/scode-sandbox-for-ai-coding-tools/
+  repo_url: null
+  description: OS-level sandbox wrapper for any AI coding harness with filesystem and network restrictions.
+  isolation_type: [process]
+  capabilities:
+    - OS-level sandboxing
+    - Works with any AI coding tool
+    - Filesystem and network restrictions
+  requirements:
+    - macOS or Linux
+  limitations:
+    - Smaller community project
+  notes: >-
+    Early entry in the space (Sept 2025), motivated by Claude Code's initial
+    lack of built-in sandboxing.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: microsandbox
+  category: standalone
+  maintainer: zerocore-ai
+  open_source: true
+  license: null
+  url: https://github.com/zerocore-ai/microsandbox
+  repo_url: https://github.com/zerocore-ai/microsandbox
+  description: Local-first programmable sandboxes using libkrun microVMs, designed for sensitive API keys with no external server.
+  isolation_type: [microvm]
+  capabilities:
+    - libkrun microVM isolation
+    - Local-first (no external server)
+    - Programmable SDK
+    - Agent Skills for Claude Code, Cursor, Codex, Gemini, Copilot
+  requirements:
+    - Linux (KVM) or macOS
+  limitations:
+    - Self-hosted only
+    - Smaller community
+  notes: >-
+    Local-first is the key differentiator — no credentials leave your machine.
+    Good for privacy-conscious users handling sensitive API keys.
+  isolation_tier: microvm
+  adoption_effort: install
+  deployment_model: local
+
+- name: agent-infra/sandbox
+  category: standalone
+  maintainer: agent-infra (community)
+  open_source: true
+  license: null
+  url: https://github.com/agent-infra/sandbox
+  repo_url: https://github.com/agent-infra/sandbox
+  description: All-in-one sandbox combining Browser, Shell, File management, MCP, and VSCode Server in a single Docker container.
+  isolation_type: [container]
+  capabilities:
+    - Browser automation
+    - Shell access
+    - File management
+    - MCP integration
+    - VSCode Server
+  requirements:
+    - Docker
+  limitations:
+    - Container isolation only (shared kernel)
+    - Monolithic design
+  notes: >-
+    Kitchen-sink approach — good for prototyping and development, less
+    suitable for security-critical production use.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
+# =============================================================================
+# Kubernetes-Native
+# =============================================================================
+
+- name: Agent Sandbox (kubernetes-sigs)
+  category: kubernetes
+  maintainer: Kubernetes SIG
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/kubernetes-sigs/agent-sandbox
+  repo_url: https://github.com/kubernetes-sigs/agent-sandbox
+  description: Kubernetes CRD and controller for isolated agent workloads with gVisor or Kata runtime and warm pod pools.
+  isolation_type: [gvisor, kata]
+  capabilities:
+    - Declarative CRD
+    - gVisor + Kata support
+    - Warm pod pool for <1s cold start
+    - Persistent storage
+    - Stable pod identity
+  requirements:
+    - Kubernetes cluster
+    - gVisor or Kata runtime
+  limitations:
+    - Kubernetes required
+    - Still maturing
+    - No standalone mode
+  notes: >-
+    Official Kubernetes SIG project (launched KubeCon Atlanta Nov 2025).
+    Likely to become the standard for K8s agent sandboxing.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: kubernetes
+
+- name: GKE Agent Sandbox
+  category: kubernetes
+  maintainer: Google Cloud
+  open_source: false
+  license: null
+  url: https://cloud.google.com
+  repo_url: null
+  description: Managed Kubernetes service for AI code isolation on GKE using gVisor and kubernetes-sigs/agent-sandbox.
+  isolation_type: [gvisor, kata]
+  capabilities:
+    - Managed gVisor/Kata runtime
+    - GKE integration
+    - Warm pools
+    - Persistent storage
+    - Cloud IAM
+  requirements:
+    - Google Cloud account
+    - GKE cluster
+  limitations:
+    - GKE-only
+    - Vendor lock-in
+  notes: >-
+    Managed wrapper around the open-source agent-sandbox project.
+    If you're already on GKE, this is the path of least resistance.
+  isolation_tier: container
+  adoption_effort: sign-up
+  deployment_model: kubernetes
+
+# =============================================================================
+# Development Environments
+# =============================================================================
+
+- name: Ona (formerly Gitpod)
+  category: dev-environment
+  maintainer: Ona
+  open_source: false
+  license: null
+  url: https://ona.com
+  repo_url: null
+  description: "Pivoted from CDE to \"mission control for AI agents\" with sandboxed dev environments, AI agents, and guardrails."
+  isolation_type: [container]
+  capabilities:
+    - API-first environments
+    - devcontainer.json support
+    - OS-level isolation
+    - Ona Agents
+    - Ona Guardrails
+  requirements:
+    - Cloud-hosted
+    - Enterprise tiers
+  limitations:
+    - Rapid pivot — product still evolving
+    - Less sandbox API focus than E2B/Daytona
+  notes: >-
+    Major pivot from Gitpod (rebranded Sept 2025). Demonstrated Claude Code
+    sandbox escape (March 2026). Not agent-specific but increasingly
+    agent-oriented.
+  isolation_tier: container
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: GitHub Codespaces
+  category: dev-environment
+  maintainer: GitHub / Microsoft
+  open_source: false
+  license: null
+  url: https://github.com/features/codespaces
+  repo_url: null
+  description: Cloud-hosted dev environments usable for isolating agent execution in a full Linux VM.
+  isolation_type: [container]
+  capabilities:
+    - Full Linux VM
+    - devcontainer.json support
+    - Pre-built images
+    - GitHub integration
+    - Port forwarding
+  requirements:
+    - GitHub account
+    - Usage-based pricing (free tier available)
+  limitations:
+    - Not agent-specific
+    - Higher startup latency
+    - Dev tool, not a sandbox service
+  notes: >-
+    Not purpose-built for agents, but accessible to anyone familiar with
+    GitHub. A "good enough" isolation option for personal agent use without
+    learning new tools.
+  isolation_tier: container
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: Coder
+  category: dev-environment
+  maintainer: Coder
+  open_source: true
+  license: AGPL-3.0
+  url: https://github.com/coder/coder
+  repo_url: https://github.com/coder/coder
+  description: Self-hosted remote development platform with container and VM workspaces, RBAC, and audit logging.
+  isolation_type: [container]
+  capabilities:
+    - Self-hosted
+    - Container and VM workspaces
+    - Templates
+    - RBAC
+    - Audit logging
+  requirements:
+    - Self-hosted on Kubernetes or Docker
+  limitations:
+    - No agent-specific features
+    - No MCP integration
+  notes: >-
+    Not agent-specific, but good for teams wanting self-hosted isolation
+    without cloud dependency. AGPL license means modifications must be shared.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: self-hosted
+
+- name: DevPod
+  category: dev-environment
+  maintainer: Loft Labs
+  open_source: true
+  license: null
+  url: https://github.com/loft-sh/devpod
+  repo_url: https://github.com/loft-sh/devpod
+  description: Client-only tool for reproducible, provider-agnostic dev environments using devcontainer.json.
+  isolation_type: [container]
+  capabilities:
+    - Provider-agnostic (Docker/SSH/K8s/cloud)
+    - devcontainer.json support
+    - Client-only (no server)
+    - Open source
+  requirements:
+    - Docker or cloud provider
+  limitations:
+    - No agent-specific features
+    - No MCP integration
+    - No managed service
+  notes: >-
+    Not agent-specific. Good open-source alternative to Codespaces for
+    local-first workflows where you want reproducible isolated environments.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
+# =============================================================================
+# Abstraction Layers
+# =============================================================================
+
+- name: ComputeSDK
+  category: abstraction
+  maintainer: ComputeSDK
+  open_source: false
+  license: null
+  url: https://www.computesdk.com
+  repo_url: null
+  description: Unified API across multiple sandbox providers (E2B, Daytona, Modal, Blaxel, etc.).
+  isolation_type: [microvm, container]
+  capabilities:
+    - Provider-agnostic API
+    - Single SDK for multiple backends
+  requirements:
+    - Account with underlying provider
+  limitations:
+    - Abstraction adds complexity
+    - Provider-dependent isolation
+  notes: >-
+    Useful if you want to avoid vendor lock-in. Isolation strength depends
+    entirely on the chosen backend provider.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
+- name: LangChain Sandboxes
+  category: abstraction
+  maintainer: LangChain
+  open_source: true
+  license: null
+  url: https://docs.langchain.com/oss/python/deepagents/sandboxes
+  repo_url: null
+  description: Sandbox integration layer within the LangChain agent framework.
+  isolation_type: [container]
+  capabilities:
+    - Framework integration
+    - Provider abstraction
+    - Agent workflow orchestration
+  requirements:
+    - LangChain framework
+    - Python
+  limitations:
+    - Framework-dependent
+    - Not standalone
+  notes: >-
+    Only relevant if already using LangChain. The sandbox capabilities
+    come from the underlying provider, not LangChain itself.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: cloud
+
+# =============================================================================
+# Enterprise / Multi-Purpose
+# =============================================================================
+
+- name: OpenSandbox
+  category: enterprise
+  maintainer: Alibaba
+  open_source: true
+  license: null
+  url: https://github.com/alibaba/OpenSandbox
+  repo_url: https://github.com/alibaba/OpenSandbox
+  description: Universal sandbox for AI apps with multi-language SDKs, Docker + K8s runtimes, covering coding agents, GUI agents, evaluation, and RL training.
+  isolation_type: [container]
+  capabilities:
+    - Multi-language SDKs (Python/Java/JS/C#/Go planned)
+    - Unified API
+    - Dual runtime (Docker for dev, K8s for prod)
+    - Evaluation and RL training support
+  requirements:
+    - Docker or Kubernetes
+    - Self-hosted
+  limitations:
+    - Very new (open-sourced March 2026)
+  notes: >-
+    Broadest scope of any sandbox — covers evaluation and RL training
+    environments, not just agent sandboxing.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: self-hosted
+
+- name: NanoClaw
+  category: enterprise
+  maintainer: Lazer and Gavriel Cohen
+  open_source: true
+  license: MIT
+  url: https://github.com/qwibitai/nanoclaw
+  repo_url: https://github.com/qwibitai/nanoclaw
+  description: Lightweight containerized agent orchestration wrapping Claude Code with messaging platform integrations.
+  isolation_type: [container]
+  capabilities:
+    - Container isolation (Docker/Docker Sandboxes/Apple Container)
+    - WhatsApp/Telegram/Slack/Discord/Gmail integration
+    - Memory management
+    - Scheduled jobs
+  requirements:
+    - Docker or Apple Container
+  limitations:
+    - Tied to Claude/Anthropic SDK
+    - Container-level isolation unless using Docker Sandboxes
+  notes: >-
+    More of an agent orchestration framework with sandbox support than a
+    sandbox itself. High adoption. Sandbox capability comes from Docker
+    or Docker Sandboxes underneath.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
+# =============================================================================
+# VM & Container Runtimes (Building Blocks)
+# =============================================================================
+
+- name: Firecracker
+  category: vm-runtime
+  maintainer: AWS
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/firecracker-microvm/firecracker
+  repo_url: https://github.com/firecracker-microvm/firecracker
+  description: Lightweight microVM monitor using KVM with <5MB overhead, powering Lambda, Fargate, E2B, Vercel, Bunnyshell, and Fly Sprites.
+  isolation_type: [kvm, microvm]
+  capabilities:
+    - KVM hardware isolation
+    - <125ms boot
+    - <5MB memory per VM
+    - Snapshot/restore (~28ms)
+    - Rate limiters
+    - Jailer for additional containment
+  requirements:
+    - Linux with KVM
+    - x86_64 or aarch64
+  limitations:
+    - Linux only
+    - No GPU passthrough
+    - Minimal device model
+    - Must build own orchestration layer
+  notes: >-
+    The foundation most cloud sandbox platforms build on. Battle-tested at AWS
+    scale (Lambda, Fargate). If you're building a sandbox product, this is
+    likely your starting point.
+  isolation_tier: hardware-vm
+  adoption_effort: compose
+  deployment_model: self-hosted
+
+- name: gVisor
+  category: vm-runtime
+  maintainer: Google
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/google/gvisor
+  repo_url: https://github.com/google/gvisor
+  description: User-space kernel that intercepts and re-implements Linux syscalls, providing container isolation without hardware virtualization.
+  isolation_type: [gvisor]
+  capabilities:
+    - Syscall interception in user space
+    - No hardware virtualization needed
+    - OCI-compatible (drop-in runsc runtime)
+    - Sentry kernel + Gofer file proxy architecture
+  requirements:
+    - Linux
+    - OCI runtime (runsc)
+  limitations:
+    - Performance overhead on syscall-heavy workloads
+    - Not all syscalls implemented
+  notes: >-
+    Used by GKE and kubernetes-sigs/agent-sandbox. Good middle ground between
+    container and VM isolation — stronger than containers, lighter than full VMs.
+  isolation_tier: container
+  adoption_effort: compose
+  deployment_model: self-hosted
+
+- name: Kata Containers
+  category: vm-runtime
+  maintainer: OpenInfra Foundation
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/kata-containers/kata-containers
+  repo_url: https://github.com/kata-containers/kata-containers
+  description: VM-level isolation per container, OCI/CRI compatible, supporting QEMU, Cloud Hypervisor, and Firecracker VMMs.
+  isolation_type: [kata, kvm]
+  capabilities:
+    - Hardware VM per container
+    - OCI/CRI compatible
+    - Multiple VMM backends (QEMU/Cloud Hypervisor/Firecracker)
+    - Kubernetes integration
+  requirements:
+    - Linux with KVM
+  limitations:
+    - Higher overhead than gVisor
+    - Requires KVM
+    - More complex setup
+  notes: >-
+    Production-proven at scale via Northflank (2M+ workloads/month). Good
+    for Kubernetes environments that need VM-level isolation per pod.
+  isolation_tier: hardware-vm
+  adoption_effort: compose
+  deployment_model: self-hosted
+
+- name: libkrun
+  category: vm-runtime
+  maintainer: Containers project (Red Hat)
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/containers/libkrun
+  repo_url: https://github.com/containers/libkrun
+  description: Library-based KVM virtualization with container-competitive startup, supporting Apple Virtualization.framework on macOS.
+  isolation_type: [kvm]
+  capabilities:
+    - Library-embeddable (no daemon)
+    - KVM isolation
+    - Fast startup
+    - Apple Virtualization.framework on macOS
+  requirements:
+    - Linux (KVM) or macOS (Virtualization.framework)
+  limitations:
+    - Less tooling than Firecracker
+    - Smaller community
+  notes: >-
+    macOS support via Apple Virtualization.framework is unique among VM
+    runtimes — Firecracker and Kata are Linux-only. Used by microsandbox.
+  isolation_tier: hardware-vm
+  adoption_effort: compose
+  deployment_model: self-hosted
+
+- name: Zeroboot
+  category: vm-runtime
+  maintainer: Zeroboot (community)
+  open_source: true
+  license: null
+  url: https://github.com/zerobootdev/zeroboot
+  repo_url: https://github.com/zerobootdev/zeroboot
+  description: Sub-millisecond VM sandboxes via COW forking of Firecracker snapshots (~0.8ms fork creation).
+  isolation_type: [kvm, microvm]
+  capabilities:
+    - KVM isolation
+    - Firecracker snapshot COW forking
+    - ~0.8ms sandbox creation
+    - Self-hostable
+    - Managed API also available
+  requirements:
+    - Linux with KVM
+  limitations:
+    - Very new
+    - Small community
+  notes: >-
+    0.8ms sandbox creation via COW forking is remarkable if verified at scale.
+    Worth watching as a potential next-gen approach to sandbox provisioning.
+  isolation_tier: hardware-vm
+  adoption_effort: compose
+  deployment_model: self-hosted
+
+# =============================================================================
+# OS-Level Sandboxing (Building Blocks)
+# =============================================================================
+
+- name: bubblewrap (bwrap)
+  category: os-primitive
+  maintainer: Containers project (Flatpak origin)
+  open_source: true
+  license: LGPL-2.0+
+  url: https://github.com/containers/bubblewrap
+  repo_url: https://github.com/containers/bubblewrap
+  description: Unprivileged user-namespace sandbox for Linux requiring no root, used by Claude Code and Flatpak.
+  isolation_type: [user-namespace]
+  capabilities:
+    - User namespaces
+    - Mount namespaces
+    - Network namespace
+    - No root required
+  requirements:
+    - Linux with user namespace support
+  limitations:
+    - Linux only
+    - Low-level (must compose with other tools)
+  notes: >-
+    Years of hardening via Flatpak. Claude Code's Linux sandbox builds on this.
+    The go-to unprivileged sandbox primitive on Linux.
+  isolation_tier: process
+  adoption_effort: compose
+  deployment_model: local
+
+- name: macOS Seatbelt / sandbox-exec
+  category: os-primitive
+  maintainer: Apple
+  open_source: false
+  license: null
+  url: null
+  repo_url: null
+  description: macOS mandatory access control using SBPL policies for filesystem, network, and process restrictions.
+  isolation_type: [seatbelt]
+  capabilities:
+    - Filesystem access control
+    - Network control
+    - Process restrictions
+    - Kernel-level enforcement
+  requirements:
+    - macOS only
+  limitations:
+    - sandbox-exec deprecated by Apple
+    - SBPL policy language poorly documented
+  notes: >-
+    Deprecated but still the only game in town for macOS process sandboxing.
+    Used by Claude Code, Agent Safehouse, and srt on macOS. No replacement
+    announced by Apple.
+  isolation_tier: process
+  adoption_effort: compose
+  deployment_model: local
+
+- name: Firejail
+  category: os-primitive
+  maintainer: netblue30 (community)
+  open_source: true
+  license: GPL-2.0
+  url: https://github.com/netblue30/firejail
+  repo_url: https://github.com/netblue30/firejail
+  description: SUID sandbox combining namespaces, seccomp, and capabilities with desktop-aware features (audio, display).
+  isolation_type: [user-namespace, seccomp]
+  capabilities:
+    - Namespace isolation
+    - seccomp-BPF filtering
+    - Filesystem whitelisting
+    - Network filtering
+    - Desktop app support (audio, display)
+    - Pre-built profiles for common apps
+  requirements:
+    - Linux
+    - Setuid binary
+  limitations:
+    - SUID is a larger attack surface
+    - Desktop-focused
+    - Linux only
+  notes: >-
+    Primarily for desktop app sandboxing, but applicable to agent processes.
+    SUID requirement is a trade-off — convenience vs. attack surface.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: Landlock LSM
+  category: os-primitive
+  maintainer: Linux kernel community
+  open_source: true
+  license: GPL-2.0
+  url: https://landlock.io
+  repo_url: null
+  description: Unprivileged filesystem access control at kernel level, used by Codex CLI and NVIDIA OpenShell.
+  isolation_type: [landlock]
+  capabilities:
+    - Filesystem access restrictions per path
+    - Unprivileged (no root)
+    - Stackable with other LSMs
+    - Kernel-level enforcement
+  requirements:
+    - Linux kernel 5.13+ (network support in 6.7+)
+  limitations:
+    - Filesystem only in early kernel versions
+    - Must combine with seccomp for full coverage
+    - Linux only
+  notes: >-
+    The modern Linux answer to unprivileged sandboxing. Network support in
+    kernel 6.7 makes it much more complete. Used by Codex CLI and OpenShell.
+  isolation_tier: process
+  adoption_effort: compose
+  deployment_model: local
+
+- name: seccomp-BPF
+  category: os-primitive
+  maintainer: Linux kernel community
+  open_source: true
+  license: GPL-2.0
+  url: null
+  repo_url: null
+  description: Syscall filtering using BPF programs to kill, trap, or errno on forbidden syscalls.
+  isolation_type: [seccomp]
+  capabilities:
+    - Syscall-level filtering
+    - BPF programmability
+    - Kill/trap/errno on forbidden syscalls
+  requirements:
+    - Linux kernel 3.5+
+  limitations:
+    - Syscall-level only (no file path awareness)
+    - Complex BPF filter authoring
+    - Linux only
+  notes: >-
+    Building block, not standalone. Almost always used alongside Landlock or
+    namespaces to provide full sandbox coverage.
+  isolation_tier: process
+  adoption_effort: compose
+  deployment_model: local
+
+- name: Linux Namespaces + cgroups
+  category: os-primitive
+  maintainer: Linux kernel community
+  open_source: true
+  license: GPL-2.0
+  url: null
+  repo_url: null
+  description: Foundation of all container technology — PID, mount, network, user, UTS, and IPC namespaces plus cgroups for resource limits.
+  isolation_type: [user-namespace]
+  capabilities:
+    - Process isolation (PID namespace)
+    - Filesystem isolation (mount namespace)
+    - Network isolation (network namespace)
+    - User isolation (user namespace)
+    - CPU/memory/IO limits (cgroups)
+  requirements:
+    - Linux
+  limitations:
+    - Building blocks only — must compose into usable tools
+    - Shared kernel
+    - Linux only
+  notes: >-
+    Everything in the container and VM space builds on these primitives.
+    Understanding namespaces and cgroups is foundational to evaluating any
+    Linux-based sandbox's isolation claims.
+  isolation_tier: process
+  adoption_effort: compose
+  deployment_model: local
+
+- name: nsjail
+  category: os-primitive
+  maintainer: Google
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/google/nsjail
+  repo_url: https://github.com/google/nsjail
+  description: Process isolation tool combining namespaces, seccomp, and resource limits with the Kafel policy language.
+  isolation_type: [user-namespace, seccomp]
+  capabilities:
+    - Namespace isolation
+    - seccomp-BPF filtering
+    - cgroup resource limits
+    - chroot/pivot_root
+    - Network filtering
+    - Kafel policy language
+  requirements:
+    - Linux
+  limitations:
+    - Linux only
+    - Less actively maintained
+    - CLI only
+  notes: >-
+    Google-maintained. Kafel policy language is more ergonomic than raw
+    seccomp-BPF. Used by competitive programming judges for untrusted
+    code execution.
+  isolation_tier: process
+  adoption_effort: compose
+  deployment_model: local
+
+# =============================================================================
+# WebAssembly Runtimes (Building Blocks)
+# =============================================================================
+
+- name: Wasmtime
+  category: wasm-runtime
+  maintainer: Bytecode Alliance
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/bytecodealliance/wasmtime
+  repo_url: https://github.com/bytecodealliance/wasmtime
+  description: Fast, secure WebAssembly runtime with WASI capability-based security and linear memory isolation.
+  isolation_type: [wasm]
+  capabilities:
+    - Memory-safe execution
+    - WASI capability-based security
+    - Multi-tenant isolation
+    - Thousands of concurrent instances
+    - Cross-platform
+  requirements:
+    - Cross-platform
+    - Must compile tools to Wasm
+  limitations:
+    - Must compile to Wasm
+    - Not for arbitrary Linux binaries
+    - Ecosystem still maturing
+  notes: >-
+    The reference Wasm runtime from Bytecode Alliance. Architecturally elegant
+    sandboxing but requires toolchain buy-in — you can't run arbitrary binaries.
+  isolation_tier: wasm
+  adoption_effort: compose
+  deployment_model: local
+
+- name: WasmEdge
+  category: wasm-runtime
+  maintainer: CNCF
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/WasmEdge/WasmEdge
+  repo_url: https://github.com/WasmEdge/WasmEdge
+  description: Cloud-native WebAssembly runtime optimized for edge, AI, and serverless workloads.
+  isolation_type: [wasm]
+  capabilities:
+    - Memory-safe execution
+    - WASI support
+    - AI/ML inference extensions
+    - Kubernetes integration
+    - Edge deployment focus
+  requirements:
+    - Cross-platform
+    - Must compile tools to Wasm
+  limitations:
+    - Must compile to Wasm
+    - Not for arbitrary Linux binaries
+  notes: >-
+    CNCF project. Differentiates from Wasmtime with AI/ML inference
+    extensions and edge deployment focus.
+  isolation_tier: wasm
+  adoption_effort: compose
+  deployment_model: local
+
+- name: wasmCloud
+  category: wasm-runtime
+  maintainer: wasmCloud community
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/wasmCloud/wasmCloud
+  repo_url: https://github.com/wasmCloud/wasmCloud
+  description: Application platform for building distributed Wasm applications with capability-based security.
+  isolation_type: [wasm]
+  capabilities:
+    - Distributed Wasm applications
+    - Capability-based security model
+    - Provider-based extensibility
+    - Lattice networking
+  requirements:
+    - Cross-platform
+    - NATS for messaging
+  limitations:
+    - Must compile to Wasm
+    - More complex than standalone runtimes
+    - Application platform, not just a runtime
+  notes: >-
+    Higher-level than Wasmtime or WasmEdge — it's an application platform,
+    not just a runtime. Useful if building distributed agent systems with
+    Wasm isolation.
+  isolation_tier: wasm
+  adoption_effort: compose
+  deployment_model: self-hosted
+
+- name: Wassette
+  category: wasm-runtime
+  maintainer: Microsoft (Azure Core Upstream)
+  open_source: true
+  license: null
+  url: https://github.com/microsoft/wassette
+  repo_url: https://github.com/microsoft/wassette
+  description: Wasm Components exposed via MCP, using Wasmtime runtime with agents fetching Wasm tools from OCI registries.
+  isolation_type: [wasm]
+  capabilities:
+    - Wasm Component Model
+    - MCP interface
+    - Deny-by-default security
+    - Wasmtime runtime (browser-grade isolation)
+    - OCI registry integration
+  requirements:
+    - Rust toolchain
+    - MCP-compatible agent
+  limitations:
+    - Wasm only (must compile tools to Wasm)
+    - Early ecosystem
+  notes: >-
+    Interesting intersection of MCP and Wasm — agents discover and load
+    sandboxed tools via MCP from OCI registries. Microsoft backing.
+    Released Aug 2025.
+  isolation_tier: wasm
+  adoption_effort: compose
+  deployment_model: local
+
+- name: Pyodide
+  category: wasm-runtime
+  maintainer: Pyodide community (Mozilla origin)
+  open_source: true
+  license: MPL-2.0
+  url: https://github.com/pyodide/pyodide
+  repo_url: https://github.com/pyodide/pyodide
+  description: CPython compiled to WebAssembly providing browser-grade sandbox security for Python execution.
+  isolation_type: [wasm]
+  capabilities:
+    - Full CPython in Wasm
+    - Browser-grade isolation
+    - Supports NumPy, Pandas, and other scientific packages
+  requirements:
+    - Browser or Wasm runtime
+  limitations:
+    - Python only
+    - Not all C extensions supported
+    - No native filesystem or network access
+    - Performance overhead vs. native CPython
+  notes: >-
+    Good for sandboxing Python-only agent code execution where you need
+    browser-grade isolation guarantees without running a VM.
+  isolation_tier: wasm
+  adoption_effort: compose
+  deployment_model: local
