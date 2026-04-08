@@ -51,7 +51,7 @@ def load_existing_repos(yaml_path: Path) -> set[str]:
     for entry in entries:
         for field in ("repo_url", "url"):
             val = entry.get(field)
-            if val and "github.com" in val:
+            if val and "github.com" in val.lower():
                 # Normalize: strip trailing slashes, lowercase
                 repos.add(val.rstrip("/").lower())
     return repos
