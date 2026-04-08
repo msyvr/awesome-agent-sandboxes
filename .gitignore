@@ -10,4 +10,4 @@ wheels/
 .venv
 
 # Local
-temp/
+tmp/
