@@ -36,15 +36,7 @@ jobs:
           if [ -f /tmp/discover-output/candidates.md ]; then
             CANDIDATE_COUNT=$(python -c "import json; print(len(json.load(open('/tmp/discover-output/candidates.json'))))")
             if [ "$CANDIDATE_COUNT" -gt "0" ]; then
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              BRANCH="discover/$(date +%Y-%m-%d)"
-              git checkout -b "$BRANCH"
-              cp /tmp/discover-output/candidates.md temp/latest-candidates.md 2>/dev/null || true
-              git add -A
-              git commit -m "chore: discovery run $(date +%Y-%m-%d) — $CANDIDATE_COUNT candidates"
-              git push origin "$BRANCH"
-              gh pr create \
+              gh issue create \
                 --title "New sandbox candidates ($(date +%Y-%m-%d))" \
                 --body "$(cat /tmp/discover-output/candidates.md)" \
                 --label "discovery"
