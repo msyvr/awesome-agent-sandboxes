@@ -610,9 +610,14 @@ class TestGenerateToc:
 
     def test_includes_detailed_reference(self):
         result = generate_toc([make_entry()])
-        # Now links to a separate file rather than an in-document anchor
-        assert f"({REFERENCE_REL_PATH})" in result
-        assert "Detailed Sandboxes Reference" in result
+        # Links to in-document section that itself links out to the file
+        assert "[Detailed Sandboxes Reference](#sec-detailed-reference)" in result
+
+    def test_detailed_reference_precedes_quick_triage(self):
+        result = generate_toc([make_entry()])
+        ref_pos = result.find("Detailed Sandboxes Reference")
+        triage_pos = result.find("Quick Triage")
+        assert ref_pos < triage_pos
 
     def test_includes_references_and_contributing(self):
         result = generate_toc([make_entry()])

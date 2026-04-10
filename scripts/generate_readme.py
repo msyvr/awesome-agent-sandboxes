@@ -421,6 +421,15 @@ def generate_part2(entries: list[dict]) -> str:
     """Generate the full Part 2: landscape content."""
     sections = []
 
+    # --- Detailed Sandboxes Reference (link section) ---
+    sections.append('<a id="sec-detailed-reference"></a>')
+    sections.append("## Detailed Sandboxes Reference\n")
+    sections.append(
+        f"Full per-entry information for every sandbox lives in "
+        f"[{REFERENCE_REL_PATH}]({REFERENCE_REL_PATH}). "
+        f"The category tables below also link directly to relevant entries.\n"
+    )
+
     # --- Quick Triage (lenses) ---
     sections.append('<a id="sec-quick-triage"></a>')
     sections.append("## Quick Triage\n")
@@ -514,7 +523,8 @@ def generate_toc(entries: list[dict]) -> str:
     lines.append("- [Choosing a sandbox](#sec-choosing)")
     lines.append("  - [Safety & Alignment Research](#sec-safety-research)")
 
-    # --- Part 2: lenses + categories ---
+    # --- Part 2: detailed reference link + lenses + categories ---
+    lines.append("- [Detailed Sandboxes Reference](#sec-detailed-reference)")
     lines.append("- [Quick Triage](#sec-quick-triage)")
 
     product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
@@ -532,7 +542,6 @@ def generate_toc(entries: list[dict]) -> str:
 
     lines.append("- [References](#sec-references)")
     lines.append("- [Contributing](#sec-contributing)")
-    lines.append(f"- [Detailed Sandboxes Reference]({REFERENCE_REL_PATH})")
 
     return "\n".join(lines)
 

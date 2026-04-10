@@ -15,6 +15,7 @@ Whether you're a developer building with AI agents or someone using them for per
   - [If you want stronger isolation](#sec-qs-stronger)
 - [Choosing a sandbox](#sec-choosing)
   - [Safety & Alignment Research](#sec-safety-research)
+- [Detailed Sandboxes Reference](#sec-detailed-reference)
 - [Quick Triage](#sec-quick-triage)
 - [Cloud Managed Sandboxes](#sec-cloud-managed)
 - [Agent-Integrated Sandboxes](#sec-agent-integrated)
@@ -28,7 +29,6 @@ Whether you're a developer building with AI agents or someone using them for per
   - [WebAssembly Runtimes](#sec-wasm-runtime)
 - [References](#sec-references)
 - [Contributing](#sec-contributing)
-- [Detailed Sandboxes Reference](docs/sandboxes-reference.md)
 
 <a id="sec-what-is-sandboxing"></a>
 ## What is sandboxing and why should you care?
@@ -249,6 +249,11 @@ If you're doing AI safety research, RL training, capability evaluation, or adver
 ---
 
 _The sections below are generated from [`data/sandboxes.yaml`](data/sandboxes.yaml). They cover the full landscape: cloud services, standalone tools, VM runtimes, OS primitives, and WebAssembly runtimes._
+
+<a id="sec-detailed-reference"></a>
+## Detailed Sandboxes Reference
+
+Full per-entry information for every sandbox lives in [docs/sandboxes-reference.md](docs/sandboxes-reference.md). The category tables below also link directly to relevant entries.
 
 <a id="sec-quick-triage"></a>
 ## Quick Triage
