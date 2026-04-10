@@ -4,6 +4,8 @@ A comprehensive guide to sandboxing options for AI agents — coding agents, bro
 
 Whether you're a developer building with AI agents or someone using them for personal tasks, this guide helps you understand how to keep your system safe while agents work on your behalf.
 
+> **Living repo.** This landscape is moving fast. A daily automated discovery job posts newly found candidates as [open issues](https://github.com/msyvr/awesome-agent-sandboxes/issues?q=is%3Aopen+label%3Adiscovery) for review before they get added to the curated list. If you're looking for the bleeding edge, check those issues — but be aware they're unreviewed.
+
 ## Table of Contents
 
 - [What is sandboxing and why should you care?](#sec-what-is-sandboxing)
