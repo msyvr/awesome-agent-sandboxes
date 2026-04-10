@@ -491,7 +491,7 @@ def generate_toc(entries: list[dict]) -> str:
     lines.append("  - [If you're using OpenAI Codex](#sec-qs-codex)")
     lines.append("  - [If you want stronger isolation](#sec-qs-stronger)")
     lines.append("- [Choosing a sandbox](#sec-choosing)")
-    lines.append("- [Safety & Alignment Research](#sec-safety-research)")
+    lines.append("  - [Safety & Alignment Research](#sec-safety-research)")
 
     # --- Part 2: lenses + categories ---
     lines.append("- [Quick Triage](#sec-quick-triage)")

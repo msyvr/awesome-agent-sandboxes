@@ -208,7 +208,7 @@ Do you already use an agent with built-in sandboxing?
 ```
 
 <a id="sec-safety-research"></a>
-## Safety & Alignment Research
+### Safety & Alignment Research
 
 If you're doing AI safety research, RL training, capability evaluation, or adversarial red-teaming, see **[Sandboxing for AI Safety & Alignment Research](docs/safety-research.md)** — these contexts have fundamentally different containment requirements from general agent use.
 

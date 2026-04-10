@@ -12,7 +12,7 @@ Whether you're a developer building with AI agents or someone using them for per
   - [If you're using OpenAI Codex](#sec-qs-codex)
   - [If you want stronger isolation](#sec-qs-stronger)
 - [Choosing a sandbox](#sec-choosing)
-- [Safety & Alignment Research](#sec-safety-research)
+  - [Safety & Alignment Research](#sec-safety-research)
 - [Quick Triage](#sec-quick-triage)
 - [Cloud Managed Sandboxes](#sec-cloud-managed)
 - [Agent-Integrated Sandboxes](#sec-agent-integrated)
@@ -230,7 +230,7 @@ Do you already use an agent with built-in sandboxing?
 ```
 
 <a id="sec-safety-research"></a>
-## Safety & Alignment Research
+### Safety & Alignment Research
 
 If you're doing AI safety research, RL training, capability evaluation, or adversarial red-teaming, see **[Sandboxing for AI Safety & Alignment Research](docs/safety-research.md)** — these contexts have fundamentally different containment requirements from general agent use.
 
