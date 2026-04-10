@@ -248,39 +248,145 @@ def generate_lens_table(entries: list[dict], tier_order: list[tuple], tag_field:
     return "\n".join(lines)
 
 
+def slugify(name: str) -> str:
+    """Generate a stable anchor slug for an entry name.
+
+    Used to link from the compact category tables to the detailed
+    reference entries below. Same function is used for both anchor
+    generation and link target so they always match.
+    """
+    import re
+    s = name.lower()
+    # Replace non-alphanumeric (except hyphens) with hyphens
+    s = re.sub(r"[^a-z0-9-]+", "-", s)
+    # Collapse multiple hyphens
+    s = re.sub(r"-+", "-", s)
+    # Trim leading/trailing hyphens
+    s = s.strip("-")
+    return f"ref-{s}"
+
+
 def generate_category_table(entries: list[dict]) -> str:
-    """Generate a detailed table for a category's entries."""
+    """Generate a compact 4-column table for a category's entries.
+
+    Columns: Name (linked to detailed reference) | OSS? | Isolation | Notes
+    Maintainer, capabilities, requirements, and limitations live in the
+    detailed reference at the bottom of the README.
+    """
     lines = []
-    lines.append("| Name | Maintainer | OSS? | Isolation | Key Capabilities | Requirements | Limitations | Notes |")
-    lines.append("|------|------------|------|-----------|------------------|--------------|-------------|-------|")
+    lines.append("| Name | OSS? | Isolation | Notes |")
+    lines.append("|------|------|-----------|-------|")
 
     for e in sorted(entries, key=lambda x: x["name"].lower()):
         name = e["name"]
-        url = e.get("url")
-        repo_url = e.get("repo_url")
-        if url:
-            name_cell = f"[{escape_md(name)}]({url})"
-        elif repo_url:
-            name_cell = f"[{escape_md(name)}]({repo_url})"
-        else:
-            name_cell = escape_md(name)
+        anchor = slugify(name)
+        name_cell = f"[{escape_md(name)}](#{anchor})"
 
-        maintainer = escape_md(e.get("maintainer", ""))
         oss = "Yes" if e.get("open_source") else "No"
         license_str = e.get("license")
         if license_str:
             oss += f" ({license_str})"
 
         isolation = ", ".join(e.get("isolation_type", []))
-        capabilities = format_list_short(e.get("capabilities", []))
-        requirements = format_list_short(e.get("requirements", []))
-        limitations = format_list_short(e.get("limitations", []))
         notes = escape_md(e.get("notes", "")) or ""
 
-        lines.append(
-            f"| {name_cell} | {maintainer} | {oss} | {isolation} "
-            f"| {capabilities} | {requirements} | {limitations} | {notes} |"
-        )
+        lines.append(f"| {name_cell} | {oss} | {isolation} | {notes} |")
+
+    return "\n".join(lines)
+
+
+def generate_definition_entry(entry: dict) -> str:
+    """Generate a detailed reference entry for a single sandbox.
+
+    Format: anchor + heading + metadata line + description + structured
+    fields. Designed to be readable at any width and self-contained.
+    """
+    lines = []
+    name = entry["name"]
+    anchor = slugify(name)
+
+    lines.append(f'<a id="{anchor}"></a>')
+    lines.append(f"#### {name}")
+    lines.append("")
+
+    # Metadata line: maintainer, license, links
+    meta_parts = []
+    maintainer = entry.get("maintainer")
+    if maintainer:
+        meta_parts.append(f"**Maintainer:** {maintainer}")
+    if entry.get("open_source"):
+        license_str = entry.get("license") or "OSS"
+        meta_parts.append(f"**License:** {license_str}")
+    else:
+        meta_parts.append("**License:** Closed source")
+    url = entry.get("url")
+    if url:
+        meta_parts.append(f"[Home]({url})")
+    repo_url = entry.get("repo_url")
+    if repo_url and repo_url != url:
+        meta_parts.append(f"[Repo]({repo_url})")
+    if meta_parts:
+        lines.append(" · ".join(meta_parts))
+        lines.append("")
+
+    # Description
+    description = entry.get("description", "")
+    if description:
+        lines.append(description)
+        lines.append("")
+
+    # Structured fields
+    isolation = ", ".join(entry.get("isolation_type", []))
+    if isolation:
+        lines.append(f"- **Isolation:** {isolation}")
+
+    for label, field in [
+        ("Capabilities", "capabilities"),
+        ("Requirements", "requirements"),
+        ("Limitations", "limitations"),
+    ]:
+        items = entry.get(field, [])
+        if items:
+            lines.append(f"- **{label}:** {'; '.join(items)}")
+
+    notes = entry.get("notes")
+    if notes:
+        lines.append("")
+        lines.append(f"_Notes: {notes}_")
+
+    return "\n".join(lines)
+
+
+def generate_definition_section(entries: list[dict]) -> str:
+    """Generate the full detailed reference section, grouped by category."""
+    lines = []
+    lines.append("## Detailed Reference\n")
+    lines.append(
+        "Full information for every entry, grouped by category. "
+        "The compact tables above link here.\n"
+    )
+
+    product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
+    building_cats = [c for c in CATEGORY_ORDER if c[0] in BUILDING_BLOCK_CATEGORIES]
+
+    for cat_key, cat_name in product_cats:
+        cat_entries = [e for e in entries if e.get("category") == cat_key]
+        if not cat_entries:
+            continue
+        lines.append(f"### {cat_name}\n")
+        for e in sorted(cat_entries, key=lambda x: x["name"].lower()):
+            lines.append(generate_definition_entry(e))
+            lines.append("")
+
+    lines.append("### Building Blocks\n")
+    for cat_key, cat_name in building_cats:
+        cat_entries = [e for e in entries if e.get("category") == cat_key]
+        if not cat_entries:
+            continue
+        lines.append(f"#### {cat_name}\n")
+        for e in sorted(cat_entries, key=lambda x: x["name"].lower()):
+            lines.append(generate_definition_entry(e))
+            lines.append("")
 
     return "\n".join(lines)
 
@@ -342,6 +448,10 @@ def generate_part2(entries: list[dict]) -> str:
             sections.append(f"{intro}\n")
         sections.append(generate_category_table(cat_entries))
         sections.append("")
+
+    # --- Detailed Reference ---
+    sections.append("---\n")
+    sections.append(generate_definition_section(entries))
 
     # --- References ---
     sections.append("## References\n")

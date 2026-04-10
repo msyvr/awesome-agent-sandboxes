@@ -22,6 +22,9 @@ from generate_readme import (
     format_list_short,
     generate_lens_table,
     generate_category_table,
+    slugify,
+    generate_definition_entry,
+    generate_definition_section,
 )
 
 
@@ -286,26 +289,20 @@ class TestGenerateLensTable:
 
 class TestGenerateCategoryTable:
     def test_renders_entry(self):
-        entries = [make_entry(name="MySandbox", maintainer="TestCo")]
+        entries = [make_entry(name="MySandbox")]
         table = generate_category_table(entries)
         assert "MySandbox" in table
-        assert "TestCo" in table
 
-    def test_links_url(self):
-        entries = [make_entry(name="Tool", url="https://example.com")]
+    def test_links_to_anchor(self):
+        entries = [make_entry(name="Tool")]
         table = generate_category_table(entries)
-        assert "[Tool](https://example.com)" in table
+        # Name should link to detailed reference anchor, not to URL
+        assert "[Tool](#ref-tool)" in table
 
-    def test_falls_back_to_repo_url(self):
-        entries = [make_entry(name="Tool", url=None, repo_url="https://github.com/t/t")]
+    def test_anchor_link_for_complex_name(self):
+        entries = [make_entry(name="agent-infra/sandbox")]
         table = generate_category_table(entries)
-        assert "[Tool](https://github.com/t/t)" in table
-
-    def test_no_link_when_no_urls(self):
-        entries = [make_entry(name="Tool", url=None, repo_url=None)]
-        table = generate_category_table(entries)
-        assert "[Tool]" not in table
-        assert "| Tool |" in table
+        assert "[agent-infra/sandbox](#ref-agent-infra-sandbox)" in table
 
     def test_oss_yes_with_license(self):
         entries = [make_entry(open_source=True, license="MIT")]
@@ -316,6 +313,28 @@ class TestGenerateCategoryTable:
         entries = [make_entry(open_source=False, license=None)]
         table = generate_category_table(entries)
         assert "| No |" in table
+
+    def test_includes_isolation(self):
+        entries = [make_entry(isolation_type=["microvm", "container"])]
+        table = generate_category_table(entries)
+        assert "microvm, container" in table
+
+    def test_includes_notes(self):
+        entries = [make_entry(notes="Important context here.")]
+        table = generate_category_table(entries)
+        assert "Important context here." in table
+
+    def test_excludes_maintainer(self):
+        """Maintainer was moved to the detailed reference."""
+        entries = [make_entry(maintainer="ShouldNotAppear Inc")]
+        table = generate_category_table(entries)
+        assert "ShouldNotAppear" not in table
+
+    def test_excludes_capabilities(self):
+        """Capabilities were moved to the detailed reference."""
+        entries = [make_entry(capabilities=["should-not-appear"])]
+        table = generate_category_table(entries)
+        assert "should-not-appear" not in table
 
     def test_sorted_alphabetically(self):
         entries = [
@@ -330,15 +349,176 @@ class TestGenerateCategoryTable:
         assert "Middle" in data_lines[1]
         assert "Zebra" in data_lines[2]
 
-    def test_has_header(self):
+    def test_has_4_column_header(self):
         entries = [make_entry()]
         table = generate_category_table(entries)
-        assert "| Name | Maintainer | OSS? |" in table
+        assert "| Name | OSS? | Isolation | Notes |" in table
 
-    def test_truncates_long_lists(self):
-        entries = [make_entry(capabilities=["a", "b", "c", "d", "e"])]
+
+# ---------------------------------------------------------------------------
+# Slugify
+# ---------------------------------------------------------------------------
+
+class TestSlugify:
+    def test_simple_name(self):
+        assert slugify("E2B") == "ref-e2b"
+
+    def test_lowercase(self):
+        assert slugify("Modal") == "ref-modal"
+
+    def test_spaces_to_hyphens(self):
+        assert slugify("Fly Sprites") == "ref-fly-sprites"
+
+    def test_strips_punctuation(self):
+        assert slugify("Anthropic sandbox-runtime (srt)") == "ref-anthropic-sandbox-runtime-srt"
+
+    def test_slash_becomes_hyphen(self):
+        assert slugify("agent-infra/sandbox") == "ref-agent-infra-sandbox"
+
+    def test_collapses_multiple_hyphens(self):
+        assert slugify("Linux Namespaces + cgroups") == "ref-linux-namespaces-cgroups"
+
+    def test_strips_trailing_punctuation(self):
+        assert slugify("nono") == "ref-nono"
+
+    def test_unique_for_distinct_entries(self):
+        """All real entry names should produce unique slugs."""
+        names = [
+            "E2B", "nono", "scode", "microsandbox",
+            "Anthropic sandbox-runtime (srt)",
+            "agent-infra/sandbox",
+            "Agent Sandbox (kubernetes-sigs)",
+            "GKE Agent Sandbox",
+            "macOS Seatbelt / sandbox-exec",
+            "seccomp-BPF",
+            "Linux Namespaces + cgroups",
+            "bubblewrap (bwrap)",
+        ]
+        slugs = [slugify(n) for n in names]
+        assert len(slugs) == len(set(slugs)), f"Duplicate slugs: {slugs}"
+
+
+# ---------------------------------------------------------------------------
+# Definition entry generation
+# ---------------------------------------------------------------------------
+
+class TestGenerateDefinitionEntry:
+    def test_includes_anchor(self):
+        entry = make_entry(name="MySandbox")
+        result = generate_definition_entry(entry)
+        assert '<a id="ref-mysandbox"></a>' in result
+
+    def test_includes_heading(self):
+        entry = make_entry(name="MySandbox")
+        result = generate_definition_entry(entry)
+        assert "#### MySandbox" in result
+
+    def test_includes_maintainer(self):
+        entry = make_entry(maintainer="TestCo")
+        result = generate_definition_entry(entry)
+        assert "TestCo" in result
+
+    def test_includes_license_when_oss(self):
+        entry = make_entry(open_source=True, license="Apache-2.0")
+        result = generate_definition_entry(entry)
+        assert "Apache-2.0" in result
+
+    def test_closed_source_marked(self):
+        entry = make_entry(open_source=False, license=None)
+        result = generate_definition_entry(entry)
+        assert "Closed source" in result
+
+    def test_includes_homepage_link(self):
+        entry = make_entry(url="https://example.com")
+        result = generate_definition_entry(entry)
+        assert "[Home](https://example.com)" in result
+
+    def test_includes_repo_link_when_different(self):
+        entry = make_entry(url="https://example.com", repo_url="https://github.com/x/y")
+        result = generate_definition_entry(entry)
+        assert "[Repo](https://github.com/x/y)" in result
+
+    def test_omits_repo_link_when_same_as_url(self):
+        entry = make_entry(url="https://github.com/x/y", repo_url="https://github.com/x/y")
+        result = generate_definition_entry(entry)
+        # Only the Home link should be present
+        assert result.count("https://github.com/x/y") == 1
+
+    def test_includes_description(self):
+        entry = make_entry(description="A unique description string.")
+        result = generate_definition_entry(entry)
+        assert "A unique description string." in result
+
+    def test_includes_capabilities(self):
+        entry = make_entry(capabilities=["cap1", "cap2", "cap3"])
+        result = generate_definition_entry(entry)
+        assert "cap1; cap2; cap3" in result
+
+    def test_includes_requirements(self):
+        entry = make_entry(requirements=["req1", "req2"])
+        result = generate_definition_entry(entry)
+        assert "req1; req2" in result
+
+    def test_includes_limitations(self):
+        entry = make_entry(limitations=["lim1"])
+        result = generate_definition_entry(entry)
+        assert "lim1" in result
+
+    def test_includes_notes(self):
+        entry = make_entry(notes="Important context")
+        result = generate_definition_entry(entry)
+        assert "Important context" in result
+
+    def test_omits_empty_optional_fields(self):
+        entry = make_entry(notes=None, repo_url=None)
+        result = generate_definition_entry(entry)
+        assert "_Notes:" not in result
+        assert "[Repo]" not in result
+
+
+# ---------------------------------------------------------------------------
+# Definition section generation
+# ---------------------------------------------------------------------------
+
+class TestGenerateDefinitionSection:
+    def test_includes_section_heading(self):
+        entries = [make_entry()]
+        result = generate_definition_section(entries)
+        assert "## Detailed Reference" in result
+
+    def test_groups_by_category(self):
+        entries = [
+            make_entry(name="Tool A", category="standalone"),
+            make_entry(name="Tool B", category="cloud-managed"),
+        ]
+        result = generate_definition_section(entries)
+        assert "### Cloud Managed Sandboxes" in result
+        assert "### Standalone / Self-Hosted Tools" in result
+
+    def test_building_blocks_grouped_under_subheading(self):
+        entries = [make_entry(name="Tool", category="vm-runtime")]
+        result = generate_definition_section(entries)
+        assert "### Building Blocks" in result
+        assert "#### VM & Container Runtimes" in result
+
+    def test_anchors_match_table_links(self):
+        """Definition section anchors must match what category tables link to."""
+        entries = [make_entry(name="Tool", category="standalone")]
         table = generate_category_table(entries)
-        assert "+2 more" in table
+        section = generate_definition_section(entries)
+        # Extract the anchor from the table link
+        assert "(#ref-tool)" in table
+        assert '<a id="ref-tool"></a>' in section
+
+    def test_alphabetical_within_category(self):
+        entries = [
+            make_entry(name="Zebra", category="standalone"),
+            make_entry(name="Alpha", category="standalone"),
+        ]
+        result = generate_definition_section(entries)
+        alpha_pos = result.find("#### Alpha")
+        zebra_pos = result.find("#### Zebra")
+        assert alpha_pos < zebra_pos
 
 
 # ---------------------------------------------------------------------------
