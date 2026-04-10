@@ -386,6 +386,20 @@ OS-level sandbox wrapper for any AI coding harness with filesystem and network r
 
 _Notes: Early entry in the space (Sept 2025), motivated by Claude Code's initial lack of built-in sandboxing._
 
+<a id="ref-sevorix-lite"></a>
+### sevorix-lite
+
+**Maintainer:** Sevorix · **License:** AGPL-3.0 · [Home](https://github.com/sevorix/sevorix-lite)
+
+Rust-native runtime containment engine combining eBPF syscall interception, mount namespace shell override, HTTP proxy, and a human-in-the-loop policy dashboard.
+
+- **Isolation:** seccomp, user-namespace
+- **Capabilities:** eBPF syscall interception (Linux); Mount-namespace bind-mount of sevsh over /bin/bash; HTTP proxy for network filtering; libseccomp integration; Central policy engine with web dashboard; Green/Red/Yellow lane model with human-in-the-loop intervention; Claude Code vault integration; Claims <20ms enforcement latency
+- **Requirements:** Linux or WSL (full enforcement); macOS (proxy + shell interception only, no eBPF/seccomp)
+- **Limitations:** macOS support is reduced (no eBPF/seccomp); "Lite" edition of a commercial product (Sevorix); AGPL means modifications must be shared
+
+_Notes: Multi-layered runtime containment rather than VM/container isolation. The "Yellow Lane" human-in-the-loop model with countdown timer is unusual — the agent pauses pending human approval via dashboard. Claude Code integration is first-class._
+
 ## Kubernetes-Native
 
 <a id="ref-agent-sandbox-kubernetes-sigs"></a>
@@ -415,6 +429,20 @@ Managed Kubernetes service for AI code isolation on GKE using gVisor and kuberne
 - **Limitations:** GKE-only; Vendor lock-in
 
 _Notes: Managed wrapper around the open-source agent-sandbox project. If you're already on GKE, this is the path of least resistance._
+
+<a id="ref-treadstone"></a>
+### treadstone
+
+**Maintainer:** earayu · **License:** Apache-2.0 · [Home](https://github.com/earayu/treadstone)
+
+Self-hostable Kubernetes sandbox control plane that provisions gVisor-isolated pods from templates, with CLI, Python SDK, REST API, and first-class browser handoff.
+
+- **Isolation:** gvisor
+- **Capabilities:** Kubernetes CRD-based provisioning (built on kubernetes-sigs/agent-sandbox); gVisor isolation; Warm pod pools; CLI + Python SDK + REST API; Browser handoff — short-lived links to hand a running session to a human; MCP-over-data-plane routing; Data plane proxy for outbound traffic
+- **Requirements:** Kubernetes cluster (self-hosted); or managed service at treadstone-ai.dev
+- **Limitations:** Solo maintainer; Maturity unclear; Full SDK/CLI surface suggests active development
+
+_Notes: Built on kubernetes-sigs/agent-sandbox as the underlying CRD. Browser handoff is an unusual feature — enables smooth transitions from autonomous agent execution to human intervention. Offered both as open source and as a hosted service._
 
 ## Development Environments
 

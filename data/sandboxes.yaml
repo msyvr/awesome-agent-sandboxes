@@ -801,6 +801,40 @@
   adoption_effort: install
   deployment_model: local
 
+- name: sevorix-lite
+  category: standalone
+  maintainer: Sevorix
+  open_source: true
+  license: AGPL-3.0
+  url: https://github.com/sevorix/sevorix-lite
+  repo_url: https://github.com/sevorix/sevorix-lite
+  description: Rust-native runtime containment engine combining eBPF syscall interception, mount namespace shell override, HTTP proxy, and a human-in-the-loop policy dashboard.
+  isolation_type: [seccomp, user-namespace]
+  capabilities:
+    - eBPF syscall interception (Linux)
+    - Mount-namespace bind-mount of sevsh over /bin/bash
+    - HTTP proxy for network filtering
+    - libseccomp integration
+    - Central policy engine with web dashboard
+    - "Green/Red/Yellow lane model with human-in-the-loop intervention"
+    - Claude Code vault integration
+    - "Claims <20ms enforcement latency"
+  requirements:
+    - Linux or WSL (full enforcement)
+    - macOS (proxy + shell interception only, no eBPF/seccomp)
+  limitations:
+    - macOS support is reduced (no eBPF/seccomp)
+    - '"Lite" edition of a commercial product (Sevorix)'
+    - AGPL means modifications must be shared
+  notes: >-
+    Multi-layered runtime containment rather than VM/container isolation.
+    The "Yellow Lane" human-in-the-loop model with countdown timer is
+    unusual — the agent pauses pending human approval via dashboard.
+    Claude Code integration is first-class.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
 # =============================================================================
 # Kubernetes-Native
 # =============================================================================
@@ -860,6 +894,39 @@
     If you're already on GKE, this is the path of least resistance.
   isolation_tier: container
   adoption_effort: sign-up
+  deployment_model: kubernetes
+
+- name: treadstone
+  category: kubernetes
+  maintainer: earayu
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/earayu/treadstone
+  repo_url: https://github.com/earayu/treadstone
+  description: Self-hostable Kubernetes sandbox control plane that provisions gVisor-isolated pods from templates, with CLI, Python SDK, REST API, and first-class browser handoff.
+  isolation_type: [gvisor]
+  capabilities:
+    - Kubernetes CRD-based provisioning (built on kubernetes-sigs/agent-sandbox)
+    - gVisor isolation
+    - Warm pod pools
+    - CLI + Python SDK + REST API
+    - Browser handoff — short-lived links to hand a running session to a human
+    - MCP-over-data-plane routing
+    - Data plane proxy for outbound traffic
+  requirements:
+    - Kubernetes cluster (self-hosted)
+    - or managed service at treadstone-ai.dev
+  limitations:
+    - Solo maintainer
+    - Maturity unclear
+    - Full SDK/CLI surface suggests active development
+  notes: >-
+    Built on kubernetes-sigs/agent-sandbox as the underlying CRD.
+    Browser handoff is an unusual feature — enables smooth transitions
+    from autonomous agent execution to human intervention. Offered
+    both as open source and as a hosted service.
+  isolation_tier: container
+  adoption_effort: install
   deployment_model: kubernetes
 
 # =============================================================================
