@@ -830,7 +830,7 @@
     Multi-layered runtime containment rather than VM/container isolation.
     The "Yellow Lane" human-in-the-loop model with countdown timer is
     unusual — the agent pauses pending human approval via dashboard.
-    Claude Code integration is first-class.
+    Claude Code support is built in, not bolted on.
   isolation_tier: process
   adoption_effort: install
   deployment_model: local
@@ -903,7 +903,7 @@
   license: Apache-2.0
   url: https://github.com/earayu/treadstone
   repo_url: https://github.com/earayu/treadstone
-  description: Self-hostable Kubernetes sandbox control plane that provisions gVisor-isolated pods from templates, with CLI, Python SDK, REST API, and first-class browser handoff.
+  description: Self-hostable Kubernetes sandbox control plane that provisions gVisor-isolated pods from templates, with CLI, Python SDK, REST API, and built-in browser handoff for human intervention.
   isolation_type: [gvisor]
   capabilities:
     - Kubernetes CRD-based provisioning (built on kubernetes-sigs/agent-sandbox)

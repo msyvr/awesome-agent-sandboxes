@@ -398,7 +398,7 @@ Rust-native runtime containment engine combining eBPF syscall interception, moun
 - **Requirements:** Linux or WSL (full enforcement); macOS (proxy + shell interception only, no eBPF/seccomp)
 - **Limitations:** macOS support is reduced (no eBPF/seccomp); "Lite" edition of a commercial product (Sevorix); AGPL means modifications must be shared
 
-_Notes: Multi-layered runtime containment rather than VM/container isolation. The "Yellow Lane" human-in-the-loop model with countdown timer is unusual — the agent pauses pending human approval via dashboard. Claude Code integration is first-class._
+_Notes: Multi-layered runtime containment rather than VM/container isolation. The "Yellow Lane" human-in-the-loop model with countdown timer is unusual — the agent pauses pending human approval via dashboard. Claude Code support is built in, not bolted on._
 
 ## Kubernetes-Native
 
@@ -435,7 +435,7 @@ _Notes: Managed wrapper around the open-source agent-sandbox project. If you're 
 
 **Maintainer:** earayu · **License:** Apache-2.0 · [Home](https://github.com/earayu/treadstone)
 
-Self-hostable Kubernetes sandbox control plane that provisions gVisor-isolated pods from templates, with CLI, Python SDK, REST API, and first-class browser handoff.
+Self-hostable Kubernetes sandbox control plane that provisions gVisor-isolated pods from templates, with CLI, Python SDK, REST API, and built-in browser handoff for human intervention.
 
 - **Isolation:** gvisor
 - **Capabilities:** Kubernetes CRD-based provisioning (built on kubernetes-sigs/agent-sandbox); gVisor isolation; Warm pod pools; CLI + Python SDK + REST API; Browser handoff — short-lived links to hand a running session to a human; MCP-over-data-plane routing; Data plane proxy for outbound traffic
