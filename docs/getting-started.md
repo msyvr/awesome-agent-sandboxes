@@ -38,6 +38,7 @@ When evaluating a sandbox, ask: *what specific risks does this protect against, 
 
 The fastest path to protection depends on what agent you're using and what OS you're on. Each option below includes what it protects and what it doesn't.
 
+<a id="sec-qs-claude-code"></a>
 ### If you're using Claude Code
 
 Claude Code has built-in sandboxing enabled by default. It uses OS-level primitives (bubblewrap on Linux, Seatbelt on macOS) to restrict filesystem and network access.
@@ -54,6 +55,7 @@ Claude Code has built-in sandboxing enabled by default. It uses OS-level primiti
 - macOS sandbox-exec is deprecated by Apple — could break in a future macOS update with no announced replacement
 - Process-level isolation (shared kernel) — weaker than VM or container isolation. A kernel exploit could bypass it.
 
+<a id="sec-qs-codex"></a>
 ### If you're using OpenAI Codex
 
 Codex enables sandboxing by default in both cloud and local modes.
@@ -68,6 +70,7 @@ Codex enables sandboxing by default in both cloud and local modes.
 - Local mode is Linux-only (kernel 5.13+) — no macOS or Windows support
 - Container isolation (cloud) shares the host kernel
 
+<a id="sec-qs-stronger"></a>
 ### If you want stronger isolation
 
 The options below provide deeper isolation than built-in agent sandboxing. They're listed in order of what security properties they offer, not brand recognition.

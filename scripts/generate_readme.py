@@ -487,6 +487,9 @@ def generate_toc(entries: list[dict]) -> str:
     # --- Part 1: hand-written sections ---
     lines.append("- [What is sandboxing and why should you care?](#sec-what-is-sandboxing)")
     lines.append("- [Quick Start: sandbox your agent in 5 minutes](#sec-quick-start)")
+    lines.append("  - [If you're using Claude Code](#sec-qs-claude-code)")
+    lines.append("  - [If you're using OpenAI Codex](#sec-qs-codex)")
+    lines.append("  - [If you want stronger isolation](#sec-qs-stronger)")
     lines.append("- [Choosing a sandbox](#sec-choosing)")
     lines.append("- [Safety & Alignment Research](#sec-safety-research)")
 
