@@ -607,6 +607,200 @@
   adoption_effort: install
   deployment_model: local
 
+- name: monty
+  category: standalone
+  maintainer: Pydantic
+  open_source: true
+  license: MIT
+  url: https://github.com/pydantic/monty
+  repo_url: https://github.com/pydantic/monty
+  description: Minimal, secure Python interpreter written in Rust providing language-runtime sandboxing for AI-generated code with no host access except via explicit caller-provided functions.
+  isolation_type: [process]
+  capabilities:
+    - Custom Python interpreter in Rust
+    - No filesystem, env, or network access by default
+    - Caller-provided functions for explicit host integration
+    - Memory, stack, and time limits
+    - Snapshotting
+  requirements:
+    - "pip install pydantic-monty"
+  limitations:
+    - Experimental — explicitly not ready for production
+    - Python subset only (not full CPython)
+  notes: >-
+    Different approach from Pyodide — a custom Rust interpreter rather
+    than CPython compiled to Wasm. Will power Pydantic AI's codemode
+    feature. Backed by Pydantic, but explicitly experimental.
+    Categorized in the wasm tier because language-runtime sandboxing
+    fits the same isolation strength characterization (fastest/lightest,
+    limited to specific runtimes), even though it's not actually Wasm.
+  isolation_tier: wasm
+  adoption_effort: install
+  deployment_model: local
+
+- name: ai-sandbox-wrapper
+  category: standalone
+  maintainer: kokorolx
+  open_source: true
+  license: null
+  url: https://github.com/nano-step/ai-sandbox-wrapper
+  repo_url: https://github.com/nano-step/ai-sandbox-wrapper
+  description: npm CLI that wraps Docker for coding agents (opencode, amp, droid) with workspace whitelisting, capability dropping, and Git fetch-only mode.
+  isolation_type: [container]
+  capabilities:
+    - Docker container isolation
+    - Workspace whitelisting (filesystem boundary)
+    - Non-root execution
+    - CAP_DROP=ALL (drops all Linux capabilities)
+    - Explicit API key passing
+    - Git fetch-only mode (egress restriction)
+    - Targets opencode, amp, droid coding agents
+  requirements:
+    - Docker
+    - "npm install -g @kokorolx/ai-sandbox-wrapper"
+  limitations:
+    - No LICENSE file in repo (legal status unclear)
+    - Solo maintainer
+    - Container isolation only (shared kernel)
+  notes: >-
+    Opinionated hardening over default Docker — capability dropping
+    and Git fetch-only mode are substantive choices most Docker
+    wrappers don't make. No license means the code is technically
+    all-rights-reserved by default; consider asking the author to
+    add one before relying on it.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
+- name: locki
+  category: standalone
+  maintainer: JanPokorny
+  open_source: true
+  license: null
+  url: https://github.com/JanPokorny/locki
+  repo_url: https://github.com/JanPokorny/locki
+  description: CLI that runs coding agents inside Incus containers in a shared Lima VM, with auto-managed git worktrees and a host-side SSH git proxy.
+  isolation_type: [kvm, container]
+  capabilities:
+    - VM isolation via Lima/QEMU
+    - Container isolation via Incus
+    - Auto-managed git worktrees
+    - Host-side SSH git proxy with command allowlist
+    - Supports claude, gemini, codex, opencode, shell
+  requirements:
+    - macOS or Linux
+    - Lima and Incus
+    - "pip or uv install"
+  limitations:
+    - No LICENSE file in repo (legal status unclear)
+    - Author explicitly disclaims security guarantees
+    - No exfiltration protection
+    - Solo maintainer
+    - Very early
+  notes: >-
+    One of the few sandboxes that layers VM (Lima/QEMU) plus container
+    (Incus) for coding agents — interesting design worth tracking.
+    Author is candid about "no security guarantees" in the README.
+    No license means the code is technically all-rights-reserved by
+    default; consider asking the author to add one before relying on it.
+  isolation_tier: hardware-vm
+  adoption_effort: install
+  deployment_model: local
+
+- name: agentsh
+  category: standalone
+  maintainer: canyonroad
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/canyonroad/agentsh
+  repo_url: https://github.com/canyonroad/agentsh
+  description: Policy-enforced execution gateway that intercepts file, network, process, and signal syscalls for agent commands with allow/deny/approve/redirect decisions and structured audit.
+  isolation_type: [process, landlock, seatbelt]
+  capabilities:
+    - Syscall interception (file, network, process, signal)
+    - Subprocess tree coverage
+    - Allow/deny/approve/redirect policy decisions
+    - Structured audit events
+    - Pairs with containers
+    - Cross-platform (Linux LSM/FUSE, macOS ESF+NE, Windows minifilter)
+    - Linux is production-ready; macOS alpha; Windows pending driver signing
+  requirements:
+    - Linux (production), macOS (alpha), or Windows (pending)
+    - Homebrew, .deb, .rpm, or .apk install
+  limitations:
+    - macOS support is alpha
+    - Windows support pending driver signing
+  notes: >-
+    Real runtime enforcement, not just wrapping. The "redirect" policy
+    decision is unusual — can transparently steer agent network calls
+    or out-of-workspace writes to scratch dirs without the agent
+    knowing it was redirected.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: jailoc
+  category: standalone
+  maintainer: Seznam
+  open_source: true
+  license: MIT
+  url: https://github.com/seznam/jailoc
+  repo_url: https://github.com/seznam/jailoc
+  description: Per-workspace Docker Compose sandbox for OpenCode agents with iptables egress filtering, dropped capabilities, and a DinD sidecar to avoid host socket mounting.
+  isolation_type: [container]
+  capabilities:
+    - Per-workspace Docker Compose sandboxes
+    - iptables egress filtering (blocks RFC 1918, link-local, CGNAT by default)
+    - UID 1000, dropped capabilities, no_new_privs
+    - DinD sidecar instead of mounting docker.sock
+    - OpenCode agent integration
+    - Renovate-pinned base image
+  requirements:
+    - Docker
+    - Linux
+  limitations:
+    - OpenCode-specific defaults (sandboxing model is general)
+    - Container isolation only (shared kernel)
+  notes: >-
+    Backed by Seznam (Czech search engine). Network isolation via
+    iptables allowlist prevents pivot to internal infra. The DinD
+    sidecar approach avoids the common docker.sock mount escape vector.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
+- name: sand
+  category: standalone
+  maintainer: banksean
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/banksean/sand
+  repo_url: https://github.com/banksean/sand
+  description: macOS CLI that spawns disposable Apple Containerization VMs with APFS copy-on-write workspace clones for running coding agents.
+  isolation_type: [microvm]
+  capabilities:
+    - Apple Containerization (Kata-based microVMs)
+    - APFS clonefile copy-on-write workspace clones
+    - SSH agent forwarding
+    - DNS
+    - eBPF egress filtering with --allowed-domains-file
+    - One-command launch of Claude Code or opencode
+  requirements:
+    - Apple Silicon
+    - macOS 15+
+    - Homebrew tap
+  limitations:
+    - macOS only (Apple Silicon)
+    - Solo maintainer
+  notes: >-
+    Apple Containerization gives hardware-isolated micro-VMs (Kata-based)
+    on Apple Silicon. APFS clonefile makes workspace clones instant
+    without copying files. eBPF egress filtering is a notable
+    hardening choice for a solo project.
+  isolation_tier: microvm
+  adoption_effort: install
+  deployment_model: local
+
 # =============================================================================
 # Kubernetes-Native
 # =============================================================================

@@ -25,6 +25,7 @@ Curated articles, papers, and discussions on sandboxing AI agents.
 ## Research
 
 - [Fault-Tolerant Sandboxing for AI Coding Agents: A Transactional Approach to Safe Autonomous Execution](https://arxiv.org/abs/2512.12806) — Academic paper on transactional safety for agent sandboxes
+- [LLM Agent Harness Survey](https://github.com/Gloriaameng/LLM-Agent-Harness-Survey) — Survey of 110+ papers across 23 agent harness systems with a taxonomy. Different scope from this repo (harnesses, not sandboxes), but the "Security & Sandboxing" section cites sandbox-relevant papers (SandboxEscapeBench, AEGIS, PRISM)
 
 ## Discussions
 
