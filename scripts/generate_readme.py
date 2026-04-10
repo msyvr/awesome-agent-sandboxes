@@ -99,13 +99,13 @@ CATEGORY_INTROS = {
     "wasm-runtime": "WebAssembly runtimes providing language-level sandboxing. Architecturally elegant but require compiling tools to Wasm.",
 }
 
-# Lens definitions
+# Lens definitions: (value, label, description, trade_off)
 ISOLATION_TIER_ORDER = [
-    ("hardware-vm", "Hardware VM (KVM)", "Full hardware virtualization. Strongest isolation — separate kernel per sandbox."),
-    ("microvm", "MicroVM", "Lightweight VMs (e.g., Firecracker). Near-VM isolation with fast startup and low overhead."),
-    ("container", "Container / User-space Kernel", "Shared kernel with namespace/syscall isolation (Docker, gVisor). Weaker than VMs but lighter."),
-    ("process", "Process-level", "OS-level restrictions on a process (namespaces, LSMs, Seatbelt). No VM or container overhead."),
-    ("wasm", "Wasm / Language Runtime", "WebAssembly or V8 isolate sandboxing. Fastest and lightest, but limited to specific runtimes."),
+    ("hardware-vm", "Hardware VM (KVM)", "Full hardware virtualization with separate kernel per sandbox.", "Higher overhead and resource use; requires KVM/hypervisor."),
+    ("microvm", "MicroVM", "Lightweight VMs (e.g., Firecracker) with fast startup and low overhead.", "Slightly weaker than full VMs; Linux-only for most options."),
+    ("container", "Container / User-space Kernel", "Shared kernel with namespace or syscall isolation (Docker, gVisor).", "Shared kernel means a kernel exploit can bypass isolation."),
+    ("process", "Process-level", "OS-level restrictions on a process (namespaces, LSMs, Seatbelt).", "Weakest containment boundary; not for adversarial workloads."),
+    ("wasm", "Wasm / Language Runtime", "WebAssembly or V8 isolate sandboxing.", "Limited to specific runtimes; can't run arbitrary binaries."),
 ]
 
 ADOPTION_EFFORT_ORDER = [
@@ -217,13 +217,13 @@ def generate_lens_table(entries: list[dict], tier_order: list[tuple], tag_field:
     if tag_field == "isolation_tier":
         lines.append("| Tier | Mechanism | Examples | Trade-off |")
         lines.append("|------|-----------|----------|-----------|")
-        for value, label, description in tier_order:
+        for value, label, description, trade_off in tier_order:
             matching = [e["name"] for e in entries if e.get(tag_field) == value]
             if matching:
                 examples = ", ".join(matching[:5])
                 if len(matching) > 5:
                     examples += f", +{len(matching) - 5} more"
-                lines.append(f"| **{label}** | {escape_md(description)} | {examples} |")
+                lines.append(f"| **{label}** | {escape_md(description)} | {examples} | {escape_md(trade_off)} |")
     elif tag_field == "adoption_effort":
         lines.append("| Effort | What it means | Examples |")
         lines.append("|--------|---------------|----------|")

@@ -46,7 +46,7 @@ Claude Code has built-in sandboxing enabled by default. It uses OS-level primiti
 **Protects against:** Filesystem writes outside your project directory. Unrestricted network access (proxy-based domain allowlisting).
 
 **Known risks:**
-- The `dangerouslyDisableSandbox` flag can be triggered by the agent itself — a [demonstrated escape vector](https://ona.com) (March 2026)
+- The `dangerouslyDisableSandbox` flag can be triggered by the agent itself — a demonstrated escape vector (Ona, March 2026)
 - macOS sandbox-exec is deprecated by Apple — could break in a future macOS update with no announced replacement
 - Process-level isolation (shared kernel) — weaker than VM or container isolation. A kernel exploit could bypass it.
 
@@ -171,7 +171,7 @@ Do you already use an agent with built-in sandboxing?
 │   stronger options below if you handle sensitive credentials or
 │   need rollback/audit capabilities.
 │
-└── What matters most to you?
+└── No → What matters most to you?
     │
     ├── Credential safety (API keys, tokens)
     │   └── nono — keys never enter the sandbox
@@ -203,9 +203,9 @@ Do you already use an agent with built-in sandboxing?
 
 If you're doing AI safety research, RL training, capability evaluation, or adversarial red-teaming, see **[Sandboxing for AI Safety & Alignment Research](docs/safety-research.md)** — these contexts have fundamentally different containment requirements from general agent use.
 
-## Full Landscape
+---
 
-For a comprehensive technical comparison of all sandbox options — including cloud services, standalone tools, VM runtimes, OS primitives, and WebAssembly runtimes — see the full landscape below.
+_The sections below are generated from [`data/sandboxes.yaml`](data/sandboxes.yaml). They cover the full landscape: cloud services, standalone tools, VM runtimes, OS primitives, and WebAssembly runtimes._
 
 ## Quick Triage
 
@@ -215,11 +215,11 @@ Three views of the same landscape to help you find what fits.
 
 | Tier | Mechanism | Examples | Trade-off |
 |------|-----------|----------|-----------|
-| **Hardware VM (KVM)** | Full hardware virtualization. Strongest isolation — separate kernel per sandbox. | Firecracker, Kata Containers, libkrun, Zeroboot |
-| **MicroVM** | Lightweight VMs (e.g., Firecracker). Near-VM isolation with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +6 more |
-| **Container / User-space Kernel** | Shared kernel with namespace/syscall isolation (Docker, gVisor). Weaker than VMs but lighter. | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, Agent Sandbox (kubernetes-sigs), +9 more |
-| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). No VM or container overhead. | Claude Code Sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +8 more |
-| **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. Fastest and lightest, but limited to specific runtimes. | Cloudflare Dynamic Workers, Wasmtime, WasmEdge, wasmCloud, Wassette, +1 more |
+| **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | Firecracker, Kata Containers, libkrun, Zeroboot | Higher overhead and resource use; requires KVM/hypervisor. |
+| **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +6 more | Slightly weaker than full VMs; Linux-only for most options. |
+| **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, Agent Sandbox (kubernetes-sigs), +9 more | Shared kernel means a kernel exploit can bypass isolation. |
+| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +8 more | Weakest containment boundary; not for adversarial workloads. |
+| **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, Wasmtime, WasmEdge, wasmCloud, Wassette, +1 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
 ### How do I get started?
 
