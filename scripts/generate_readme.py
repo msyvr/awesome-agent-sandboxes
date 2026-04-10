@@ -396,6 +396,7 @@ def generate_part2(entries: list[dict]) -> str:
     sections = []
 
     # --- Quick Triage (lenses) ---
+    sections.append('<a id="sec-quick-triage"></a>')
     sections.append("## Quick Triage\n")
     sections.append("Three views of the same landscape to help you find what fits.\n")
 
@@ -422,6 +423,7 @@ def generate_part2(entries: list[dict]) -> str:
         cat_entries = [e for e in entries if e.get("category") == cat_key]
         if not cat_entries:
             continue
+        sections.append(f'<a id="sec-{cat_key}"></a>')
         sections.append(f"## {cat_name}\n")
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
@@ -430,6 +432,7 @@ def generate_part2(entries: list[dict]) -> str:
         sections.append("")
 
     sections.append("---\n")
+    sections.append('<a id="sec-building-blocks"></a>')
     sections.append("## Building Blocks\n")
     sections.append(
         "The underlying technologies that sandbox products are built on. "
@@ -442,6 +445,7 @@ def generate_part2(entries: list[dict]) -> str:
         cat_entries = [e for e in entries if e.get("category") == cat_key]
         if not cat_entries:
             continue
+        sections.append(f'<a id="sec-{cat_key}"></a>')
         sections.append(f"### {cat_name}\n")
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
@@ -451,13 +455,16 @@ def generate_part2(entries: list[dict]) -> str:
 
     # --- Detailed Reference ---
     sections.append("---\n")
+    sections.append('<a id="sec-detailed-reference"></a>')
     sections.append(generate_definition_section(entries))
 
     # --- References ---
+    sections.append('<a id="sec-references"></a>')
     sections.append("## References\n")
     sections.append("See [references/reading-list.md](references/reading-list.md) for blog posts, papers, and discussions on agent sandboxing.\n")
 
     # --- Contributing ---
+    sections.append('<a id="sec-contributing"></a>')
     sections.append("## Contributing\n")
     sections.append("To add or update a sandbox entry:\n")
     sections.append("1. Edit `data/sandboxes.yaml` — follow the existing schema (all fields documented in the file header)")
@@ -466,6 +473,44 @@ def generate_part2(entries: list[dict]) -> str:
     sections.append("The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.\n")
 
     return "\n".join(sections)
+
+
+def generate_toc(entries: list[dict]) -> str:
+    """Generate the table of contents.
+
+    Part 1 entries are hardcoded to mirror docs/getting-started.md headings.
+    If you add or rename a section in getting-started.md, update this list.
+    Part 2 entries are derived from CATEGORY_ORDER and the YAML data.
+    """
+    lines = ["## Table of Contents\n"]
+
+    # --- Part 1: hand-written sections ---
+    lines.append("- [What is sandboxing and why should you care?](#sec-what-is-sandboxing)")
+    lines.append("- [Quick Start: sandbox your agent in 5 minutes](#sec-quick-start)")
+    lines.append("- [Choosing a sandbox](#sec-choosing)")
+    lines.append("- [Safety & Alignment Research](#sec-safety-research)")
+
+    # --- Part 2: lenses + categories ---
+    lines.append("- [Quick Triage](#sec-quick-triage)")
+
+    product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
+    building_cats = [c for c in CATEGORY_ORDER if c[0] in BUILDING_BLOCK_CATEGORIES]
+
+    for cat_key, cat_name in product_cats:
+        if any(e.get("category") == cat_key for e in entries):
+            lines.append(f"- [{cat_name}](#sec-{cat_key})")
+
+    if any(e.get("category") in BUILDING_BLOCK_CATEGORIES for e in entries):
+        lines.append("- [Building Blocks](#sec-building-blocks)")
+        for cat_key, cat_name in building_cats:
+            if any(e.get("category") == cat_key for e in entries):
+                lines.append(f"  - [{cat_name}](#sec-{cat_key})")
+
+    lines.append("- [Detailed Reference](#sec-detailed-reference)")
+    lines.append("- [References](#sec-references)")
+    lines.append("- [Contributing](#sec-contributing)")
+
+    return "\n".join(lines)
 
 
 def main():
@@ -497,6 +542,16 @@ def main():
         sys.exit(1)
 
     part1 = GETTING_STARTED_PATH.read_text().rstrip()
+
+    # Inject the table of contents at the placeholder
+    toc = generate_toc(entries)
+    if "<!-- TOC -->" not in part1:
+        print(
+            f"Error: {GETTING_STARTED_PATH} is missing the <!-- TOC --> placeholder",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    part1 = part1.replace("<!-- TOC -->", toc)
 
     # Generate Part 2
     part2 = generate_part2(entries)

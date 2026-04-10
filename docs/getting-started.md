@@ -4,6 +4,9 @@ A comprehensive guide to sandboxing options for AI agents — coding agents, bro
 
 Whether you're a developer building with AI agents or someone using them for personal tasks, this guide helps you understand how to keep your system safe while agents work on your behalf.
 
+<!-- TOC -->
+
+<a id="sec-what-is-sandboxing"></a>
 ## What is sandboxing and why should you care?
 
 A sandbox limits what your AI agent can do on your computer (or in the cloud). Think of it like giving someone access to one room in your house instead of handing them the keys to the whole building.
@@ -30,6 +33,7 @@ Different sandboxes protect against different things. Understanding what a sandb
 
 When evaluating a sandbox, ask: *what specific risks does this protect against, and what does it leave exposed?*
 
+<a id="sec-quick-start"></a>
 ## Quick Start: sandbox your agent in 5 minutes
 
 The fastest path to protection depends on what agent you're using and what OS you're on. Each option below includes what it protects and what it doesn't.
@@ -161,6 +165,7 @@ If you'd rather not manage infrastructure, sign up for a cloud sandbox:
 - Usage-based pricing can accumulate
 - Ephemeral by default (except Daytona and Fly Sprites which offer persistence)
 
+<a id="sec-choosing"></a>
 ## Choosing a sandbox
 
 Use this decision tree to narrow down your options:
@@ -199,6 +204,7 @@ Do you already use an agent with built-in sandboxing?
         └── Any K8s cluster → agent-sandbox (kubernetes-sigs)
 ```
 
+<a id="sec-safety-research"></a>
 ## Safety & Alignment Research
 
 If you're doing AI safety research, RL training, capability evaluation, or adversarial red-teaming, see **[Sandboxing for AI Safety & Alignment Research](docs/safety-research.md)** — these contexts have fundamentally different containment requirements from general agent use.

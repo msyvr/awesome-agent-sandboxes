@@ -25,6 +25,7 @@ from generate_readme import (
     slugify,
     generate_definition_entry,
     generate_definition_section,
+    generate_toc,
 )
 
 
@@ -533,3 +534,60 @@ class TestVocabularyConsistency:
     def test_no_duplicate_categories_in_order(self):
         keys = [key for key, _ in CATEGORY_ORDER]
         assert len(keys) == len(set(keys))
+
+
+# ---------------------------------------------------------------------------
+# Table of Contents
+# ---------------------------------------------------------------------------
+
+class TestGenerateToc:
+    def test_includes_heading(self):
+        result = generate_toc([make_entry()])
+        assert "## Table of Contents" in result
+
+    def test_includes_part1_sections(self):
+        result = generate_toc([make_entry()])
+        assert "(#sec-what-is-sandboxing)" in result
+        assert "(#sec-quick-start)" in result
+        assert "(#sec-choosing)" in result
+        assert "(#sec-safety-research)" in result
+
+    def test_includes_quick_triage(self):
+        result = generate_toc([make_entry()])
+        assert "(#sec-quick-triage)" in result
+
+    def test_includes_categories_with_entries(self):
+        entries = [
+            make_entry(name="A", category="cloud-managed"),
+            make_entry(name="B", category="standalone"),
+        ]
+        result = generate_toc(entries)
+        assert "(#sec-cloud-managed)" in result
+        assert "(#sec-standalone)" in result
+
+    def test_omits_categories_without_entries(self):
+        entries = [make_entry(category="cloud-managed")]
+        result = generate_toc(entries)
+        assert "(#sec-cloud-managed)" in result
+        # No standalone entries, so no link
+        assert "(#sec-kubernetes)" not in result
+
+    def test_building_blocks_nested(self):
+        entries = [make_entry(category="vm-runtime")]
+        result = generate_toc(entries)
+        assert "(#sec-building-blocks)" in result
+        assert "  - [VM & Container Runtimes](#sec-vm-runtime)" in result
+
+    def test_no_building_blocks_when_no_entries(self):
+        entries = [make_entry(category="cloud-managed")]
+        result = generate_toc(entries)
+        assert "(#sec-building-blocks)" not in result
+
+    def test_includes_detailed_reference(self):
+        result = generate_toc([make_entry()])
+        assert "(#sec-detailed-reference)" in result
+
+    def test_includes_references_and_contributing(self):
+        result = generate_toc([make_entry()])
+        assert "(#sec-references)" in result
+        assert "(#sec-contributing)" in result

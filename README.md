@@ -4,6 +4,28 @@ A comprehensive guide to sandboxing options for AI agents — coding agents, bro
 
 Whether you're a developer building with AI agents or someone using them for personal tasks, this guide helps you understand how to keep your system safe while agents work on your behalf.
 
+## Table of Contents
+
+- [What is sandboxing and why should you care?](#sec-what-is-sandboxing)
+- [Quick Start: sandbox your agent in 5 minutes](#sec-quick-start)
+- [Choosing a sandbox](#sec-choosing)
+- [Safety & Alignment Research](#sec-safety-research)
+- [Quick Triage](#sec-quick-triage)
+- [Cloud Managed Sandboxes](#sec-cloud-managed)
+- [Agent-Integrated Sandboxes](#sec-agent-integrated)
+- [Standalone / Self-Hosted Tools](#sec-standalone)
+- [Kubernetes-Native](#sec-kubernetes)
+- [Development Environments](#sec-dev-environment)
+- [Abstraction Layers](#sec-abstraction)
+- [Building Blocks](#sec-building-blocks)
+  - [VM & Container Runtimes](#sec-vm-runtime)
+  - [OS-Level Sandboxing](#sec-os-primitive)
+  - [WebAssembly Runtimes](#sec-wasm-runtime)
+- [Detailed Reference](#sec-detailed-reference)
+- [References](#sec-references)
+- [Contributing](#sec-contributing)
+
+<a id="sec-what-is-sandboxing"></a>
 ## What is sandboxing and why should you care?
 
 A sandbox limits what your AI agent can do on your computer (or in the cloud). Think of it like giving someone access to one room in your house instead of handing them the keys to the whole building.
@@ -30,6 +52,7 @@ Different sandboxes protect against different things. Understanding what a sandb
 
 When evaluating a sandbox, ask: *what specific risks does this protect against, and what does it leave exposed?*
 
+<a id="sec-quick-start"></a>
 ## Quick Start: sandbox your agent in 5 minutes
 
 The fastest path to protection depends on what agent you're using and what OS you're on. Each option below includes what it protects and what it doesn't.
@@ -161,6 +184,7 @@ If you'd rather not manage infrastructure, sign up for a cloud sandbox:
 - Usage-based pricing can accumulate
 - Ephemeral by default (except Daytona and Fly Sprites which offer persistence)
 
+<a id="sec-choosing"></a>
 ## Choosing a sandbox
 
 Use this decision tree to narrow down your options:
@@ -199,6 +223,7 @@ Do you already use an agent with built-in sandboxing?
         └── Any K8s cluster → agent-sandbox (kubernetes-sigs)
 ```
 
+<a id="sec-safety-research"></a>
 ## Safety & Alignment Research
 
 If you're doing AI safety research, RL training, capability evaluation, or adversarial red-teaming, see **[Sandboxing for AI Safety & Alignment Research](docs/safety-research.md)** — these contexts have fundamentally different containment requirements from general agent use.
@@ -207,6 +232,7 @@ If you're doing AI safety research, RL training, capability evaluation, or adver
 
 _The sections below are generated from [`data/sandboxes.yaml`](data/sandboxes.yaml). They cover the full landscape: cloud services, standalone tools, VM runtimes, OS primitives, and WebAssembly runtimes._
 
+<a id="sec-quick-triage"></a>
 ## Quick Triage
 
 Three views of the same landscape to help you find what fits.
@@ -242,6 +268,7 @@ Three views of the same landscape to help you find what fits.
 
 ---
 
+<a id="sec-cloud-managed"></a>
 ## Cloud Managed Sandboxes
 
 Managed cloud services that provide sandbox environments via API/SDK. You sign up and get isolated environments on demand.
@@ -259,6 +286,7 @@ Managed cloud services that provide sandbox environments via API/SDK. You sign u
 | [Runloop](#ref-runloop) | No | microvm | Enterprise compliance focus (SOC 2) differentiates from developer-oriented alternatives. GA May 2025. |
 | [Vercel Sandbox](#ref-vercel-sandbox) | No | microvm | Tightly integrated with Vercel deployment pipeline and v0. |
 
+<a id="sec-agent-integrated"></a>
 ## Agent-Integrated Sandboxes
 
 Sandboxing built directly into AI agent products. These activate automatically or with minimal configuration.
@@ -268,6 +296,7 @@ Sandboxing built directly into AI agent products. These activate automatically o
 | [Claude Code Sandbox](#ref-claude-code-sandbox) | No | user-namespace, seatbelt | Demonstrated escape by Ona (March 2026) via dangerouslyDisableSandbox flag. Uses bubblewrap on Linux, Seatbelt on macOS — different mechanisms per OS. |
 | [OpenAI Codex Sandbox](#ref-openai-codex-sandbox) | No | container, landlock, seccomp | Only major agent with sandboxing enabled by default. Two-phase model (online setup, offline agent) is a unique security architecture — the agent never has network access during execution. |
 
+<a id="sec-standalone"></a>
 ## Standalone / Self-Hosted Tools
 
 Tools you install and run yourself to sandbox any agent or process on your own machine.
@@ -284,6 +313,7 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 | [OpenSandbox](#ref-opensandbox) | Yes | container | Broadest scope of any sandbox — covers evaluation and RL training environments, not just agent sandboxing. |
 | [scode](#ref-scode) | Yes | process | Early entry in the space (Sept 2025), motivated by Claude Code's initial lack of built-in sandboxing. |
 
+<a id="sec-kubernetes"></a>
 ## Kubernetes-Native
 
 Sandbox solutions designed for Kubernetes clusters.
@@ -293,6 +323,7 @@ Sandbox solutions designed for Kubernetes clusters.
 | [Agent Sandbox (kubernetes-sigs)](#ref-agent-sandbox-kubernetes-sigs) | Yes (Apache-2.0) | gvisor, kata | Official Kubernetes SIG project (launched KubeCon Atlanta Nov 2025). Likely to become the standard for K8s agent sandboxing. |
 | [GKE Agent Sandbox](#ref-gke-agent-sandbox) | No | gvisor, kata | Managed wrapper around the open-source agent-sandbox project. If you're already on GKE, this is the path of least resistance. |
 
+<a id="sec-dev-environment"></a>
 ## Development Environments
 
 Development environment platforms that can be repurposed for agent isolation. These aren't agent-specific but provide usable isolation out of the box.
@@ -305,6 +336,7 @@ Development environment platforms that can be repurposed for agent isolation. Th
 | [Koyeb](#ref-koyeb) | No | container | General-purpose serverless platform, not purpose-built for agents, but usable for agent isolation out of the box with standard container workflows. |
 | [Ona (formerly Gitpod)](#ref-ona-formerly-gitpod) | No | container | Major pivot from Gitpod (rebranded Sept 2025). Demonstrated Claude Code sandbox escape (March 2026). Not agent-specific but increasingly agent-oriented. |
 
+<a id="sec-abstraction"></a>
 ## Abstraction Layers
 
 SDKs and frameworks that abstract across multiple sandbox providers.
@@ -317,10 +349,12 @@ SDKs and frameworks that abstract across multiple sandbox providers.
 
 ---
 
+<a id="sec-building-blocks"></a>
 ## Building Blocks
 
 The underlying technologies that sandbox products are built on. Most users interact with these indirectly — this section is for people building their own sandbox infrastructure or evaluating isolation claims.
 
+<a id="sec-vm-runtime"></a>
 ### VM & Container Runtimes
 
 The underlying VM and container runtimes that sandbox products are built on. Use these if you're building your own sandbox infrastructure.
@@ -333,6 +367,7 @@ The underlying VM and container runtimes that sandbox products are built on. Use
 | [libkrun](#ref-libkrun) | Yes (Apache-2.0) | kvm | macOS support via Apple Virtualization.framework is unique among VM runtimes — Firecracker and Kata are Linux-only. Used by microsandbox. |
 | [Zeroboot](#ref-zeroboot) | Yes | kvm, microvm | 0.8ms sandbox creation via COW forking is remarkable if verified at scale. Worth watching as a potential next-gen approach to sandbox provisioning. |
 
+<a id="sec-os-primitive"></a>
 ### OS-Level Sandboxing
 
 OS-level isolation primitives. These are building blocks — most users interact with them indirectly through higher-level tools.
@@ -347,6 +382,7 @@ OS-level isolation primitives. These are building blocks — most users interact
 | [nsjail](#ref-nsjail) | Yes (Apache-2.0) | user-namespace, seccomp | Google-maintained. Kafel policy language is more ergonomic than raw seccomp-BPF. Used by competitive programming judges for untrusted code execution. |
 | [seccomp-BPF](#ref-seccomp-bpf) | Yes (GPL-2.0) | seccomp | Building block, not standalone. Almost always used alongside Landlock or namespaces to provide full sandbox coverage. |
 
+<a id="sec-wasm-runtime"></a>
 ### WebAssembly Runtimes
 
 WebAssembly runtimes providing language-level sandboxing. Architecturally elegant but require compiling tools to Wasm.
@@ -361,6 +397,7 @@ WebAssembly runtimes providing language-level sandboxing. Architecturally elegan
 
 ---
 
+<a id="sec-detailed-reference"></a>
 ## Detailed Reference
 
 Full information for every entry, grouped by category. The compact tables above link here.
@@ -1057,10 +1094,12 @@ Wasm Components exposed via MCP, using Wasmtime runtime with agents fetching Was
 
 _Notes: Interesting intersection of MCP and Wasm — agents discover and load sandboxed tools via MCP from OCI registries. Microsoft backing. Released Aug 2025._
 
+<a id="sec-references"></a>
 ## References
 
 See [references/reading-list.md](references/reading-list.md) for blog posts, papers, and discussions on agent sandboxing.
 
+<a id="sec-contributing"></a>
 ## Contributing
 
 To add or update a sandbox entry:
