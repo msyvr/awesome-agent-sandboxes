@@ -172,24 +172,46 @@ def check_staleness(token: str | None, yaml_path: Path) -> list[dict]:
                 "reason": "Repository is archived",
             })
 
-    # Also check non-GitHub URLs with HEAD requests
+    # Also check non-GitHub URLs. Use a browser-like User-Agent because
+    # some sites (e.g., CodeSandbox) reject the default python-requests
+    # UA. Fall back to GET if HEAD is rejected, since some servers don't
+    # support HEAD at all.
+    browser_headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        ),
+    }
     for entry in entries:
         url = entry.get("url")
-        if not url or "github.com" in url:
+        if not url or "github.com" in url.lower():
             continue
+        status = None
         try:
-            resp = requests.head(url, timeout=15, allow_redirects=True)
-            if resp.status_code >= 400:
-                stale.append({
-                    "name": entry["name"],
-                    "url": url,
-                    "reason": f"URL returned HTTP {resp.status_code}",
-                })
+            resp = requests.head(
+                url, timeout=15, allow_redirects=True, headers=browser_headers
+            )
+            status = resp.status_code
+            if status >= 400:
+                # Retry with GET — many sites only return useful status on GET
+                resp = requests.get(
+                    url, timeout=15, allow_redirects=True, headers=browser_headers
+                )
+                status = resp.status_code
         except requests.RequestException:
             stale.append({
                 "name": entry["name"],
                 "url": url,
                 "reason": "URL unreachable",
+            })
+            continue
+
+        if status is not None and status >= 400:
+            stale.append({
+                "name": entry["name"],
+                "url": url,
+                "reason": f"URL returned HTTP {status}",
             })
 
     return stale
