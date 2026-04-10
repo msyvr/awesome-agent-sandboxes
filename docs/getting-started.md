@@ -171,6 +171,7 @@ If you'd rather not manage infrastructure, sign up for a cloud sandbox:
 - [E2B](https://e2b.dev) — Firecracker microVMs, ~150ms startup, free tier
 - [Modal](https://modal.com/products/sandboxes) — GPU support, sub-second starts
 - [Daytona](https://www.daytona.io) — container-based, state management (pause/resume)
+- [Fly Sprites](https://sprites.dev) — persistent Firecracker microVMs with 100GB NVMe per sprite
 
 **Protects against:** Full VM or container isolation. No local system access.
 
