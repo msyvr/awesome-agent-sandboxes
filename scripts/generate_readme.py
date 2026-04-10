@@ -15,6 +15,9 @@ ROOT = Path(__file__).resolve().parent.parent
 YAML_PATH = ROOT / "data" / "sandboxes.yaml"
 GETTING_STARTED_PATH = ROOT / "docs" / "getting-started.md"
 README_PATH = ROOT / "README.md"
+REFERENCE_PATH = ROOT / "docs" / "sandboxes-reference.md"
+# Relative path used in markdown links from README to the reference doc
+REFERENCE_REL_PATH = "docs/sandboxes-reference.md"
 
 # ---------------------------------------------------------------------------
 # Schema: controlled vocabularies
@@ -266,12 +269,17 @@ def slugify(name: str) -> str:
     return f"ref-{s}"
 
 
-def generate_category_table(entries: list[dict]) -> str:
+def generate_category_table(entries: list[dict], anchor_prefix: str = "") -> str:
     """Generate a compact 4-column table for a category's entries.
 
     Columns: Name (linked to detailed reference) | OSS? | Isolation | Notes
+
+    `anchor_prefix` is prepended to entry anchor links. Pass an empty
+    string for in-document links (e.g., "#ref-foo"), or a file path to
+    link out to a separate reference doc (e.g., "docs/sandboxes-reference.md#ref-foo").
+
     Maintainer, capabilities, requirements, and limitations live in the
-    detailed reference at the bottom of the README.
+    detailed reference doc that the table links to.
     """
     lines = []
     lines.append("| Name | OSS? | Isolation | Notes |")
@@ -280,7 +288,7 @@ def generate_category_table(entries: list[dict]) -> str:
     for e in sorted(entries, key=lambda x: x["name"].lower()):
         name = e["name"]
         anchor = slugify(name)
-        name_cell = f"[{escape_md(name)}](#{anchor})"
+        name_cell = f"[{escape_md(name)}]({anchor_prefix}#{anchor})"
 
         oss = "Yes" if e.get("open_source") else "No"
         license_str = e.get("license")
@@ -295,18 +303,24 @@ def generate_category_table(entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def generate_definition_entry(entry: dict) -> str:
+def generate_definition_entry(entry: dict, heading_level: int = 4) -> str:
     """Generate a detailed reference entry for a single sandbox.
 
     Format: anchor + heading + metadata line + description + structured
     fields. Designed to be readable at any width and self-contained.
+
+    `heading_level` controls the markdown heading depth for the entry
+    name. Default 4 (####) matches the in-README detailed reference
+    section. Use 3 (###) for the standalone reference doc which has
+    its own H1.
     """
     lines = []
     name = entry["name"]
     anchor = slugify(name)
+    hashes = "#" * heading_level
 
     lines.append(f'<a id="{anchor}"></a>')
-    lines.append(f"#### {name}")
+    lines.append(f"{hashes} {name}")
     lines.append("")
 
     # Metadata line: maintainer, license, links
@@ -357,14 +371,23 @@ def generate_definition_entry(entry: dict) -> str:
     return "\n".join(lines)
 
 
-def generate_definition_section(entries: list[dict]) -> str:
-    """Generate the full detailed reference section, grouped by category."""
+def generate_reference_doc(entries: list[dict]) -> str:
+    """Generate the standalone Detailed Sandboxes Reference doc.
+
+    Has its own H1, intro, and uses heading levels appropriate for a
+    standalone document (H1 title, H2 categories, H3 entries, with
+    Building Blocks as a sibling H2).
+    """
     lines = []
-    lines.append("## Detailed Sandboxes Reference\n")
+    lines.append("# Detailed Sandboxes Reference")
+    lines.append("")
     lines.append(
-        "Full information for every entry, grouped by category. "
-        "The compact tables above link here.\n"
+        "Full information for every sandbox tracked in "
+        "[awesome-agent-sandboxes](../README.md), grouped by category. "
+        "Use your browser's back button or the link above to return to "
+        "the main guide."
     )
+    lines.append("")
 
     product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
     building_cats = [c for c in CATEGORY_ORDER if c[0] in BUILDING_BLOCK_CATEGORIES]
@@ -373,19 +396,22 @@ def generate_definition_section(entries: list[dict]) -> str:
         cat_entries = [e for e in entries if e.get("category") == cat_key]
         if not cat_entries:
             continue
-        lines.append(f"### {cat_name}\n")
+        lines.append(f"## {cat_name}")
+        lines.append("")
         for e in sorted(cat_entries, key=lambda x: x["name"].lower()):
-            lines.append(generate_definition_entry(e))
+            lines.append(generate_definition_entry(e, heading_level=3))
             lines.append("")
 
-    lines.append("### Building Blocks\n")
+    lines.append("## Building Blocks")
+    lines.append("")
     for cat_key, cat_name in building_cats:
         cat_entries = [e for e in entries if e.get("category") == cat_key]
         if not cat_entries:
             continue
-        lines.append(f"#### {cat_name}\n")
+        lines.append(f"### {cat_name}")
+        lines.append("")
         for e in sorted(cat_entries, key=lambda x: x["name"].lower()):
-            lines.append(generate_definition_entry(e))
+            lines.append(generate_definition_entry(e, heading_level=4))
             lines.append("")
 
     return "\n".join(lines)
@@ -428,7 +454,7 @@ def generate_part2(entries: list[dict]) -> str:
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
             sections.append(f"{intro}\n")
-        sections.append(generate_category_table(cat_entries))
+        sections.append(generate_category_table(cat_entries, anchor_prefix=REFERENCE_REL_PATH))
         sections.append("")
 
     sections.append("---\n")
@@ -450,7 +476,7 @@ def generate_part2(entries: list[dict]) -> str:
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
             sections.append(f"{intro}\n")
-        sections.append(generate_category_table(cat_entries))
+        sections.append(generate_category_table(cat_entries, anchor_prefix=REFERENCE_REL_PATH))
         sections.append("")
 
     # --- References ---
@@ -466,11 +492,6 @@ def generate_part2(entries: list[dict]) -> str:
     sections.append("2. Run `python scripts/generate_readme.py` to regenerate the README")
     sections.append("3. Open a PR\n")
     sections.append("The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.\n")
-
-    # --- Detailed Reference (last section) ---
-    sections.append("---\n")
-    sections.append('<a id="sec-detailed-reference"></a>')
-    sections.append(generate_definition_section(entries))
 
     return "\n".join(sections)
 
@@ -511,7 +532,7 @@ def generate_toc(entries: list[dict]) -> str:
 
     lines.append("- [References](#sec-references)")
     lines.append("- [Contributing](#sec-contributing)")
-    lines.append("- [Detailed Sandboxes Reference](#sec-detailed-reference)")
+    lines.append(f"- [Detailed Sandboxes Reference]({REFERENCE_REL_PATH})")
 
     return "\n".join(lines)
 
@@ -562,9 +583,15 @@ def main():
     # Concatenate
     readme = f"{part1}\n\n{part2}\n"
 
-    # Write
+    # Write README
     README_PATH.write_text(readme)
     print(f"Generated {README_PATH} ({len(entries)} entries, {len(readme)} chars)")
+
+    # Write standalone Detailed Sandboxes Reference
+    reference_doc = generate_reference_doc(entries) + "\n"
+    REFERENCE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    REFERENCE_PATH.write_text(reference_doc)
+    print(f"Generated {REFERENCE_PATH} ({len(reference_doc)} chars)")
 
 
 if __name__ == "__main__":

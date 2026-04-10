@@ -24,8 +24,9 @@ from generate_readme import (
     generate_category_table,
     slugify,
     generate_definition_entry,
-    generate_definition_section,
+    generate_reference_doc,
     generate_toc,
+    REFERENCE_REL_PATH,
 )
 
 
@@ -294,16 +295,21 @@ class TestGenerateCategoryTable:
         table = generate_category_table(entries)
         assert "MySandbox" in table
 
-    def test_links_to_anchor(self):
+    def test_links_to_local_anchor_by_default(self):
         entries = [make_entry(name="Tool")]
         table = generate_category_table(entries)
-        # Name should link to detailed reference anchor, not to URL
+        # No prefix → in-document anchor link
         assert "[Tool](#ref-tool)" in table
+
+    def test_links_to_external_anchor_with_prefix(self):
+        entries = [make_entry(name="Tool")]
+        table = generate_category_table(entries, anchor_prefix="docs/sandboxes-reference.md")
+        assert "[Tool](docs/sandboxes-reference.md#ref-tool)" in table
 
     def test_anchor_link_for_complex_name(self):
         entries = [make_entry(name="agent-infra/sandbox")]
-        table = generate_category_table(entries)
-        assert "[agent-infra/sandbox](#ref-agent-infra-sandbox)" in table
+        table = generate_category_table(entries, anchor_prefix="docs/sandboxes-reference.md")
+        assert "[agent-infra/sandbox](docs/sandboxes-reference.md#ref-agent-infra-sandbox)" in table
 
     def test_oss_yes_with_license(self):
         entries = [make_entry(open_source=True, license="MIT")]
@@ -476,49 +482,68 @@ class TestGenerateDefinitionEntry:
         assert "_Notes:" not in result
         assert "[Repo]" not in result
 
+    def test_default_heading_level(self):
+        entry = make_entry(name="MySandbox")
+        result = generate_definition_entry(entry)
+        assert "#### MySandbox" in result
+
+    def test_custom_heading_level(self):
+        entry = make_entry(name="MySandbox")
+        result = generate_definition_entry(entry, heading_level=3)
+        assert "### MySandbox" in result
+        assert "#### MySandbox" not in result
+
 
 # ---------------------------------------------------------------------------
-# Definition section generation
+# Standalone reference doc generation
 # ---------------------------------------------------------------------------
 
-class TestGenerateDefinitionSection:
-    def test_includes_section_heading(self):
-        entries = [make_entry()]
-        result = generate_definition_section(entries)
-        assert "## Detailed Sandboxes Reference" in result
+class TestGenerateReferenceDoc:
+    def test_includes_h1_heading(self):
+        result = generate_reference_doc([make_entry()])
+        assert result.startswith("# Detailed Sandboxes Reference")
 
-    def test_groups_by_category(self):
+    def test_includes_intro_link_to_readme(self):
+        result = generate_reference_doc([make_entry()])
+        assert "[awesome-agent-sandboxes](../README.md)" in result
+
+    def test_groups_by_category_at_h2(self):
         entries = [
             make_entry(name="Tool A", category="standalone"),
             make_entry(name="Tool B", category="cloud-managed"),
         ]
-        result = generate_definition_section(entries)
-        assert "### Cloud Managed Sandboxes" in result
-        assert "### Standalone / Self-Hosted Tools" in result
+        result = generate_reference_doc(entries)
+        assert "## Cloud Managed Sandboxes" in result
+        assert "## Standalone / Self-Hosted Tools" in result
 
-    def test_building_blocks_grouped_under_subheading(self):
+    def test_building_blocks_at_h2(self):
         entries = [make_entry(name="Tool", category="vm-runtime")]
-        result = generate_definition_section(entries)
-        assert "### Building Blocks" in result
-        assert "#### VM & Container Runtimes" in result
+        result = generate_reference_doc(entries)
+        assert "## Building Blocks" in result
+        assert "### VM & Container Runtimes" in result
 
-    def test_anchors_match_table_links(self):
-        """Definition section anchors must match what category tables link to."""
+    def test_product_entries_at_h3(self):
         entries = [make_entry(name="Tool", category="standalone")]
-        table = generate_category_table(entries)
-        section = generate_definition_section(entries)
-        # Extract the anchor from the table link
-        assert "(#ref-tool)" in table
-        assert '<a id="ref-tool"></a>' in section
+        result = generate_reference_doc(entries)
+        assert "### Tool" in result
+        assert "#### Tool" not in result
+
+    def test_anchors_match_external_table_links(self):
+        """Reference doc anchors must match what README category tables link to."""
+        entries = [make_entry(name="Tool", category="standalone")]
+        table = generate_category_table(entries, anchor_prefix=REFERENCE_REL_PATH)
+        doc = generate_reference_doc(entries)
+        assert f"({REFERENCE_REL_PATH}#ref-tool)" in table
+        assert '<a id="ref-tool"></a>' in doc
 
     def test_alphabetical_within_category(self):
         entries = [
             make_entry(name="Zebra", category="standalone"),
             make_entry(name="Alpha", category="standalone"),
         ]
-        result = generate_definition_section(entries)
-        alpha_pos = result.find("#### Alpha")
-        zebra_pos = result.find("#### Zebra")
+        result = generate_reference_doc(entries)
+        alpha_pos = result.find("### Alpha")
+        zebra_pos = result.find("### Zebra")
         assert alpha_pos < zebra_pos
 
 
@@ -585,7 +610,9 @@ class TestGenerateToc:
 
     def test_includes_detailed_reference(self):
         result = generate_toc([make_entry()])
-        assert "(#sec-detailed-reference)" in result
+        # Now links to a separate file rather than an in-document anchor
+        assert f"({REFERENCE_REL_PATH})" in result
+        assert "Detailed Sandboxes Reference" in result
 
     def test_includes_references_and_contributing(self):
         result = generate_toc([make_entry()])
