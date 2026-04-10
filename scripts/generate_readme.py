@@ -360,7 +360,7 @@ def generate_definition_entry(entry: dict) -> str:
 def generate_definition_section(entries: list[dict]) -> str:
     """Generate the full detailed reference section, grouped by category."""
     lines = []
-    lines.append("## Detailed Reference\n")
+    lines.append("## Detailed Sandboxes Reference\n")
     lines.append(
         "Full information for every entry, grouped by category. "
         "The compact tables above link here.\n"
@@ -453,11 +453,6 @@ def generate_part2(entries: list[dict]) -> str:
         sections.append(generate_category_table(cat_entries))
         sections.append("")
 
-    # --- Detailed Reference ---
-    sections.append("---\n")
-    sections.append('<a id="sec-detailed-reference"></a>')
-    sections.append(generate_definition_section(entries))
-
     # --- References ---
     sections.append('<a id="sec-references"></a>')
     sections.append("## References\n")
@@ -471,6 +466,11 @@ def generate_part2(entries: list[dict]) -> str:
     sections.append("2. Run `python scripts/generate_readme.py` to regenerate the README")
     sections.append("3. Open a PR\n")
     sections.append("The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.\n")
+
+    # --- Detailed Reference (last section) ---
+    sections.append("---\n")
+    sections.append('<a id="sec-detailed-reference"></a>')
+    sections.append(generate_definition_section(entries))
 
     return "\n".join(sections)
 
@@ -509,9 +509,9 @@ def generate_toc(entries: list[dict]) -> str:
             if any(e.get("category") == cat_key for e in entries):
                 lines.append(f"  - [{cat_name}](#sec-{cat_key})")
 
-    lines.append("- [Detailed Reference](#sec-detailed-reference)")
     lines.append("- [References](#sec-references)")
     lines.append("- [Contributing](#sec-contributing)")
+    lines.append("- [Detailed Sandboxes Reference](#sec-detailed-reference)")
 
     return "\n".join(lines)
 

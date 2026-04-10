@@ -24,9 +24,9 @@ Whether you're a developer building with AI agents or someone using them for per
   - [VM & Container Runtimes](#sec-vm-runtime)
   - [OS-Level Sandboxing](#sec-os-primitive)
   - [WebAssembly Runtimes](#sec-wasm-runtime)
-- [Detailed Reference](#sec-detailed-reference)
 - [References](#sec-references)
 - [Contributing](#sec-contributing)
+- [Detailed Sandboxes Reference](#sec-detailed-reference)
 
 <a id="sec-what-is-sandboxing"></a>
 ## What is sandboxing and why should you care?
@@ -417,10 +417,26 @@ WebAssembly runtimes providing language-level sandboxing. Architecturally elegan
 | [Wasmtime](#ref-wasmtime) | Yes (Apache-2.0) | wasm | The reference Wasm runtime from Bytecode Alliance. Architecturally elegant sandboxing but requires toolchain buy-in — you can't run arbitrary binaries. |
 | [Wassette](#ref-wassette) | Yes | wasm | Interesting intersection of MCP and Wasm — agents discover and load sandboxed tools via MCP from OCI registries. Microsoft backing. Released Aug 2025. |
 
+<a id="sec-references"></a>
+## References
+
+See [references/reading-list.md](references/reading-list.md) for blog posts, papers, and discussions on agent sandboxing.
+
+<a id="sec-contributing"></a>
+## Contributing
+
+To add or update a sandbox entry:
+
+1. Edit `data/sandboxes.yaml` — follow the existing schema (all fields documented in the file header)
+2. Run `python scripts/generate_readme.py` to regenerate the README
+3. Open a PR
+
+The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.
+
 ---
 
 <a id="sec-detailed-reference"></a>
-## Detailed Reference
+## Detailed Sandboxes Reference
 
 Full information for every entry, grouped by category. The compact tables above link here.
 
@@ -1199,20 +1215,4 @@ Wasm Components exposed via MCP, using Wasmtime runtime with agents fetching Was
 - **Limitations:** Wasm only (must compile tools to Wasm); Early ecosystem
 
 _Notes: Interesting intersection of MCP and Wasm — agents discover and load sandboxed tools via MCP from OCI registries. Microsoft backing. Released Aug 2025._
-
-<a id="sec-references"></a>
-## References
-
-See [references/reading-list.md](references/reading-list.md) for blog posts, papers, and discussions on agent sandboxing.
-
-<a id="sec-contributing"></a>
-## Contributing
-
-To add or update a sandbox entry:
-
-1. Edit `data/sandboxes.yaml` — follow the existing schema (all fields documented in the file header)
-2. Run `python scripts/generate_readme.py` to regenerate the README
-3. Open a PR
-
-The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.
 

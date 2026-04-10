@@ -485,7 +485,7 @@ class TestGenerateDefinitionSection:
     def test_includes_section_heading(self):
         entries = [make_entry()]
         result = generate_definition_section(entries)
-        assert "## Detailed Reference" in result
+        assert "## Detailed Sandboxes Reference" in result
 
     def test_groups_by_category(self):
         entries = [
