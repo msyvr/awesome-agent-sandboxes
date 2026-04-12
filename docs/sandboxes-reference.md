@@ -246,6 +246,20 @@ Lightweight sandboxing for arbitrary processes using bubblewrap (Linux) and Seat
 
 _Notes: Designed to sandbox any process, not just Claude Code. Interactive network approval mode is useful for discovering what network access a tool actually needs._
 
+<a id="ref-cleanroom"></a>
+### cleanroom
+
+**Maintainer:** Buildkite · **License:** OSS · [Home](https://github.com/buildkite/cleanroom)
+
+Self-hosted microVM sandbox using Firecracker (Linux) or Apple Virtualization.framework (macOS) with deny-by-default network and host-side credential proxy.
+
+- **Isolation:** microvm, kvm
+- **Capabilities:** Firecracker microVMs (Linux); Apple Virtualization.framework (macOS); Deny-by-default egress with policy-controlled allowlists; Host-side credential proxy (credentials never enter sandbox); Repo-scoped cleanroom.yaml network policy; Docker-inside-sandbox support
+- **Requirements:** Linux (KVM) or macOS
+- **Limitations:** Early project; No LICENSE file in repo
+
+_Notes: From Buildkite (established CI company). Strongest isolation in recent discovery batches — hardware VM boundary, not containers or namespaces. Credential proxy model is similar to nono (keys never enter the sandbox). cleanroom.yaml per-repo policy is a clean declarative approach._
+
 <a id="ref-docker-sandboxes"></a>
 ### Docker Sandboxes
 
@@ -372,6 +386,20 @@ macOS CLI that spawns disposable Apple Containerization VMs with APFS copy-on-wr
 
 _Notes: Apple Containerization gives hardware-isolated micro-VMs (Kata-based) on Apple Silicon. APFS clonefile makes workspace clones instant without copying files. eBPF egress filtering is a notable hardening choice for a solo project._
 
+<a id="ref-sandcastle"></a>
+### sandcastle
+
+**Maintainer:** Matt Pocock · **License:** MIT · [Home](https://github.com/mattpocock/sandcastle)
+
+TypeScript library for orchestrating coding agents inside Docker containers with git-aware branch strategies and automatic commit merging.
+
+- **Isolation:** container
+- **Capabilities:** Docker container isolation (self-managed, not delegated); Git-aware branch strategy orchestration; Automatic commit merging from agent branches; TypeScript API (sandcastle.run()); npm package
+- **Requirements:** Docker; Node.js / TypeScript
+- **Limitations:** Orchestration-focused (sandboxing is the mechanism, not the product); Container isolation only (shared kernel)
+
+_Notes: Uses Docker containers it creates directly — not delegating to E2B or Daytona. The git branch strategy (agents work on branches, commits merge back) is the differentiator. Useful if you want multi-agent orchestration with isolation included._
+
 <a id="ref-scode"></a>
 ### scode
 
@@ -399,6 +427,20 @@ Rust-native runtime containment engine combining eBPF syscall interception, moun
 - **Limitations:** macOS support is reduced (no eBPF/seccomp); "Lite" edition of a commercial product (Sevorix); AGPL means modifications must be shared
 
 _Notes: Multi-layered runtime containment rather than VM/container isolation. The "Yellow Lane" human-in-the-loop model with countdown timer is unusual — the agent pauses pending human approval via dashboard. Claude Code support is built in, not bolted on._
+
+<a id="ref-skilllite"></a>
+### skilllite
+
+**Maintainer:** EXboys · **License:** MIT · [Home](https://github.com/EXboys/skilllite)
+
+Rust single-binary agent engine with a built-in OS-native sandbox using macOS Seatbelt and Linux bubblewrap/seccomp for skill execution isolation.
+
+- **Isolation:** seatbelt, user-namespace, seccomp
+- **Capabilities:** OS-native sandbox (Seatbelt on macOS, bubblewrap + seccomp on Linux); Filesystem, network, and IPC lockdown; Process-exec whitelisting; Resource limits via rlimits; Three-layer defense (install-time scan, pre-exec auth, runtime sandbox); Zero-dependency single binary; Sandbox component usable independently of the agent engine
+- **Requirements:** macOS or Linux
+- **Limitations:** Early project; Smaller community
+
+_Notes: The skilllite-sandbox component is independently usable — you don't have to use the agent engine to get the sandbox. Three-layer defense model (install scan + pre-exec auth + runtime sandbox) is more depth than most standalone tools offer._
 
 ## Kubernetes-Native
 
@@ -429,6 +471,34 @@ Managed Kubernetes service for AI code isolation on GKE using gVisor and kuberne
 - **Limitations:** GKE-only; Vendor lock-in
 
 _Notes: Managed wrapper around the open-source agent-sandbox project. If you're already on GKE, this is the path of least resistance._
+
+<a id="ref-openkruise-agents"></a>
+### openkruise/agents
+
+**Maintainer:** OpenKruise (Alibaba / CNCF) · **License:** Apache-2.0 · [Home](https://github.com/openkruise/agents)
+
+Kubernetes operator for agent sandbox lifecycle management with resource pooling, hibernation, checkpoint/restore, and E2B API compatibility.
+
+- **Isolation:** container
+- **Capabilities:** Sandbox pod lifecycle management; Resource pooling; Sandbox hibernation and checkpoint (memory + RW layer + GPU memory); E2B API compatibility on self-hosted K8s; Configurable runtime (container, gVisor, Kata)
+- **Requirements:** Kubernetes cluster
+- **Limitations:** Early project; Kubernetes required
+
+_Notes: CNCF-affiliated via OpenKruise (Alibaba). The E2B API compatibility is notable — lets you use existing E2B SDK integrations against self-hosted K8s instead of E2B's cloud. Sandbox hibernation with GPU memory checkpoint is unusual._
+
+<a id="ref-sandbox0"></a>
+### sandbox0
+
+**Maintainer:** sandbox0-ai · **License:** Apache-2.0 · [Home](https://github.com/sandbox0-ai/sandbox0)
+
+Kubernetes-native agent sandbox platform with warm pod pools, JuiceFS persistent storage, network policy enforcement, and in-pod process manager.
+
+- **Isolation:** container, gvisor
+- **Capabilities:** Warm pod pools; JuiceFS persistent storage; Configurable runtimeClass (gVisor/Kata); L4/L7 network enforcement via dedicated netd daemon; Egress auth proxy (credential injection outside sandbox); procd in-pod process manager (PID 1) with REPL session management
+- **Requirements:** Kubernetes cluster; Self-hosted
+- **Limitations:** Early project; Small community
+
+_Notes: The procd process manager inside pods provides REPL session management — unusual for a K8s sandbox. Egress credential injection keeps secrets outside the sandbox boundary, similar to nono's credential proxy model but at the K8s level._
 
 <a id="ref-treadstone"></a>
 ### treadstone
