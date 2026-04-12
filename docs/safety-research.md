@@ -54,9 +54,9 @@ This guide covers sandbox selection for safety and alignment research, including
 | Need | Options | Trade-offs |
 |------|---------|------------|
 | Fast resets | Firecracker snapshots (~28ms restore), Zeroboot COW forking (~0.8ms) | Zeroboot is much faster but unproven — **known CSPRNG concern**: random state is shared across COW forks, so experiments may not be independent unless you explicitly reseed. This can silently invalidate results. |
-| GPU + parallelism | Modal (50k+ concurrent, GPU support) | Cloud-only, closed source. The only sandbox option with GPU support. |
+| GPU + parallelism | Modal (50k+ concurrent, GPU support), openkruise/agents (K8s, GPU memory checkpoint) | Modal is cloud-only, closed source. openkruise/agents is self-hosted K8s with sandbox hibernation that preserves GPU memory state — useful for pausing and resuming training runs. |
 | Eval + RL framework | OpenSandbox (Alibaba) | Explicitly designed for evaluation and RL training with multi-language SDKs. Very new (March 2026) — verify that RL support meets your specific needs before committing. |
-| Self-hosted scale | Firecracker + custom orchestration | Battle-tested (powers AWS Lambda) but requires building your own orchestration layer. No GPU passthrough. |
+| Self-hosted scale | Firecracker + custom orchestration, openkruise/agents (K8s) | Firecracker is battle-tested (powers AWS Lambda) but requires building your own orchestration. openkruise/agents provides K8s-native lifecycle management with E2B API compatibility. |
 
 **Reward computation architecture:** The reward signal must be computed in a trusted environment that observes sandbox state, not inside the sandbox where the agent could influence it. An agent that can affect its own reward — directly or via side effects visible to the reward function — is a fundamental alignment failure mode. Design your sandbox architecture with a clear trust boundary: the agent runs inside; the reward function runs outside, reading only a defined observation interface.
 
@@ -65,8 +65,9 @@ This guide covers sandbox selection for safety and alignment research, including
 | Need | Options | Trade-offs |
 |------|---------|------------|
 | Syscall-level observability | gVisor | Intercepts every syscall in user space via its Sentry kernel. You can instrument and log all agent-OS interaction. Practical caveat: logs are verbose — you'll need filtering infrastructure to extract meaningful signals. |
-| Credential isolation | nono | Credential proxy ensures API keys never enter the sandbox — the agent uses services without seeing the actual keys. Directly tests whether agents attempt credential exfiltration. |
+| Credential isolation | nono, cleanroom (Buildkite) | Both keep API keys outside the sandbox via host-side proxy. nono adds L7 API endpoint filtering; cleanroom adds microVM isolation boundary (stronger than nono's process-level). Directly tests whether agents attempt credential exfiltration. |
 | Audit trail | nono | Cryptographic audit chain with Sigstore attestation. The agent cannot tamper with the record of what it did. |
+| Observability / intervention | sevorix-lite, gVisor | sevorix-lite's "Yellow Lane" dashboard lets researchers observe and intervene in real time (approve/deny/redirect). gVisor logs denied syscalls. Different flavors: sevorix-lite is human-in-the-loop; gVisor is post-hoc analysis. |
 | Reproducibility | Firecracker snapshots, Fly Sprites (persistent) | Snapshot before evaluation, restore to replay. Fly Sprites offers persistent 100GB NVMe if you need durable eval environments. |
 | Controlled capability exposure | nono (L7 API filtering), Wasm/WASI (capability grants) | Gradually increase what the agent can access and study behavioral changes at each level. |
 
@@ -74,9 +75,9 @@ This guide covers sandbox selection for safety and alignment research, including
 
 | Need | Options | Trade-offs |
 |------|---------|------------|
-| Hardware VM containment | Firecracker (with jailer), Kata Containers | Separate kernel per sandbox. Firecracker's jailer adds cgroup, namespace, and seccomp containment around the VMM process itself — defense in depth. |
-| Escape detection | gVisor (denied syscall logging), nono (boundary violation recording) | Most sandboxes silently block forbidden actions. These record them — critical for studying *what* the agent tried, not just that it was stopped. |
-| Network monitoring | nono (L7 filtering + logging), Anthropic srt (proxy with interactive approval) | See exactly what network endpoints the agent attempts to reach, including denied requests. |
+| Hardware VM containment | Firecracker (with jailer), Kata Containers, cleanroom (Buildkite) | Separate kernel per sandbox. Firecracker's jailer adds defense in depth. cleanroom provides a ready-to-use tool on top of Firecracker (Linux) or Apple Virtualization.framework (macOS) with deny-by-default egress — closer to "adversarial-by-default" posture than raw Firecracker. |
+| Escape detection | gVisor (denied syscall logging), sevorix-lite (eBPF syscall interception), nono (boundary violation recording) | Most sandboxes silently block forbidden actions. These record them — critical for studying *what* the agent tried, not just that it was stopped. sevorix-lite's eBPF layer intercepts at the syscall level similarly to gVisor but outside the sandbox kernel. |
+| Network monitoring | nono (L7 filtering + logging), cleanroom (deny-by-default egress + policy allowlists), Anthropic srt (proxy with interactive approval) | See exactly what network endpoints the agent attempts to reach, including denied requests. cleanroom's deny-by-default posture means nothing gets through unless explicitly allowed. |
 | Side-channel mitigation | Dedicated physical machines, NUMA pinning | Software-only sandboxes share CPU cache hierarchy. For studying highly capable agents, consider hardware-level isolation. No sandbox in this repo fully addresses information leakage. |
 
 ## Maturity vs. security properties
@@ -86,6 +87,9 @@ Several tools with excellent *design* for safety research have immature *impleme
 | Tool | Security properties | Maturity caveat |
 |------|-------------------|-----------------|
 | nono | Credential proxy, atomic rollback, cryptographic audit, capability-based isolation | Early alpha, not yet security-audited. Using an unaudited tool to contain agents whose behavior you're studying because it's uncertain is a tension worth acknowledging. |
+| cleanroom | MicroVM isolation, credential proxy, deny-by-default egress, per-repo policy | Early project, no LICENSE file. Backed by Buildkite (established company), but the tool itself is new and untested at scale. |
+| sevorix-lite | eBPF syscall interception, mount namespace shell override, human-in-the-loop dashboard | "Lite" edition of a commercial product (Sevorix). AGPL license. macOS support is reduced (no eBPF/seccomp). Full enforcement is Linux-only. |
+| openkruise/agents | K8s sandbox lifecycle, GPU memory checkpoint, E2B API compatibility | CNCF-affiliated via OpenKruise, but the agent sandbox operator itself is early. |
 | Zeroboot | Sub-millisecond VM creation, hardware isolation | Not production-hardened. CSPRNG state sharing across forks is a research-correctness risk for RL. |
 | OpenSandbox | RL + evaluation framework, multi-language SDKs | Very new (March 2026). RL support claims are from Alibaba's documentation — verify independently. |
 | Firecracker | Hardware VM, snapshot/restore, jailer | Mature and battle-tested (AWS Lambda/Fargate). The safest bet for production safety research infrastructure. |
@@ -93,10 +97,10 @@ Several tools with excellent *design* for safety research have immature *impleme
 
 ## What's missing from the landscape
 
-1. **No sandbox is designed for adversarial containment by default.** All assume the agent is trying to be helpful. A purpose-built safety research sandbox would treat the agent as potentially adversarial — monitoring escape attempts, alerting on anomalous behavior, recording all boundary interactions.
+1. **Few sandboxes default to an adversarial posture.** Most assume the agent is trying to be helpful. cleanroom's deny-by-default egress and credential proxy come closest to treating the agent as potentially adversarial, but even it doesn't monitor for escape attempts or alert on anomalous behavior. A purpose-built safety research sandbox would combine deny-by-default containment with escape detection and behavioral alerting.
 
 2. **Escape study tooling doesn't exist.** Researchers studying escape behavior need to observe and replay escape attempts, not just prevent them. gVisor's syscall logging is the closest thing, but there's no turnkey "escape research sandbox."
 
-3. **Capability escalation isn't a first-class feature.** Safety research often involves gradually increasing capabilities to study behavioral transitions. You'd need to script this yourself using nono's capability model or WASI grants.
+3. **Capability escalation isn't a built-in feature.** Safety research often involves gradually increasing capabilities to study behavioral transitions. You'd need to script this yourself using nono's capability model or WASI grants.
 
 4. **Side channels are unaddressed.** Every software sandbox in this repo shares some hardware state with the host. For the most capable agents, this may matter.
