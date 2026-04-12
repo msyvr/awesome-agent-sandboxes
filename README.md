@@ -144,6 +144,16 @@ Works with Claude Code, Codex, Copilot, Gemini, and Kiro.
 - **macOS nesting complexity**: On macOS, you get host → Apple VM → microVM → container → agent. Each layer adds potential attack surface and makes debugging harder.
 - **Licensing**: Docker Desktop requires a paid subscription for organizations with >250 employees or >$10M annual revenue. Docker Engine (CLI only) remains free.
 
+#### cleanroom (Buildkite) — microVM isolation with credential proxy (macOS, Linux)
+
+[cleanroom](https://github.com/buildkite/cleanroom) runs your agent inside a Firecracker microVM (Linux) or Apple Virtualization.framework VM (macOS) with deny-by-default network egress and a host-side credential proxy — your API keys never enter the sandbox.
+
+**Protects against:** Filesystem and network access at the VM level (hardware isolation boundary). Credential leakage (host-side proxy, keys never enter sandbox). Unauthorized egress (deny-by-default, policy-controlled allowlists via per-repo `cleanroom.yaml`).
+
+**Known risks:**
+- Early project, no LICENSE file in repo
+- Newer than Docker Sandboxes, less community testing
+
 #### Anthropic srt — sandbox any process or MCP server (macOS, Linux)
 
 [srt](https://github.com/anthropic-experimental/sandbox-runtime) is a lightweight sandbox for arbitrary processes. Particularly useful for sandboxing MCP servers, which run with your permissions but are often third-party code.
@@ -217,13 +227,14 @@ Do you already use an agent with built-in sandboxing?
 └── No → What matters most to you?
     │
     ├── Credential safety (API keys, tokens)
-    │   └── nono — keys never enter the sandbox
+    │   ├── nono — keys never enter the sandbox + rollback + audit
+    │   └── cleanroom — keys never enter the sandbox + microVM isolation
     │
     ├── Undo mistakes (rollback)
     │   └── nono — atomic rollback with integrity verification
     │
     ├── Strongest isolation boundary
-    │   ├── Local → Docker Sandboxes or microsandbox (microVM)
+    │   ├── Local → cleanroom, Docker Sandboxes, microsandbox, or sand (microVM)
     │   └── Cloud → E2B, Modal (Firecracker microVM)
     │
     ├── Sandbox MCP servers / third-party tools
