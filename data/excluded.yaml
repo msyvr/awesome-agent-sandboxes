@@ -198,3 +198,26 @@
   reason: Terraform deployment guide for GKE Agent Sandbox, not a distinct tool
 - url: https://github.com/CognicellAI/Cognition
   reason: Agent platform with optional Docker sandbox, not a sandbox tool itself
+
+# --- Reviewed in issue #10 (2026-04-14) ---
+
+- url: https://github.com/Tencent/WeKnora
+  reason: Document understanding framework, not a sandbox
+- url: https://github.com/njbrake/agent-of-empires
+  reason: TUI agent manager, not a sandbox
+- url: https://github.com/pacoxu/AI-Infra
+  reason: Learning notes, not a sandbox
+- url: https://github.com/francize/agents-to-im
+  reason: Feishu/Lark chat integration, not a sandbox
+- url: https://github.com/ShipWithAI/claude-code-mastery
+  reason: Course, not a sandbox
+- url: https://github.com/lidge-jun/cli-jaw
+  reason: CLI assistant, not a sandbox
+- url: https://github.com/ParallaxPro-AI/Open-ParallaxPro
+  reason: Game generator, not a sandbox
+- url: https://github.com/distrihub/distri
+  reason: Agent framework, not a sandbox
+- url: https://github.com/Rob-Morris/obsidian-brain
+  reason: Knowledge base, not a sandbox
+- url: https://github.com/fisheatfish/ai-sandbox
+  reason: Docker Compose dev environment, no isolation enforcement beyond default Docker

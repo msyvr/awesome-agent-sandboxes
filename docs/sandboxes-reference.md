@@ -232,6 +232,20 @@ npm CLI that wraps Docker for coding agents (opencode, amp, droid) with workspac
 
 _Notes: Opinionated hardening over default Docker — capability dropping and Git fetch-only mode are substantive choices most Docker wrappers don't make. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it._
 
+<a id="ref-aide"></a>
+### aide
+
+**Maintainer:** jskswamy · **License:** MIT · [Home](https://github.com/jskswamy/aide)
+
+Unified agent launcher with capability-based permission model and OS-native sandbox enforcement on macOS.
+
+- **Isolation:** seatbelt
+- **Capabilities:** Capability-based permission model (19 built-in capabilities); Composable grants with never-allow hard denials; macOS Seatbelt sandbox enforcement; Per-project context resolution (agent, credentials, capabilities); Supports multiple agents from a single launcher
+- **Requirements:** macOS (sandbox enforcement); Go
+- **Limitations:** Linux sandbox not yet implemented (Landlock + seccomp planned); macOS-only sandbox enforcement today; Early project (v0.1.0)
+
+_Notes: The capability model is the differentiator — 19 built-in capabilities (docker, k8s, aws, etc.) with composable grants and never-allow hard denials. More opinionated than fence or Agent Safehouse about what agents should be allowed to do. Linux sandbox is planned but not yet implemented._
+
 <a id="ref-anthropic-sandbox-runtime-srt"></a>
 ### Anthropic sandbox-runtime (srt)
 
@@ -273,6 +287,20 @@ MicroVM sandboxes for AI coding agents, each with its own Docker daemon, filesys
 - **Limitations:** Experimental; MicroVM overhead
 
 _Notes: Very new (March 2026). Multi-agent support is notable — works with most major coding agents out of the box._
+
+<a id="ref-fence"></a>
+### fence
+
+**Maintainer:** Tusk · **License:** Apache-2.0 · [Home](https://github.com/Use-Tusk/fence)
+
+Container-free CLI sandbox using OS-native primitives for network domain allowlisting, filesystem access control, and command deny-lists.
+
+- **Isolation:** seatbelt, user-namespace
+- **Capabilities:** macOS sandbox-exec (Seatbelt); Linux bubblewrap + socat for network bridging; Network domain allowlisting; Filesystem access control; Command deny-lists; Built-in templates for Claude Code, Codex, Amp, Gemini CLI, Copilot; Go library for programmatic use
+- **Requirements:** macOS or Linux; Homebrew, Nix, or Go install
+- **Limitations:** macOS sandbox-exec deprecation risk; Process-level isolation (shared kernel)
+
+_Notes: Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture._
 
 <a id="ref-jailoc"></a>
 ### jailoc

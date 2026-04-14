@@ -280,7 +280,7 @@ Three views of the same landscape to help you find what fits.
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, cleanroom, Firecracker, Kata Containers, libkrun, +1 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +7 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +16 more | Shared kernel means a kernel exploit can bypass isolation. |
-| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +11 more | Weakest containment boundary; not for adversarial workloads. |
+| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +13 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, Wasmtime, WasmEdge, wasmCloud, +2 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
 ### How do I get started?
@@ -289,7 +289,7 @@ Three views of the same landscape to help you find what fits.
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +10 more |
-| **Install a tool** | Install a standalone tool or runtime on your machine. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +24 more |
+| **Install a tool** | Install a standalone tool or runtime on your machine. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +26 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | Firecracker, gVisor, Kata Containers, libkrun, Zeroboot, +11 more |
 
 ### Where does it run?
@@ -298,7 +298,7 @@ Three views of the same landscape to help you find what fits.
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +10 more |
-| **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +27 more |
+| **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +29 more |
 | **Self-hosted** | You host and manage the infrastructure. | Coder, OpenSandbox, Firecracker, gVisor, Kata Containers, +3 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0 |
 
@@ -343,9 +343,11 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 | [agent-infra/sandbox](docs/sandboxes-reference.md#ref-agent-infra-sandbox) | Yes | container | Kitchen-sink approach — good for prototyping and development, less suitable for security-critical production use. |
 | [agentsh](docs/sandboxes-reference.md#ref-agentsh) | Yes (Apache-2.0) | process, landlock, seatbelt | Real runtime enforcement, not just wrapping. The "redirect" policy decision is unusual — can transparently steer agent network calls or out-of-workspace writes to scratch dirs without the agent knowing it was redirected. |
 | [ai-sandbox-wrapper](docs/sandboxes-reference.md#ref-ai-sandbox-wrapper) | Yes | container | Opinionated hardening over default Docker — capability dropping and Git fetch-only mode are substantive choices most Docker wrappers don't make. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |
+| [aide](docs/sandboxes-reference.md#ref-aide) | Yes (MIT) | seatbelt | The capability model is the differentiator — 19 built-in capabilities (docker, k8s, aws, etc.) with composable grants and never-allow hard denials. More opinionated than fence or Agent Safehouse about what agents should be allowed to do. Linux sandbox is planned but not yet implemented. |
 | [Anthropic sandbox-runtime (srt)](docs/sandboxes-reference.md#ref-anthropic-sandbox-runtime-srt) | Yes | user-namespace, seatbelt | Designed to sandbox any process, not just Claude Code. Interactive network approval mode is useful for discovering what network access a tool actually needs. |
 | [cleanroom](docs/sandboxes-reference.md#ref-cleanroom) | Yes | microvm, kvm | From Buildkite (established CI company). Strongest isolation in recent discovery batches — hardware VM boundary, not containers or namespaces. Credential proxy model is similar to nono (keys never enter the sandbox). cleanroom.yaml per-repo policy is a clean declarative approach. |
 | [Docker Sandboxes](docs/sandboxes-reference.md#ref-docker-sandboxes) | No | microvm | Very new (March 2026). Multi-agent support is notable — works with most major coding agents out of the box. |
+| [fence](docs/sandboxes-reference.md#ref-fence) | Yes (Apache-2.0) | seatbelt, user-namespace | Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture. |
 | [jailoc](docs/sandboxes-reference.md#ref-jailoc) | Yes (MIT) | container | Backed by Seznam (Czech search engine). Network isolation via iptables allowlist prevents pivot to internal infra. The DinD sidecar approach avoids the common docker.sock mount escape vector. |
 | [llm-sandbox](docs/sandboxes-reference.md#ref-llm-sandbox) | Yes (MIT) | container | Multi-backend support is the differentiator — same API across Docker, Podman, and K8s. Good for sandboxing LLM-generated code execution specifically. SonarCloud + codecov CI suggests reasonable code quality standards. |
 | [locki](docs/sandboxes-reference.md#ref-locki) | Yes | kvm, container | One of the few sandboxes that layers VM (Lima/QEMU) plus container (Incus) for coding agents — interesting design worth tracking. Author is candid about "no security guarantees" in the README. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |

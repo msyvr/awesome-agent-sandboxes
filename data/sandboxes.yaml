@@ -866,6 +866,70 @@
   adoption_effort: install
   deployment_model: local
 
+- name: fence
+  category: standalone
+  maintainer: Tusk
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/Use-Tusk/fence
+  repo_url: https://github.com/Use-Tusk/fence
+  description: Container-free CLI sandbox using OS-native primitives for network domain allowlisting, filesystem access control, and command deny-lists.
+  isolation_type: [seatbelt, user-namespace]
+  capabilities:
+    - macOS sandbox-exec (Seatbelt)
+    - Linux bubblewrap + socat for network bridging
+    - Network domain allowlisting
+    - Filesystem access control
+    - Command deny-lists
+    - Built-in templates for Claude Code, Codex, Amp, Gemini CLI, Copilot
+    - Go library for programmatic use
+  requirements:
+    - macOS or Linux
+    - "Homebrew, Nix, or Go install"
+  limitations:
+    - macOS sandbox-exec deprecation risk
+    - Process-level isolation (shared kernel)
+  notes: >-
+    Lightest-weight option for wrapping agent processes with real
+    isolation — no container runtime needed. Inspired by Anthropic's
+    srt. Built-in agent templates mean zero config for common agents.
+    Well-documented security model and architecture.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: aide
+  category: standalone
+  maintainer: jskswamy
+  open_source: true
+  license: MIT
+  url: https://github.com/jskswamy/aide
+  repo_url: https://github.com/jskswamy/aide
+  description: Unified agent launcher with capability-based permission model and OS-native sandbox enforcement on macOS.
+  isolation_type: [seatbelt]
+  capabilities:
+    - Capability-based permission model (19 built-in capabilities)
+    - Composable grants with never-allow hard denials
+    - macOS Seatbelt sandbox enforcement
+    - Per-project context resolution (agent, credentials, capabilities)
+    - Supports multiple agents from a single launcher
+  requirements:
+    - macOS (sandbox enforcement)
+    - Go
+  limitations:
+    - Linux sandbox not yet implemented (Landlock + seccomp planned)
+    - macOS-only sandbox enforcement today
+    - Early project (v0.1.0)
+  notes: >-
+    The capability model is the differentiator — 19 built-in
+    capabilities (docker, k8s, aws, etc.) with composable grants
+    and never-allow hard denials. More opinionated than fence or
+    Agent Safehouse about what agents should be allowed to do.
+    Linux sandbox is planned but not yet implemented.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
 - name: skilllite
   category: standalone
   maintainer: EXboys
