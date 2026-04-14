@@ -183,3 +183,18 @@
   reason: Curated list, not a sandbox
 - url: https://github.com/zgsm-sangfor/costrict-coding-hub
   reason: MCP server hub, not a sandbox
+
+# --- Reviewed in issue #9 (2026-04-13) ---
+
+- url: https://github.com/haoruilee/awesome-agent-native-services
+  reason: Service discovery list, not a sandbox
+- url: https://github.com/Team-Commonly/commonly
+  reason: Social platform, not a sandbox
+- url: https://github.com/kweaver-ai/decision-agent
+  reason: Agent tool, not a sandbox
+- url: https://github.com/Prismer-AI/signet
+  reason: Cryptographic action receipts, not runtime isolation (mentioned in complementary defenses)
+- url: https://github.com/Leisureroad/ai-agent-sandbox-on-gke
+  reason: Terraform deployment guide for GKE Agent Sandbox, not a distinct tool
+- url: https://github.com/CognicellAI/Cognition
+  reason: Agent platform with optional Docker sandbox, not a sandbox tool itself

@@ -288,6 +288,20 @@ Per-workspace Docker Compose sandbox for OpenCode agents with iptables egress fi
 
 _Notes: Backed by Seznam (Czech search engine). Network isolation via iptables allowlist prevents pivot to internal infra. The DinD sidecar approach avoids the common docker.sock mount escape vector._
 
+<a id="ref-llm-sandbox"></a>
+### llm-sandbox
+
+**Maintainer:** vndee · **License:** MIT · [Home](https://github.com/vndee/llm-sandbox)
+
+Lightweight Python library for executing LLM-generated code inside Docker, Podman, or Kubernetes containers with network isolation and resource limits.
+
+- **Isolation:** container
+- **Capabilities:** Multi-backend (Docker, Podman, Kubernetes); Network isolation; Resource limits; Security policies; MCP integration; PyPI published
+- **Requirements:** Docker, Podman, or Kubernetes; Python
+- **Limitations:** Container isolation only (shared kernel); Code interpreter focus (not general agent sandboxing)
+
+_Notes: Multi-backend support is the differentiator — same API across Docker, Podman, and K8s. Good for sandboxing LLM-generated code execution specifically. SonarCloud + codecov CI suggests reasonable code quality standards._
+
 <a id="ref-locki"></a>
 ### locki
 

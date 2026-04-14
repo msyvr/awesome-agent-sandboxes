@@ -607,6 +607,37 @@
   adoption_effort: install
   deployment_model: local
 
+- name: llm-sandbox
+  category: standalone
+  maintainer: vndee
+  open_source: true
+  license: MIT
+  url: https://github.com/vndee/llm-sandbox
+  repo_url: https://github.com/vndee/llm-sandbox
+  description: Lightweight Python library for executing LLM-generated code inside Docker, Podman, or Kubernetes containers with network isolation and resource limits.
+  isolation_type: [container]
+  capabilities:
+    - Multi-backend (Docker, Podman, Kubernetes)
+    - Network isolation
+    - Resource limits
+    - Security policies
+    - MCP integration
+    - PyPI published
+  requirements:
+    - Docker, Podman, or Kubernetes
+    - Python
+  limitations:
+    - Container isolation only (shared kernel)
+    - Code interpreter focus (not general agent sandboxing)
+  notes: >-
+    Multi-backend support is the differentiator — same API across Docker,
+    Podman, and K8s. Good for sandboxing LLM-generated code execution
+    specifically. SonarCloud + codecov CI suggests reasonable code quality
+    standards.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
 - name: monty
   category: standalone
   maintainer: Pydantic
