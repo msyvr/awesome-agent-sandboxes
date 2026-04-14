@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from discover import (
     load_existing_repos,
+    load_excluded_repos,
     filter_new_candidates,
     format_candidates_md,
     format_staleness_md,
@@ -88,6 +89,59 @@ class TestLoadExistingRepos:
         yaml_file.write_text("")
         repos = load_existing_repos(yaml_file)
         assert repos == set()
+
+
+# ---------------------------------------------------------------------------
+# load_excluded_repos
+# ---------------------------------------------------------------------------
+
+class TestLoadExcludedRepos:
+    def test_loads_urls(self, tmp_path):
+        data = [
+            {"url": "https://github.com/org/rejected1", "reason": "Not a sandbox"},
+            {"url": "https://github.com/org/rejected2", "reason": "Agent framework"},
+        ]
+        yaml_file = tmp_path / "excluded.yaml"
+        yaml_file.write_text(yaml.dump(data))
+        repos = load_excluded_repos(yaml_file)
+        assert "https://github.com/org/rejected1" in repos
+        assert "https://github.com/org/rejected2" in repos
+
+    def test_normalizes_case(self, tmp_path):
+        data = [{"url": "https://GitHub.com/Org/Repo", "reason": "test"}]
+        yaml_file = tmp_path / "excluded.yaml"
+        yaml_file.write_text(yaml.dump(data))
+        repos = load_excluded_repos(yaml_file)
+        assert "https://github.com/org/repo" in repos
+
+    def test_missing_file_returns_empty(self, tmp_path):
+        repos = load_excluded_repos(tmp_path / "nonexistent.yaml")
+        assert repos == set()
+
+    def test_empty_yaml_returns_empty(self, tmp_path):
+        yaml_file = tmp_path / "excluded.yaml"
+        yaml_file.write_text("")
+        repos = load_excluded_repos(yaml_file)
+        assert repos == set()
+
+    def test_filters_candidates_when_combined(self):
+        """Excluded repos should be filtered out alongside known repos."""
+        known = {"https://github.com/org/known"}
+        excluded = {"https://github.com/org/rejected"}
+        candidates = [
+            make_candidate(url="https://github.com/org/known"),
+            make_candidate(name="rejected", url="https://github.com/org/rejected"),
+            make_candidate(name="new", url="https://github.com/org/new"),
+        ]
+        result = filter_new_candidates(candidates, known | excluded)
+        assert len(result) == 1
+        assert result[0]["name"] == "new"
+
+    def test_real_excluded_yaml_parses(self):
+        """The actual excluded.yaml should parse without errors."""
+        excluded_path = Path(__file__).resolve().parent.parent / "data" / "excluded.yaml"
+        repos = load_excluded_repos(excluded_path)
+        assert len(repos) > 0, "Expected at least some excluded repos"
 
 
 # ---------------------------------------------------------------------------

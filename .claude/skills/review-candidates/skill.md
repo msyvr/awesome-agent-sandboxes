@@ -142,7 +142,18 @@ git commit -m "..."
 git push upstream main
 ```
 
-### 9. Close issues
+### 9. Update excluded list
+
+Append all rejected repos to `data/excluded.yaml` so they don't resurface in future discovery runs:
+
+```yaml
+- url: https://github.com/org/rejected-repo
+  reason: Brief reason for rejection
+```
+
+`discover.py` filters these alongside entries in `sandboxes.yaml`. Group new additions by review date with a comment header.
+
+### 10. Close issues
 
 Close each reviewed issue with a comment summarizing what was added and rejected:
 

@@ -18,6 +18,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 YAML_PATH = ROOT / "data" / "sandboxes.yaml"
+EXCLUDED_PATH = ROOT / "data" / "excluded.yaml"
 
 GITHUB_API = "https://api.github.com"
 
@@ -54,6 +55,20 @@ def load_existing_repos(yaml_path: Path) -> set[str]:
             if val and "github.com" in val.lower():
                 # Normalize: strip trailing slashes, lowercase
                 repos.add(val.rstrip("/").lower())
+    return repos
+
+
+def load_excluded_repos(excluded_path: Path) -> set[str]:
+    """Load repo URLs from the excluded list to skip rejected candidates."""
+    if not excluded_path.exists():
+        return set()
+    with open(excluded_path) as f:
+        entries = yaml.safe_load(f) or []
+    repos = set()
+    for entry in entries:
+        val = entry.get("url")
+        if val and "github.com" in val.lower():
+            repos.add(val.rstrip("/").lower())
     return repos
 
 
@@ -271,7 +286,8 @@ def main():
         print("Searching for new sandbox repos...")
         candidates = search_github(token)
         known = load_existing_repos(YAML_PATH)
-        new_candidates = filter_new_candidates(candidates, known)
+        excluded = load_excluded_repos(EXCLUDED_PATH)
+        new_candidates = filter_new_candidates(candidates, known | excluded)
         candidates_md = format_candidates_md(new_candidates)
         print(f"Found {len(new_candidates)} new candidate(s) from {len(candidates)} total results.")
 
