@@ -18,6 +18,7 @@ Curated articles, papers, and discussions on sandboxing AI agents.
 
 ## Architecture and Design
 
+- [Sandboxing Agents at the Kernel Level](https://www.greptile.com/blog/sandboxing-agents-at-the-kernel-level) — Traces the Linux `open()` syscall through three kernel enforcement layers (permission bits, mount masking, chroot/namespaces) to explain why kernel-level isolation is the only reliable constraint for agent filesystem access
 - [LangChain's Approach To Sandboxing — Native Isolation vs Docker Containers](https://cobusgreyling.medium.com/langchains-approach-to-sandboxing-native-isolation-vs-docker-containers-746a60b265c1) — Framework-level sandboxing design decisions
 - [Sandboxing AI agents, 100x faster](https://blog.cloudflare.com/dynamic-workers/) — Cloudflare's V8 isolate approach to agent sandboxing
 - [How we made sandboxed coding agents 10x faster to start](https://imbue.com/product/containers/) — Performance engineering for sandbox startup latency
