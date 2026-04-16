@@ -221,3 +221,36 @@
   reason: Knowledge base, not a sandbox
 - url: https://github.com/fisheatfish/ai-sandbox
   reason: Docker Compose dev environment, no isolation enforcement beyond default Docker
+
+# --- Reviewed in issues #11, #12 (2026-04-15, 2026-04-16) ---
+
+- url: https://github.com/K9i-0/ccpocket
+  reason: Mobile client for coding agents, not a sandbox
+- url: https://github.com/langchain-ai/langchain-aws
+  reason: LangChain AWS integration, not a sandbox
+- url: https://github.com/aws-samples/sample-e2b-on-aws
+  reason: CloudFormation deployment guide for E2B (already listed), not a distinct tool
+- url: https://github.com/deepelementlab/clawcode
+  reason: Coding agent, not a sandbox
+- url: https://github.com/Swival/swival
+  reason: Coding agent, not a sandbox
+- url: https://github.com/AnastasiyaW/claude-code-config
+  reason: Config/skills, not a sandbox
+- url: https://github.com/Citrus-bit/medrix-flow
+  reason: Empty description, not a sandbox
+- url: https://github.com/catatafishen/agentbridge
+  reason: IDE agent, not a sandbox
+- url: https://github.com/leogr/coding-agents-kit
+  reason: Falco policy/guardrail layer, explicitly not a substitute for sandboxing
+- url: https://github.com/toniantunovi/prowl
+  reason: Vulnerability scanner, not a sandbox
+- url: https://github.com/vercel-labs/open-agents
+  reason: Cloud agent template, not a sandbox
+- url: https://github.com/ZHangZHengEric/Sage
+  reason: Multi-agent framework, not a sandbox
+- url: https://github.com/sympozium-ai/sympozium
+  reason: K8s orchestrator that optionally uses kubernetes-sigs/agent-sandbox (already listed), not a distinct sandbox
+- url: https://github.com/xpert-ai/xpert
+  reason: Enterprise data/AI platform, not a sandbox
+- url: https://github.com/chernistry/bernstein
+  reason: Agent orchestration, not a sandbox

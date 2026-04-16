@@ -130,6 +130,20 @@ Enterprise-grade sandbox infrastructure (Devboxes) with SOC 2 compliance and 10k
 
 _Notes: Enterprise compliance focus (SOC 2) differentiates from developer-oriented alternatives. GA May 2025._
 
+<a id="ref-superserve"></a>
+### Superserve
+
+**Maintainer:** superserve-ai · **License:** Apache-2.0 · [Home](https://github.com/superserve-ai/superserve)
+
+Cloud sandbox platform using Firecracker microVMs with TypeScript and Python SDKs.
+
+- **Isolation:** microvm
+- **Capabilities:** Firecracker microVM isolation; TypeScript and Python SDKs; Managed cloud service
+- **Requirements:** Cloud-hosted (superserve.ai sign-up)
+- **Limitations:** Beta; SDK is open source but sandbox backend is private
+
+_Notes: Firecracker-based like E2B. SDK is open source (Apache-2.0) but the sandbox backend infrastructure is in a separate private repo. Beta — evaluate maturity before committing to production use._
+
 <a id="ref-vercel-sandbox"></a>
 ### Vercel Sandbox
 
@@ -287,6 +301,20 @@ MicroVM sandboxes for AI coding agents, each with its own Docker daemon, filesys
 - **Limitations:** Experimental; MicroVM overhead
 
 _Notes: Very new (March 2026). Multi-agent support is notable — works with most major coding agents out of the box._
+
+<a id="ref-envpod-ce"></a>
+### envpod-ce
+
+**Maintainer:** markamo · **License:** BSL-1.1 · [Home](https://github.com/markamo/envpod-ce)
+
+Linux governance sandbox using OverlayFS COW, namespaces, cgroups v2, and seccomp-BPF with a diff/commit/rollback workflow for agent changes to host files.
+
+- **Isolation:** user-namespace, seccomp
+- **Capabilities:** OverlayFS copy-on-write (agents work on real files, changes staged); Linux namespaces (PID, net, mount, UTS, user); cgroups v2 resource limits; seccomp-BPF syscall filtering; Per-pod DNS with allowlisting; Encrypted credential vault; Diff/commit/rollback workflow for host changes; Jailbreak test suite included
+- **Requirements:** Linux only; Single-binary Rust install
+- **Limitations:** Linux only; BSL-1.1 license (not OSI-approved open source); Very early (v0.1.15, 9 stars)
+
+_Notes: The diff/commit/rollback workflow is unique — agents work on real host files via an OverlayFS overlay, and changes are staged for human review before committing to the host. Most sandboxes either fully isolate (agent can't touch host files) or don't isolate at all. This is a middle ground that enables real work with reversibility. BSL-1.1 license restricts production use without a commercial license._
 
 <a id="ref-fence"></a>
 ### fence

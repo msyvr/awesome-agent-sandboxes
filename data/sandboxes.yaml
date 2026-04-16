@@ -267,6 +267,32 @@
   adoption_effort: sign-up
   deployment_model: cloud
 
+- name: Superserve
+  category: cloud-managed
+  maintainer: superserve-ai
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/superserve-ai/superserve
+  repo_url: https://github.com/superserve-ai/superserve
+  description: Cloud sandbox platform using Firecracker microVMs with TypeScript and Python SDKs.
+  isolation_type: [microvm]
+  capabilities:
+    - Firecracker microVM isolation
+    - TypeScript and Python SDKs
+    - Managed cloud service
+  requirements:
+    - Cloud-hosted (superserve.ai sign-up)
+  limitations:
+    - Beta
+    - SDK is open source but sandbox backend is private
+  notes: >-
+    Firecracker-based like E2B. SDK is open source (Apache-2.0) but
+    the sandbox backend infrastructure is in a separate private repo.
+    Beta — evaluate maturity before committing to production use.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
 - name: Koyeb
   category: dev-environment
   maintainer: Koyeb
@@ -926,6 +952,43 @@
     and never-allow hard denials. More opinionated than fence or
     Agent Safehouse about what agents should be allowed to do.
     Linux sandbox is planned but not yet implemented.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: envpod-ce
+  category: standalone
+  maintainer: markamo
+  open_source: true
+  license: BSL-1.1
+  url: https://github.com/markamo/envpod-ce
+  repo_url: https://github.com/markamo/envpod-ce
+  description: Linux governance sandbox using OverlayFS COW, namespaces, cgroups v2, and seccomp-BPF with a diff/commit/rollback workflow for agent changes to host files.
+  isolation_type: [user-namespace, seccomp]
+  capabilities:
+    - OverlayFS copy-on-write (agents work on real files, changes staged)
+    - Linux namespaces (PID, net, mount, UTS, user)
+    - cgroups v2 resource limits
+    - seccomp-BPF syscall filtering
+    - Per-pod DNS with allowlisting
+    - Encrypted credential vault
+    - Diff/commit/rollback workflow for host changes
+    - Jailbreak test suite included
+  requirements:
+    - Linux only
+    - Single-binary Rust install
+  limitations:
+    - Linux only
+    - BSL-1.1 license (not OSI-approved open source)
+    - Very early (v0.1.15, 9 stars)
+  notes: >-
+    The diff/commit/rollback workflow is unique — agents work on real
+    host files via an OverlayFS overlay, and changes are staged for
+    human review before committing to the host. Most sandboxes either
+    fully isolate (agent can't touch host files) or don't isolate at
+    all. This is a middle ground that enables real work with
+    reversibility. BSL-1.1 license restricts production use without a
+    commercial license.
   isolation_tier: process
   adoption_effort: install
   deployment_model: local
