@@ -993,6 +993,100 @@
   adoption_effort: install
   deployment_model: local
 
+- name: brood-box
+  category: standalone
+  maintainer: Stacklok
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/stacklok/brood-box
+  repo_url: https://github.com/stacklok/brood-box
+  description: CLI that runs coding agents inside hardware-isolated microVMs with COW workspace snapshots and interactive per-file diff review before changes land.
+  isolation_type: [kvm, microvm]
+  capabilities:
+    - Hardware VM isolation (libkrun/KVM on Linux, Hypervisor.framework on macOS)
+    - COW workspace snapshots
+    - Interactive per-file diff review (VM stopped before review, TOCTOU-resistant)
+    - DNS-aware egress firewall
+    - Ephemeral SSH keys
+    - Non-overridable secret exclusions
+    - Permission stripping on flush
+  requirements:
+    - Linux (KVM) or macOS (Apple Silicon, Hypervisor.framework)
+  limitations:
+    - Experimental
+  notes: >-
+    From Stacklok (founded by Luke Hinds of Sigstore). Hardware VM
+    isolation like cleanroom, but adds TOCTOU-resistant diff review —
+    the VM is stopped before the user reviews changes, preventing the
+    agent from modifying files during review. DNS egress firewall and
+    non-overridable secret exclusions are strong default posture.
+  isolation_tier: hardware-vm
+  adoption_effort: install
+  deployment_model: local
+
+- name: alcless
+  category: standalone
+  maintainer: AkihiroSuda
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/AkihiroSuda/alcless
+  repo_url: https://github.com/AkihiroSuda/alcless
+  description: macOS sandbox using separate local user accounts for process/filesystem isolation with rsync workspace sync and user-confirmed sync-back.
+  isolation_type: [process]
+  capabilities:
+    - Separate macOS user account isolation
+    - rsync-based workspace isolation
+    - User-confirmed file sync-back
+    - Mach bootstrap subset isolation via pam_launchd
+    - No VM or container overhead
+  requirements:
+    - macOS only
+  limitations:
+    - macOS only (by design — Linux/FreeBSD have containers)
+    - Requires sudo for user switching
+    - Early project
+  notes: >-
+    From AkihiroSuda (maintainer of Lima, nerdctl). Deliberately
+    positioned as the lightweight complement to Lima (VM-based).
+    Zero VM overhead — just Unix user separation. The rsync + confirm
+    workflow means changes don't land on the host without approval.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
+- name: hole
+  category: standalone
+  maintainer: lukashornych
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/lukashornych/hole
+  repo_url: https://github.com/lukashornych/hole
+  description: CLI that runs AI agents inside ephemeral Docker/Podman containers with proxy-based network domain whitelisting and configurable filesystem exclusions.
+  isolation_type: [container]
+  capabilities:
+    - Docker and Podman container isolation
+    - Proxy-based network domain whitelisting (three profiles)
+    - --dump-network-access logging
+    - File exclusion via bind-mount overrides
+    - Docker-in-Docker support for agents that need containers
+    - Ephemeral containers (destroyed on exit)
+    - Non-root user inside container
+  requirements:
+    - Docker or Podman
+    - Linux, macOS, or WSL
+  limitations:
+    - Container isolation only (shared kernel)
+    - Solo maintainer
+    - Early project
+  notes: >-
+    The --dump-network-access flag is useful for discovering what network
+    access an agent actually needs — similar to Anthropic srt's
+    interactive approval mode but post-hoc. Docker-in-Docker support
+    is unusual and needed for agents that themselves use containers.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
 - name: skilllite
   category: standalone
   maintainer: EXboys

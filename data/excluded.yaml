@@ -254,3 +254,28 @@
   reason: Enterprise data/AI platform, not a sandbox
 - url: https://github.com/chernistry/bernstein
   reason: Agent orchestration, not a sandbox
+
+# --- Reviewed in issue #13 (2026-04-17) ---
+
+- url: https://github.com/openai/openai-agents-python
+  reason: Agent framework, not a sandbox
+- url: https://github.com/vinhnx/VTCode
+  reason: Coding agent, not a sandbox
+- url: https://github.com/withastro/flue
+  reason: Agent framework, default sandbox is just bash with no isolation, real isolation delegated to Daytona
+- url: https://github.com/VILA-Lab/Dive-into-Claude-Code
+  reason: Analysis paper, not a sandbox
+- url: https://github.com/SteelMorgan/1c-agent-based-dev-framework
+  reason: 1C dev framework, not a sandbox
+- url: https://github.com/GenAI-Gurus/awesome-eu-ai-act
+  reason: Compliance list, not a sandbox
+- url: https://github.com/spektre-labs/creation-os
+  reason: Cognitive architecture, not a sandbox
+- url: https://github.com/mdelapenya/biomelab
+  reason: GUI management layer for Docker Sandboxes, no isolation of its own
+- url: https://github.com/JeremyGuo/ClawParty
+  reason: Agent service framework, not a sandbox
+- url: https://github.com/Darwin-Agent/HarnessX
+  reason: Empty description, not a sandbox
+- url: https://github.com/bitkaio/migratowl
+  reason: Dependency analyzer, not a sandbox

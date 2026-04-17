@@ -260,6 +260,20 @@ Unified agent launcher with capability-based permission model and OS-native sand
 
 _Notes: The capability model is the differentiator — 19 built-in capabilities (docker, k8s, aws, etc.) with composable grants and never-allow hard denials. More opinionated than fence or Agent Safehouse about what agents should be allowed to do. Linux sandbox is planned but not yet implemented._
 
+<a id="ref-alcless"></a>
+### alcless
+
+**Maintainer:** AkihiroSuda · **License:** Apache-2.0 · [Home](https://github.com/AkihiroSuda/alcless)
+
+macOS sandbox using separate local user accounts for process/filesystem isolation with rsync workspace sync and user-confirmed sync-back.
+
+- **Isolation:** process
+- **Capabilities:** Separate macOS user account isolation; rsync-based workspace isolation; User-confirmed file sync-back; Mach bootstrap subset isolation via pam_launchd; No VM or container overhead
+- **Requirements:** macOS only
+- **Limitations:** macOS only (by design — Linux/FreeBSD have containers); Requires sudo for user switching; Early project
+
+_Notes: From AkihiroSuda (maintainer of Lima, nerdctl). Deliberately positioned as the lightweight complement to Lima (VM-based). Zero VM overhead — just Unix user separation. The rsync + confirm workflow means changes don't land on the host without approval._
+
 <a id="ref-anthropic-sandbox-runtime-srt"></a>
 ### Anthropic sandbox-runtime (srt)
 
@@ -273,6 +287,20 @@ Lightweight sandboxing for arbitrary processes using bubblewrap (Linux) and Seat
 - **Limitations:** Experimental/research preview; Not production-hardened; macOS sandbox-exec deprecation risk
 
 _Notes: Designed to sandbox any process, not just Claude Code. Interactive network approval mode is useful for discovering what network access a tool actually needs._
+
+<a id="ref-brood-box"></a>
+### brood-box
+
+**Maintainer:** Stacklok · **License:** Apache-2.0 · [Home](https://github.com/stacklok/brood-box)
+
+CLI that runs coding agents inside hardware-isolated microVMs with COW workspace snapshots and interactive per-file diff review before changes land.
+
+- **Isolation:** kvm, microvm
+- **Capabilities:** Hardware VM isolation (libkrun/KVM on Linux, Hypervisor.framework on macOS); COW workspace snapshots; Interactive per-file diff review (VM stopped before review, TOCTOU-resistant); DNS-aware egress firewall; Ephemeral SSH keys; Non-overridable secret exclusions; Permission stripping on flush
+- **Requirements:** Linux (KVM) or macOS (Apple Silicon, Hypervisor.framework)
+- **Limitations:** Experimental
+
+_Notes: From Stacklok (founded by Luke Hinds of Sigstore). Hardware VM isolation like cleanroom, but adds TOCTOU-resistant diff review — the VM is stopped before the user reviews changes, preventing the agent from modifying files during review. DNS egress firewall and non-overridable secret exclusions are strong default posture._
 
 <a id="ref-cleanroom"></a>
 ### cleanroom
@@ -329,6 +357,20 @@ Container-free CLI sandbox using OS-native primitives for network domain allowli
 - **Limitations:** macOS sandbox-exec deprecation risk; Process-level isolation (shared kernel)
 
 _Notes: Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture._
+
+<a id="ref-hole"></a>
+### hole
+
+**Maintainer:** lukashornych · **License:** Apache-2.0 · [Home](https://github.com/lukashornych/hole)
+
+CLI that runs AI agents inside ephemeral Docker/Podman containers with proxy-based network domain whitelisting and configurable filesystem exclusions.
+
+- **Isolation:** container
+- **Capabilities:** Docker and Podman container isolation; Proxy-based network domain whitelisting (three profiles); --dump-network-access logging; File exclusion via bind-mount overrides; Docker-in-Docker support for agents that need containers; Ephemeral containers (destroyed on exit); Non-root user inside container
+- **Requirements:** Docker or Podman; Linux, macOS, or WSL
+- **Limitations:** Container isolation only (shared kernel); Solo maintainer; Early project
+
+_Notes: The --dump-network-access flag is useful for discovering what network access an agent actually needs — similar to Anthropic srt's interactive approval mode but post-hoc. Docker-in-Docker support is unusual and needed for agents that themselves use containers._
 
 <a id="ref-jailoc"></a>
 ### jailoc
