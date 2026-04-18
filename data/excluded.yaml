@@ -279,3 +279,24 @@
   reason: Empty description, not a sandbox
 - url: https://github.com/bitkaio/migratowl
   reason: Dependency analyzer, not a sandbox
+
+# --- Reviewed in issue #14 (2026-04-18) ---
+
+- url: https://github.com/jamesmurdza/awesome-ai-devtools
+  reason: Curated list, not a sandbox
+- url: https://github.com/lasywolf/Learn-OpenClaw
+  reason: Tutorial, not a sandbox
+- url: https://github.com/wado-lang/wado
+  reason: Programming language, not a sandbox
+- url: https://github.com/JKHeadley/instar
+  reason: Agent scheduler, not a sandbox
+- url: https://github.com/raphaelmansuy/edgecrab
+  reason: Personal assistant, not a sandbox
+- url: https://github.com/ccat3z/stars
+  reason: Star list tool, not a sandbox
+- url: https://github.com/drewbitt/starred
+  reason: Star list, not a sandbox
+- url: https://github.com/yurukusa/cc-safe-setup
+  reason: Claude Code hook rules in settings.json, no isolation — pattern matching within same process
+- url: https://github.com/sandst1/nav
+  reason: Coding agent, not a sandbox

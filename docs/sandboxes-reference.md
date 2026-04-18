@@ -316,6 +316,20 @@ Self-hosted microVM sandbox using Firecracker (Linux) or Apple Virtualization.fr
 
 _Notes: From Buildkite (established CI company). Strongest isolation in recent discovery batches — hardware VM boundary, not containers or namespaces. Credential proxy model is similar to nono (keys never enter the sandbox). cleanroom.yaml per-repo policy is a clean declarative approach._
 
+<a id="ref-code-on-incus"></a>
+### code-on-incus
+
+**Maintainer:** mensfeld · **License:** MIT · [Home](https://github.com/mensfeld/code-on-incus)
+
+Hardened Incus container sandbox with real-time nftables threat detection (reverse shells, C2, DNS tunneling, exfiltration) and automated container pause/kill response.
+
+- **Isolation:** container, seccomp
+- **Capabilities:** Incus unprivileged system containers (seccomp, AppArmor, UID remapping); Firewalld network isolation (restricted/allowlist/open modes); Real-time nftables threat detection daemon; Automated container pause/kill on threat detection; Protected paths via read-only mounts + chattr +i; Supply-chain hardening (read-only .git/hooks, .husky, .vscode); Credential isolation (host credentials not mounted); Health-check command verifying seccomp/AppArmor/privilege posture
+- **Requirements:** Linux (native); macOS via Lima/Colima VM
+- **Limitations:** Container isolation (shared kernel); Linux-native (macOS requires VM layer)
+
+_Notes: Goes beyond isolation into active defense — the monitoring daemon uses kernel-level nftables packet inspection to detect reverse shells, C2 callbacks, DNS tunneling, and data exfiltration patterns, then auto-pauses or kills the container. Supply-chain hardening (read-only git hooks) is a detail most sandboxes miss._
+
 <a id="ref-docker-sandboxes"></a>
 ### Docker Sandboxes
 
@@ -357,6 +371,20 @@ Container-free CLI sandbox using OS-native primitives for network domain allowli
 - **Limitations:** macOS sandbox-exec deprecation risk; Process-level isolation (shared kernel)
 
 _Notes: Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture._
+
+<a id="ref-hazmat"></a>
+### hazmat
+
+**Maintainer:** dredozubov · **License:** MIT · [Home](https://github.com/dredozubov/hazmat)
+
+macOS triple-layer containment stacking a dedicated user account, per-session Seatbelt kernel sandbox, and pf firewall with DNS blocklists and Kopia snapshots.
+
+- **Isolation:** seatbelt, process
+- **Capabilities:** Dedicated macOS agent user (blocks ~/.ssh, ~/.aws, Keychain); Per-session Seatbelt kernel sandbox (default-deny filesystem); pf packet filter scoped to agent user; DNS blocklists (ngrok, pastebin, webhook.site); Supply-chain hardening (npm ignore-scripts by default); Kopia backup snapshots; TLA+ formally verified session lifecycle and policy structure
+- **Requirements:** macOS only; Homebrew install
+- **Limitations:** macOS only; Seatbelt is undocumented by Apple; HTTPS exfiltration not blocked; /tmp is shared
+
+_Notes: Strongest macOS-specific sandbox — layers everything alcless (user isolation) and Agent Safehouse (Seatbelt) do individually, plus pf firewall and DNS blocklists. TLA+ formal verification of session lifecycle is unusual rigor for a sandbox tool. Honest about limitations (HTTPS exfil, shared /tmp)._
 
 <a id="ref-hole"></a>
 ### hole
