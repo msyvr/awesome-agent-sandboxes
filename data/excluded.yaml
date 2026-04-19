@@ -300,3 +300,14 @@
   reason: Claude Code hook rules in settings.json, no isolation — pattern matching within same process
 - url: https://github.com/sandst1/nav
   reason: Coding agent, not a sandbox
+
+# --- Reviewed in issue #15 (2026-04-19) ---
+
+- url: https://github.com/dagucloud/dagu
+  reason: Workflow engine, not a sandbox
+- url: https://github.com/danieltamas/cloak
+  reason: At-rest credential encryption, not runtime isolation (mentioned in complementary defenses)
+- url: https://github.com/bikramtuladhar/awesome-list
+  reason: List, not a sandbox
+- url: https://github.com/akillness/oh-my-skills
+  reason: Skills configs, not a sandbox
