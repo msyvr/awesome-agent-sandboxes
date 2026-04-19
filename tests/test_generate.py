@@ -24,9 +24,9 @@ from generate_readme import (
     generate_category_table,
     slugify,
     generate_definition_entry,
-    generate_reference_doc,
+    generate_reference_docs,
     generate_toc,
-    REFERENCE_REL_PATH,
+    ref_path_for_category,
 )
 
 
@@ -298,18 +298,23 @@ class TestGenerateCategoryTable:
     def test_links_to_local_anchor_by_default(self):
         entries = [make_entry(name="Tool")]
         table = generate_category_table(entries)
-        # No prefix → in-document anchor link
+        # No cat_key → in-document anchor link
         assert "[Tool](#ref-tool)" in table
 
-    def test_links_to_external_anchor_with_prefix(self):
+    def test_links_to_category_ref_file(self):
         entries = [make_entry(name="Tool")]
-        table = generate_category_table(entries, anchor_prefix="docs/sandboxes-reference.md")
-        assert "[Tool](docs/sandboxes-reference.md#ref-tool)" in table
+        table = generate_category_table(entries, cat_key="standalone")
+        assert "[Tool](docs/ref-standalone.md#ref-tool)" in table
+
+    def test_links_to_building_blocks_ref_file(self):
+        entries = [make_entry(name="Tool")]
+        table = generate_category_table(entries, cat_key="vm-runtime")
+        assert "[Tool](docs/ref-building-blocks.md#ref-tool)" in table
 
     def test_anchor_link_for_complex_name(self):
         entries = [make_entry(name="agent-infra/sandbox")]
-        table = generate_category_table(entries, anchor_prefix="docs/sandboxes-reference.md")
-        assert "[agent-infra/sandbox](docs/sandboxes-reference.md#ref-agent-infra-sandbox)" in table
+        table = generate_category_table(entries, cat_key="standalone")
+        assert "[agent-infra/sandbox](docs/ref-standalone.md#ref-agent-infra-sandbox)" in table
 
     def test_oss_yes_with_license(self):
         entries = [make_entry(open_source=True, license="MIT")]
@@ -498,53 +503,66 @@ class TestGenerateDefinitionEntry:
 # Standalone reference doc generation
 # ---------------------------------------------------------------------------
 
-class TestGenerateReferenceDoc:
-    def test_includes_h1_heading(self):
-        result = generate_reference_doc([make_entry()])
-        assert result.startswith("# Detailed Sandboxes Reference")
+class TestGenerateReferenceDocs:
+    def test_returns_dict_of_files(self):
+        entries = [make_entry(category="standalone")]
+        docs = generate_reference_docs(entries)
+        assert isinstance(docs, dict)
+        assert "ref-standalone.md" in docs
 
-    def test_includes_intro_link_to_readme(self):
-        result = generate_reference_doc([make_entry()])
-        assert "[awesome-agent-sandboxes](../README.md)" in result
-
-    def test_groups_by_category_at_h2(self):
+    def test_product_categories_get_own_files(self):
         entries = [
             make_entry(name="Tool A", category="standalone"),
             make_entry(name="Tool B", category="cloud-managed"),
         ]
-        result = generate_reference_doc(entries)
-        assert "## Cloud Managed Sandboxes" in result
-        assert "## Standalone / Self-Hosted Tools" in result
+        docs = generate_reference_docs(entries)
+        assert "ref-standalone.md" in docs
+        assert "ref-cloud-managed.md" in docs
 
-    def test_building_blocks_at_h2(self):
-        entries = [make_entry(name="Tool", category="vm-runtime")]
-        result = generate_reference_doc(entries)
-        assert "## Building Blocks" in result
-        assert "### VM & Container Runtimes" in result
+    def test_building_blocks_share_one_file(self):
+        entries = [
+            make_entry(name="A", category="vm-runtime"),
+            make_entry(name="B", category="os-primitive"),
+        ]
+        docs = generate_reference_docs(entries)
+        assert "ref-building-blocks.md" in docs
+        assert "## VM & Container Runtimes" in docs["ref-building-blocks.md"]
+        assert "## OS-Level Sandboxing" in docs["ref-building-blocks.md"]
 
-    def test_product_entries_at_h3(self):
+    def test_each_file_has_back_link(self):
+        entries = [make_entry(category="standalone")]
+        docs = generate_reference_docs(entries)
+        assert "[Back to main guide](../README.md)" in docs["ref-standalone.md"]
+
+    def test_product_entries_at_h2(self):
         entries = [make_entry(name="Tool", category="standalone")]
-        result = generate_reference_doc(entries)
-        assert "### Tool" in result
-        assert "#### Tool" not in result
+        docs = generate_reference_docs(entries)
+        assert "## Tool" in docs["ref-standalone.md"]
 
-    def test_anchors_match_external_table_links(self):
+    def test_anchors_match_table_links(self):
         """Reference doc anchors must match what README category tables link to."""
         entries = [make_entry(name="Tool", category="standalone")]
-        table = generate_category_table(entries, anchor_prefix=REFERENCE_REL_PATH)
-        doc = generate_reference_doc(entries)
-        assert f"({REFERENCE_REL_PATH}#ref-tool)" in table
-        assert '<a id="ref-tool"></a>' in doc
+        table = generate_category_table(entries, cat_key="standalone")
+        docs = generate_reference_docs(entries)
+        ref_path = ref_path_for_category("standalone")
+        assert f"({ref_path}#ref-tool)" in table
+        assert '<a id="ref-tool"></a>' in docs["ref-standalone.md"]
 
     def test_alphabetical_within_category(self):
         entries = [
             make_entry(name="Zebra", category="standalone"),
             make_entry(name="Alpha", category="standalone"),
         ]
-        result = generate_reference_doc(entries)
-        alpha_pos = result.find("### Alpha")
-        zebra_pos = result.find("### Zebra")
+        docs = generate_reference_docs(entries)
+        content = docs["ref-standalone.md"]
+        alpha_pos = content.find("## Alpha")
+        zebra_pos = content.find("## Zebra")
         assert alpha_pos < zebra_pos
+
+    def test_empty_categories_excluded(self):
+        entries = [make_entry(category="standalone")]
+        docs = generate_reference_docs(entries)
+        assert "ref-cloud-managed.md" not in docs
 
 
 # ---------------------------------------------------------------------------
