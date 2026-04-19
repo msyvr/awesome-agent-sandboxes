@@ -470,21 +470,21 @@ def generate_additions_chart(additions: list[dict]) -> None:
             ha="center",
             va="bottom",
             fontsize=7,
-            color="#94a3b8",
+            color=BAR_COLOR,
             fontfamily="sans-serif",
         )
 
-    # Y-axis: integers only, no gridlines
-    ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
-    ax.set_ylim(0, max_count + 2)
+    # Y-axis: fixed 0-10 range, show only 0 and 10
+    ax.set_ylim(0, 10)
+    ax.set_yticks([0, 10])
 
     # No spines at all
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    # Tick styling
-    ax.tick_params(axis="x", labelsize=7.5, colors="#64748b", length=0, pad=4)
-    ax.tick_params(axis="y", labelsize=7, colors="#94a3b8", length=0, pad=4)
+    # Tick styling — same color as bars and title
+    ax.tick_params(axis="x", labelsize=7.5, colors=BAR_COLOR, length=0, pad=4)
+    ax.tick_params(axis="y", labelsize=7, colors=BAR_COLOR, length=0, pad=4)
 
     # Title in bar color
     ax.set_title(
