@@ -446,13 +446,15 @@ def generate_additions_chart(additions: list[dict]) -> None:
     counts = [len(a["entries"]) for a in discovery]
     max_count = max(counts)
 
-    fig, ax = plt.subplots(figsize=(7, 1.8))
+    BAR_COLOR = "#e87043"  # Claude Code orange
+
+    fig, ax = plt.subplots(figsize=(5, 1.8))
     fig.patch.set_alpha(0)
     ax.set_facecolor("none")
 
     bars = ax.bar(
         dates, counts,
-        color="#6366f1",
+        color=BAR_COLOR,
         width=0.5,
         edgecolor="white",
         linewidth=0.5,
@@ -472,27 +474,23 @@ def generate_additions_chart(additions: list[dict]) -> None:
             fontfamily="sans-serif",
         )
 
-    # Y-axis: integers only, subtle gridlines behind bars
+    # Y-axis: integers only, no gridlines
     ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
     ax.set_ylim(0, max_count + 2)
-    ax.grid(axis="y", color="#e2e8f0", linewidth=0.5, zorder=0)
 
-    # Minimal spines — bottom only
+    # No spines at all
     for spine in ax.spines.values():
         spine.set_visible(False)
-    ax.spines["bottom"].set_visible(True)
-    ax.spines["bottom"].set_color("#cbd5e1")
-    ax.spines["bottom"].set_linewidth(0.5)
 
     # Tick styling
     ax.tick_params(axis="x", labelsize=7.5, colors="#64748b", length=0, pad=4)
     ax.tick_params(axis="y", labelsize=7, colors="#94a3b8", length=0, pad=4)
 
-    # Title
+    # Title in bar color
     ax.set_title(
         f"Additions by date  ·  initial seed: {seed_count} items ({seed_date})",
         fontsize=8.5,
-        color="#475569",
+        color=BAR_COLOR,
         fontfamily="sans-serif",
         pad=10,
     )
@@ -520,7 +518,7 @@ def generate_additions_section(additions: list[dict]) -> str:
 
     lines = []
     lines.append('<a id="sec-additions"></a>')
-    lines.append(f"\n![Additions chart]({CHART_REL_PATH})\n")
+    lines.append(f'\n<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
 
     # --- Collapsible daily breakdown with links (reverse-chron) ---
     lines.append("<details>")

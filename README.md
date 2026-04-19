@@ -1,6 +1,6 @@
 <a id="sec-additions"></a>
 
-![Additions chart](docs/additions-chart.png)
+<p align="center"><img src="docs/additions-chart.png" alt="Additions chart" width="66%"></p>
 
 <details>
 <summary>Daily breakdown (click to expand)</summary>
