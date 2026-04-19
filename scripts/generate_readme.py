@@ -421,8 +421,9 @@ def generate_reference_doc(entries: list[dict]) -> str:
 def generate_additions_section(additions: list[dict]) -> str:
     """Generate the additions histogram section.
 
-    Produces a Mermaid bar chart showing daily additions, followed by
-    a collapsible details section with linked entry names per day.
+    Produces a Mermaid bar chart of discovery additions (excludes the
+    initial seed to keep the scale readable), followed by a collapsible
+    reverse-chronological breakdown with linked entry names.
     """
     if not additions:
         return ""
@@ -431,31 +432,43 @@ def generate_additions_section(additions: list[dict]) -> str:
     lines.append('<a id="sec-additions"></a>')
     lines.append("## Additions Over Time\n")
 
-    # --- Mermaid bar chart ---
-    dates = [a["date"] for a in additions]
-    counts = [len(a["entries"]) for a in additions]
-    # Shorten dates for x-axis labels (MM-DD)
-    short_dates = [d[5:] for d in dates]
+    # Separate the initial seed from discovery additions
+    seed = additions[0] if additions else None
+    discovery = additions[1:] if len(additions) > 1 else []
 
-    lines.append("```mermaid")
-    lines.append("xychart-beta")
-    lines.append('    title "Sandbox entries added by date"')
-    x_labels = ", ".join(f'"{d}"' for d in short_dates)
-    lines.append(f"    x-axis [{x_labels}]")
-    max_count = max(counts)
-    lines.append(f'    y-axis "Entries" 0 --> {max_count + 2}')
-    bar_data = ", ".join(str(c) for c in counts)
-    lines.append(f"    bar [{bar_data}]")
-    lines.append("```\n")
+    if seed:
+        lines.append(
+            f"Initial seed: **{len(seed['entries'])} entries** ({seed['date']}). "
+            f"Discovery additions since then:\n"
+        )
 
-    # --- Collapsible daily breakdown with links ---
+    # --- Mermaid bar chart (discovery only) ---
+    if discovery:
+        short_dates = [a["date"][5:] for a in discovery]
+        counts = [len(a["entries"]) for a in discovery]
+        max_count = max(counts)
+
+        lines.append("```mermaid")
+        lines.append("xychart-beta")
+        lines.append('    title "Discovery additions by date"')
+        x_labels = ", ".join(f'"{d}"' for d in short_dates)
+        lines.append(f"    x-axis [{x_labels}]")
+        lines.append(f'    y-axis "Entries" 0 --> {max_count + 2}')
+        bar_data = ", ".join(str(c) for c in counts)
+        lines.append(f"    bar [{bar_data}]")
+        lines.append("```\n")
+
+    # --- Collapsible daily breakdown with links (reverse-chron) ---
     lines.append("<details>")
     lines.append("<summary>Daily breakdown (click to expand)</summary>\n")
 
-    for addition in additions:
+    for addition in reversed(additions):
         date = addition["date"]
         entry_names = addition["entries"]
-        lines.append(f"**{date}** ({len(entry_names)} entries)")
+        label = f"**{date}** ({len(entry_names)} entries)"
+        if addition is seed:
+            label += " — initial seed"
+        lines.append(label)
         for name in entry_names:
             anchor = slugify(name)
             lines.append(f"- [{name}]({REFERENCE_REL_PATH}#{anchor})")
@@ -478,6 +491,10 @@ def generate_part2(entries: list[dict], additions: list[dict] | None = None) -> 
         f"[{REFERENCE_REL_PATH}]({REFERENCE_REL_PATH}). "
         f"The category tables below also link directly to relevant entries.\n"
     )
+
+    # --- Additions histogram ---
+    if additions:
+        sections.append(generate_additions_section(additions))
 
     # --- Quick Triage (lenses) ---
     sections.append('<a id="sec-quick-triage"></a>')
@@ -551,10 +568,6 @@ def generate_part2(entries: list[dict], additions: list[dict] | None = None) -> 
     sections.append("3. Open a PR\n")
     sections.append("The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.\n")
 
-    # --- Additions histogram ---
-    if additions:
-        sections.append(generate_additions_section(additions))
-
     return "\n".join(sections)
 
 
@@ -576,8 +589,9 @@ def generate_toc(entries: list[dict]) -> str:
     lines.append("- [Choosing a sandbox](#sec-choosing)")
     lines.append("  - [Safety & Alignment Research](#sec-safety-research)")
 
-    # --- Part 2: detailed reference link + lenses + categories ---
+    # --- Part 2: detailed reference + additions + lenses + categories ---
     lines.append("- [Detailed Sandboxes Reference](#sec-detailed-reference)")
+    lines.append("- [Additions Over Time](#sec-additions)")
     lines.append("- [Quick Triage](#sec-quick-triage)")
 
     product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
@@ -595,7 +609,6 @@ def generate_toc(entries: list[dict]) -> str:
 
     lines.append("- [References](#sec-references)")
     lines.append("- [Contributing](#sec-contributing)")
-    lines.append("- [Additions Over Time](#sec-additions)")
 
     return "\n".join(lines)
 
