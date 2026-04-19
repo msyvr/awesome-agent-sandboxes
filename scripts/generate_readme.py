@@ -418,8 +418,8 @@ def generate_reference_doc(entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
-CHART_PATH = ROOT / "docs" / "additions-chart.png"
-CHART_REL_PATH = "docs/additions-chart.png"
+CHART_PATH = ROOT / "docs" / "additions-chart.svg"
+CHART_REL_PATH = "docs/additions-chart.svg"
 
 
 def generate_additions_chart(additions: list[dict]) -> None:
@@ -456,8 +456,7 @@ def generate_additions_chart(additions: list[dict]) -> None:
         dates, counts,
         color=BAR_COLOR,
         width=0.5,
-        edgecolor="white",
-        linewidth=0.5,
+        edgecolor="none",
         zorder=3,
     )
 
@@ -498,8 +497,9 @@ def generate_additions_chart(additions: list[dict]) -> None:
     fig.tight_layout()
     CHART_PATH.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(
-        CHART_PATH, dpi=180, bbox_inches="tight",
+        CHART_PATH, bbox_inches="tight",
         transparent=True, pad_inches=0.15,
+        format="svg",
     )
     plt.close(fig)
     print(f"Generated {CHART_PATH}")
