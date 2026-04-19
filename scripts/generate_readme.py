@@ -431,6 +431,7 @@ def generate_additions_chart(additions: list[dict]) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import matplotlib.ticker as ticker
 
     seed = additions[0] if additions else None
     discovery = additions[1:] if len(additions) > 1 else []
@@ -443,37 +444,65 @@ def generate_additions_chart(additions: list[dict]) -> None:
 
     dates = [a["date"][5:] for a in discovery]
     counts = [len(a["entries"]) for a in discovery]
+    max_count = max(counts)
 
-    fig, ax = plt.subplots(figsize=(7, 2))
-    bars = ax.bar(dates, counts, color="#3b82f6", width=0.6)
+    fig, ax = plt.subplots(figsize=(7, 1.8))
+    fig.patch.set_alpha(0)
+    ax.set_facecolor("none")
+
+    bars = ax.bar(
+        dates, counts,
+        color="#6366f1",
+        width=0.5,
+        edgecolor="white",
+        linewidth=0.5,
+        zorder=3,
+    )
 
     # Value labels on top of each bar
     for bar, count in zip(bars, counts):
         ax.text(
             bar.get_x() + bar.get_width() / 2,
-            bar.get_height() + 0.15,
+            bar.get_height() + 0.2,
             str(count),
             ha="center",
             va="bottom",
-            fontsize=8,
-            color="#666",
+            fontsize=7,
+            color="#94a3b8",
+            fontfamily="sans-serif",
         )
 
-    ax.set_ylabel("Entries added", fontsize=9)
+    # Y-axis: integers only, subtle gridlines behind bars
+    ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
+    ax.set_ylim(0, max_count + 2)
+    ax.grid(axis="y", color="#e2e8f0", linewidth=0.5, zorder=0)
+
+    # Minimal spines — bottom only
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.spines["bottom"].set_visible(True)
+    ax.spines["bottom"].set_color("#cbd5e1")
+    ax.spines["bottom"].set_linewidth(0.5)
+
+    # Tick styling
+    ax.tick_params(axis="x", labelsize=7.5, colors="#64748b", length=0, pad=4)
+    ax.tick_params(axis="y", labelsize=7, colors="#94a3b8", length=0, pad=4)
+
+    # Title
     ax.set_title(
-        f"Additions by date after initial seed ({seed_count} items {seed_date})",
-        fontsize=10,
-        pad=8,
+        f"Additions by date  ·  initial seed: {seed_count} items ({seed_date})",
+        fontsize=8.5,
+        color="#475569",
+        fontfamily="sans-serif",
+        pad=10,
     )
-    ax.set_ylim(0, max(counts) + 2)
-    ax.tick_params(axis="x", labelsize=8, rotation=0)
-    ax.tick_params(axis="y", labelsize=8)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
 
     fig.tight_layout()
     CHART_PATH.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(CHART_PATH, dpi=150, bbox_inches="tight")
+    fig.savefig(
+        CHART_PATH, dpi=180, bbox_inches="tight",
+        transparent=True, pad_inches=0.15,
+    )
     plt.close(fig)
     print(f"Generated {CHART_PATH}")
 
