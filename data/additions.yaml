@@ -1,0 +1,101 @@
+# Log of sandbox entries added by date.
+# Appended by the /review-candidates skill after each review.
+# Used by generate_readme.py to build the additions histogram.
+
+- date: "2026-04-07"
+  entries:
+    - E2B
+    - Daytona
+    - Modal
+    - Runloop
+    - Northflank
+    - Fly Sprites
+    - CodeSandbox SDK
+    - Bunnyshell AI Sandboxes
+    - Vercel Sandbox
+    - Koyeb
+    - Cloudflare Dynamic Workers
+    - Claude Code Sandbox
+    - OpenAI Codex Sandbox
+    - Docker Sandboxes
+    - nono
+    - Anthropic sandbox-runtime (srt)
+    - NVIDIA OpenShell
+    - Agent Safehouse
+    - scode
+    - microsandbox
+    - agent-infra/sandbox
+    - Agent Sandbox (kubernetes-sigs)
+    - GKE Agent Sandbox
+    - Ona (formerly Gitpod)
+    - GitHub Codespaces
+    - Coder
+    - DevPod
+    - ComputeSDK
+    - LangChain Sandboxes
+    - OpenSandbox
+    - NanoClaw
+    - Firecracker
+    - gVisor
+    - Kata Containers
+    - libkrun
+    - Zeroboot
+    - bubblewrap (bwrap)
+    - macOS Seatbelt / sandbox-exec
+    - Firejail
+    - Landlock LSM
+    - seccomp-BPF
+    - Linux Namespaces + cgroups
+    - nsjail
+    - Wasmtime
+    - WasmEdge
+    - wasmCloud
+    - Wassette
+    - Pyodide
+
+- date: "2026-04-09"
+  entries:
+    - monty
+    - locki
+    - ai-sandbox-wrapper
+    - agentsh
+    - jailoc
+    - sand
+
+- date: "2026-04-10"
+  entries:
+    - sevorix-lite
+    - treadstone
+
+- date: "2026-04-12"
+  entries:
+    - skilllite
+    - sandcastle
+    - cleanroom
+    - openkruise/agents
+    - sandbox0
+
+- date: "2026-04-13"
+  entries:
+    - llm-sandbox
+
+- date: "2026-04-14"
+  entries:
+    - fence
+    - aide
+
+- date: "2026-04-16"
+  entries:
+    - envpod-ce
+    - Superserve
+
+- date: "2026-04-17"
+  entries:
+    - brood-box
+    - alcless
+    - hole
+
+- date: "2026-04-18"
+  entries:
+    - code-on-incus
+    - hazmat

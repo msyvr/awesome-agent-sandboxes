@@ -29,6 +29,7 @@ Whether you're a developer building with AI agents or someone using them for per
   - [WebAssembly Runtimes](#sec-wasm-runtime)
 - [References](#sec-references)
 - [Contributing](#sec-contributing)
+- [Additions Over Time](#sec-additions)
 
 <a id="sec-what-is-sandboxing"></a>
 ## What is sandboxing and why should you care?
@@ -470,4 +471,109 @@ To add or update a sandbox entry:
 3. Open a PR
 
 The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.
+
+<a id="sec-additions"></a>
+## Additions Over Time
+
+```mermaid
+xychart-beta
+    title "Sandbox entries added by date"
+    x-axis ["04-07", "04-09", "04-10", "04-12", "04-13", "04-14", "04-16", "04-17", "04-18"]
+    y-axis "Entries" 0 --> 50
+    bar [48, 6, 2, 5, 1, 2, 2, 3, 2]
+```
+
+<details>
+<summary>Daily breakdown (click to expand)</summary>
+
+**2026-04-07** (48 entries)
+- [E2B](docs/sandboxes-reference.md#ref-e2b)
+- [Daytona](docs/sandboxes-reference.md#ref-daytona)
+- [Modal](docs/sandboxes-reference.md#ref-modal)
+- [Runloop](docs/sandboxes-reference.md#ref-runloop)
+- [Northflank](docs/sandboxes-reference.md#ref-northflank)
+- [Fly Sprites](docs/sandboxes-reference.md#ref-fly-sprites)
+- [CodeSandbox SDK](docs/sandboxes-reference.md#ref-codesandbox-sdk)
+- [Bunnyshell AI Sandboxes](docs/sandboxes-reference.md#ref-bunnyshell-ai-sandboxes)
+- [Vercel Sandbox](docs/sandboxes-reference.md#ref-vercel-sandbox)
+- [Koyeb](docs/sandboxes-reference.md#ref-koyeb)
+- [Cloudflare Dynamic Workers](docs/sandboxes-reference.md#ref-cloudflare-dynamic-workers)
+- [Claude Code Sandbox](docs/sandboxes-reference.md#ref-claude-code-sandbox)
+- [OpenAI Codex Sandbox](docs/sandboxes-reference.md#ref-openai-codex-sandbox)
+- [Docker Sandboxes](docs/sandboxes-reference.md#ref-docker-sandboxes)
+- [nono](docs/sandboxes-reference.md#ref-nono)
+- [Anthropic sandbox-runtime (srt)](docs/sandboxes-reference.md#ref-anthropic-sandbox-runtime-srt)
+- [NVIDIA OpenShell](docs/sandboxes-reference.md#ref-nvidia-openshell)
+- [Agent Safehouse](docs/sandboxes-reference.md#ref-agent-safehouse)
+- [scode](docs/sandboxes-reference.md#ref-scode)
+- [microsandbox](docs/sandboxes-reference.md#ref-microsandbox)
+- [agent-infra/sandbox](docs/sandboxes-reference.md#ref-agent-infra-sandbox)
+- [Agent Sandbox (kubernetes-sigs)](docs/sandboxes-reference.md#ref-agent-sandbox-kubernetes-sigs)
+- [GKE Agent Sandbox](docs/sandboxes-reference.md#ref-gke-agent-sandbox)
+- [Ona (formerly Gitpod)](docs/sandboxes-reference.md#ref-ona-formerly-gitpod)
+- [GitHub Codespaces](docs/sandboxes-reference.md#ref-github-codespaces)
+- [Coder](docs/sandboxes-reference.md#ref-coder)
+- [DevPod](docs/sandboxes-reference.md#ref-devpod)
+- [ComputeSDK](docs/sandboxes-reference.md#ref-computesdk)
+- [LangChain Sandboxes](docs/sandboxes-reference.md#ref-langchain-sandboxes)
+- [OpenSandbox](docs/sandboxes-reference.md#ref-opensandbox)
+- [NanoClaw](docs/sandboxes-reference.md#ref-nanoclaw)
+- [Firecracker](docs/sandboxes-reference.md#ref-firecracker)
+- [gVisor](docs/sandboxes-reference.md#ref-gvisor)
+- [Kata Containers](docs/sandboxes-reference.md#ref-kata-containers)
+- [libkrun](docs/sandboxes-reference.md#ref-libkrun)
+- [Zeroboot](docs/sandboxes-reference.md#ref-zeroboot)
+- [bubblewrap (bwrap)](docs/sandboxes-reference.md#ref-bubblewrap-bwrap)
+- [macOS Seatbelt / sandbox-exec](docs/sandboxes-reference.md#ref-macos-seatbelt-sandbox-exec)
+- [Firejail](docs/sandboxes-reference.md#ref-firejail)
+- [Landlock LSM](docs/sandboxes-reference.md#ref-landlock-lsm)
+- [seccomp-BPF](docs/sandboxes-reference.md#ref-seccomp-bpf)
+- [Linux Namespaces + cgroups](docs/sandboxes-reference.md#ref-linux-namespaces-cgroups)
+- [nsjail](docs/sandboxes-reference.md#ref-nsjail)
+- [Wasmtime](docs/sandboxes-reference.md#ref-wasmtime)
+- [WasmEdge](docs/sandboxes-reference.md#ref-wasmedge)
+- [wasmCloud](docs/sandboxes-reference.md#ref-wasmcloud)
+- [Wassette](docs/sandboxes-reference.md#ref-wassette)
+- [Pyodide](docs/sandboxes-reference.md#ref-pyodide)
+
+**2026-04-09** (6 entries)
+- [monty](docs/sandboxes-reference.md#ref-monty)
+- [locki](docs/sandboxes-reference.md#ref-locki)
+- [ai-sandbox-wrapper](docs/sandboxes-reference.md#ref-ai-sandbox-wrapper)
+- [agentsh](docs/sandboxes-reference.md#ref-agentsh)
+- [jailoc](docs/sandboxes-reference.md#ref-jailoc)
+- [sand](docs/sandboxes-reference.md#ref-sand)
+
+**2026-04-10** (2 entries)
+- [sevorix-lite](docs/sandboxes-reference.md#ref-sevorix-lite)
+- [treadstone](docs/sandboxes-reference.md#ref-treadstone)
+
+**2026-04-12** (5 entries)
+- [skilllite](docs/sandboxes-reference.md#ref-skilllite)
+- [sandcastle](docs/sandboxes-reference.md#ref-sandcastle)
+- [cleanroom](docs/sandboxes-reference.md#ref-cleanroom)
+- [openkruise/agents](docs/sandboxes-reference.md#ref-openkruise-agents)
+- [sandbox0](docs/sandboxes-reference.md#ref-sandbox0)
+
+**2026-04-13** (1 entries)
+- [llm-sandbox](docs/sandboxes-reference.md#ref-llm-sandbox)
+
+**2026-04-14** (2 entries)
+- [fence](docs/sandboxes-reference.md#ref-fence)
+- [aide](docs/sandboxes-reference.md#ref-aide)
+
+**2026-04-16** (2 entries)
+- [envpod-ce](docs/sandboxes-reference.md#ref-envpod-ce)
+- [Superserve](docs/sandboxes-reference.md#ref-superserve)
+
+**2026-04-17** (3 entries)
+- [brood-box](docs/sandboxes-reference.md#ref-brood-box)
+- [alcless](docs/sandboxes-reference.md#ref-alcless)
+- [hole](docs/sandboxes-reference.md#ref-hole)
+
+**2026-04-18** (2 entries)
+- [code-on-incus](docs/sandboxes-reference.md#ref-code-on-incus)
+- [hazmat](docs/sandboxes-reference.md#ref-hazmat)
+
+</details>
 

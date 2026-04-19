@@ -142,7 +142,20 @@ git commit -m "..."
 git push upstream main
 ```
 
-### 9. Update excluded list
+### 9. Update additions log
+
+Append newly added entries to `data/additions.yaml` so the additions histogram stays current. Group by the issue date, not the review date — if reviewing multiple days' issues, create one entry per day:
+
+```yaml
+- date: "2026-04-19"
+  entries:
+    - new-sandbox-name
+    - another-sandbox-name
+```
+
+Keep entries in chronological order. The generate script reads this to build the Mermaid bar chart and collapsible daily breakdown in the README.
+
+### 10. Update excluded list
 
 Append all rejected repos to `data/excluded.yaml` so they don't resurface in future discovery runs:
 
@@ -153,7 +166,7 @@ Append all rejected repos to `data/excluded.yaml` so they don't resurface in fut
 
 `discover.py` filters these alongside entries in `sandboxes.yaml`. Group new additions by review date with a comment header.
 
-### 10. Close issues
+### 11. Close issues
 
 Close each reviewed issue with a comment summarizing what was added and rejected:
 
@@ -161,7 +174,7 @@ Close each reviewed issue with a comment summarizing what was added and rejected
 gh issue close <N> --repo <owner>/<repo> --comment "Reviewed in <sha>. Added: ... Rejected: ..."
 ```
 
-### 10. Check for staleness issues
+### 12. Check for staleness issues
 
 After closing discovery issues, check for open staleness issues:
 

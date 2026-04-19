@@ -13,6 +13,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 YAML_PATH = ROOT / "data" / "sandboxes.yaml"
+ADDITIONS_PATH = ROOT / "data" / "additions.yaml"
 GETTING_STARTED_PATH = ROOT / "docs" / "getting-started.md"
 README_PATH = ROOT / "README.md"
 REFERENCE_PATH = ROOT / "docs" / "sandboxes-reference.md"
@@ -417,7 +418,55 @@ def generate_reference_doc(entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def generate_part2(entries: list[dict]) -> str:
+def generate_additions_section(additions: list[dict]) -> str:
+    """Generate the additions histogram section.
+
+    Produces a Mermaid bar chart showing daily additions, followed by
+    a collapsible details section with linked entry names per day.
+    """
+    if not additions:
+        return ""
+
+    lines = []
+    lines.append('<a id="sec-additions"></a>')
+    lines.append("## Additions Over Time\n")
+
+    # --- Mermaid bar chart ---
+    dates = [a["date"] for a in additions]
+    counts = [len(a["entries"]) for a in additions]
+    # Shorten dates for x-axis labels (MM-DD)
+    short_dates = [d[5:] for d in dates]
+
+    lines.append("```mermaid")
+    lines.append("xychart-beta")
+    lines.append('    title "Sandbox entries added by date"')
+    x_labels = ", ".join(f'"{d}"' for d in short_dates)
+    lines.append(f"    x-axis [{x_labels}]")
+    max_count = max(counts)
+    lines.append(f'    y-axis "Entries" 0 --> {max_count + 2}')
+    bar_data = ", ".join(str(c) for c in counts)
+    lines.append(f"    bar [{bar_data}]")
+    lines.append("```\n")
+
+    # --- Collapsible daily breakdown with links ---
+    lines.append("<details>")
+    lines.append("<summary>Daily breakdown (click to expand)</summary>\n")
+
+    for addition in additions:
+        date = addition["date"]
+        entry_names = addition["entries"]
+        lines.append(f"**{date}** ({len(entry_names)} entries)")
+        for name in entry_names:
+            anchor = slugify(name)
+            lines.append(f"- [{name}]({REFERENCE_REL_PATH}#{anchor})")
+        lines.append("")
+
+    lines.append("</details>\n")
+
+    return "\n".join(lines)
+
+
+def generate_part2(entries: list[dict], additions: list[dict] | None = None) -> str:
     """Generate the full Part 2: landscape content."""
     sections = []
 
@@ -502,6 +551,10 @@ def generate_part2(entries: list[dict]) -> str:
     sections.append("3. Open a PR\n")
     sections.append("The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.\n")
 
+    # --- Additions histogram ---
+    if additions:
+        sections.append(generate_additions_section(additions))
+
     return "\n".join(sections)
 
 
@@ -542,6 +595,7 @@ def generate_toc(entries: list[dict]) -> str:
 
     lines.append("- [References](#sec-references)")
     lines.append("- [Contributing](#sec-contributing)")
+    lines.append("- [Additions Over Time](#sec-additions)")
 
     return "\n".join(lines)
 
@@ -586,8 +640,15 @@ def main():
         sys.exit(1)
     part1 = part1.replace("<!-- TOC -->", toc)
 
+    # Load additions history
+    additions = None
+    if ADDITIONS_PATH.exists():
+        with open(ADDITIONS_PATH) as f:
+            additions = yaml.safe_load(f) or []
+        print(f"Loaded {len(additions)} addition dates from {ADDITIONS_PATH}.")
+
     # Generate Part 2
-    part2 = generate_part2(entries)
+    part2 = generate_part2(entries, additions)
 
     # Concatenate
     readme = f"{part1}\n\n{part2}\n"
