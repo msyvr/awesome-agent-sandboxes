@@ -419,41 +419,50 @@ def generate_reference_doc(entries: list[dict]) -> str:
 
 
 def generate_additions_section(additions: list[dict]) -> str:
-    """Generate the additions histogram section.
+    """Generate the additions chart and collapsible breakdown.
 
-    Produces a Mermaid bar chart of discovery additions (excludes the
-    initial seed to keep the scale readable), followed by a collapsible
-    reverse-chronological breakdown with linked entry names.
+    No section heading — this sits at the very top of the README as a
+    visual summary. The chart excludes the initial seed to keep the
+    scale readable; seed info is in the chart title.
     """
     if not additions:
         return ""
 
     lines = []
     lines.append('<a id="sec-additions"></a>')
-    lines.append("## Additions Over Time\n")
 
     # Separate the initial seed from discovery additions
     seed = additions[0] if additions else None
     discovery = additions[1:] if len(additions) > 1 else []
 
-    if seed:
-        lines.append(
-            f"Initial seed: **{len(seed['entries'])} entries** ({seed['date']}). "
-            f"Discovery additions since then:\n"
-        )
+    seed_count = len(seed["entries"]) if seed else 0
+    seed_date = seed["date"] if seed else "unknown"
 
-    # --- Mermaid bar chart (discovery only) ---
+    # --- Mermaid bar chart (discovery only, compact) ---
     if discovery:
         short_dates = [a["date"][5:] for a in discovery]
         counts = [len(a["entries"]) for a in discovery]
         max_count = max(counts)
 
         lines.append("```mermaid")
+        lines.append("---")
+        lines.append("config:")
+        lines.append("    xyChart:")
+        lines.append("        height: 200")
+        lines.append("        width: 700")
+        lines.append("        xAxis:")
+        lines.append("            labelFontSize: 10")
+        lines.append("        yAxis:")
+        lines.append("            labelFontSize: 10")
+        lines.append("---")
         lines.append("xychart-beta")
-        lines.append('    title "Discovery additions by date"')
+        lines.append(
+            f'    title "Additions by date after initial seed'
+            f' ({seed_count} items {seed_date})"'
+        )
         x_labels = ", ".join(f'"{d}"' for d in short_dates)
         lines.append(f"    x-axis [{x_labels}]")
-        lines.append(f'    y-axis "Entries" 0 --> {max_count + 2}')
+        lines.append(f'    y-axis "Entries added" 0 --> {max_count + 2}')
         bar_data = ", ".join(str(c) for c in counts)
         lines.append(f"    bar [{bar_data}]")
         lines.append("```\n")
@@ -479,7 +488,7 @@ def generate_additions_section(additions: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def generate_part2(entries: list[dict], additions: list[dict] | None = None) -> str:
+def generate_part2(entries: list[dict]) -> str:
     """Generate the full Part 2: landscape content."""
     sections = []
 
@@ -491,10 +500,6 @@ def generate_part2(entries: list[dict], additions: list[dict] | None = None) -> 
         f"[{REFERENCE_REL_PATH}]({REFERENCE_REL_PATH}). "
         f"The category tables below also link directly to relevant entries.\n"
     )
-
-    # --- Additions histogram ---
-    if additions:
-        sections.append(generate_additions_section(additions))
 
     # --- Quick Triage (lenses) ---
     sections.append('<a id="sec-quick-triage"></a>')
@@ -589,9 +594,8 @@ def generate_toc(entries: list[dict]) -> str:
     lines.append("- [Choosing a sandbox](#sec-choosing)")
     lines.append("  - [Safety & Alignment Research](#sec-safety-research)")
 
-    # --- Part 2: detailed reference + additions + lenses + categories ---
+    # --- Part 2: lenses + categories ---
     lines.append("- [Detailed Sandboxes Reference](#sec-detailed-reference)")
-    lines.append("- [Additions Over Time](#sec-additions)")
     lines.append("- [Quick Triage](#sec-quick-triage)")
 
     product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
@@ -660,11 +664,16 @@ def main():
             additions = yaml.safe_load(f) or []
         print(f"Loaded {len(additions)} addition dates from {ADDITIONS_PATH}.")
 
-    # Generate Part 2
-    part2 = generate_part2(entries, additions)
+    # Generate additions chart (sits at the very top, before Part 1)
+    additions_section = ""
+    if additions:
+        additions_section = generate_additions_section(additions) + "\n"
 
-    # Concatenate
-    readme = f"{part1}\n\n{part2}\n"
+    # Generate Part 2
+    part2 = generate_part2(entries)
+
+    # Concatenate: chart at top, then Part 1, then Part 2
+    readme = f"{additions_section}{part1}\n\n{part2}\n"
 
     # Write README
     README_PATH.write_text(readme)
