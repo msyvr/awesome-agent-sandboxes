@@ -16,17 +16,9 @@ YAML_PATH = ROOT / "data" / "sandboxes.yaml"
 ADDITIONS_PATH = ROOT / "data" / "additions.yaml"
 GETTING_STARTED_PATH = ROOT / "docs" / "getting-started.md"
 README_PATH = ROOT / "README.md"
-DOCS_DIR = ROOT / "docs"
-
-# Building blocks go in one file; product categories each get their own
-BUILDING_BLOCKS_REF_FILE = "ref-building-blocks.md"
-
-
-def ref_path_for_category(cat_key: str) -> str:
-    """Return the relative path (from repo root) for a category's reference file."""
-    if cat_key in BUILDING_BLOCK_CATEGORIES:
-        return f"docs/{BUILDING_BLOCKS_REF_FILE}"
-    return f"docs/ref-{cat_key}.md"
+REFERENCE_PATH = ROOT / "docs" / "sandboxes-reference.md"
+# Relative path used in markdown links from README to the reference doc
+REFERENCE_REL_PATH = "docs/sandboxes-reference.md"
 
 # ---------------------------------------------------------------------------
 # Schema: controlled vocabularies
@@ -278,13 +270,14 @@ def slugify(name: str) -> str:
     return f"ref-{s}"
 
 
-def generate_category_table(entries: list[dict], cat_key: str = "") -> str:
+def generate_category_table(entries: list[dict], anchor_prefix: str = "") -> str:
     """Generate a compact 4-column table for a category's entries.
 
     Columns: Name (linked to detailed reference) | OSS? | Isolation | Notes
 
-    `cat_key` determines which reference file the name links to. If
-    empty, links are in-document anchors.
+    `anchor_prefix` is prepended to entry anchor links. Pass an empty
+    string for in-document links (e.g., "#ref-foo"), or a file path to
+    link out to a separate reference doc (e.g., "docs/sandboxes-reference.md#ref-foo").
 
     Maintainer, capabilities, requirements, and limitations live in the
     detailed reference doc that the table links to.
@@ -293,12 +286,10 @@ def generate_category_table(entries: list[dict], cat_key: str = "") -> str:
     lines.append("| Name | OSS? | Isolation | Notes |")
     lines.append("|------|------|-----------|-------|")
 
-    ref_file = ref_path_for_category(cat_key) if cat_key else ""
-
     for e in sorted(entries, key=lambda x: x["name"].lower()):
         name = e["name"]
         anchor = slugify(name)
-        name_cell = f"[{escape_md(name)}]({ref_file}#{anchor})"
+        name_cell = f"[{escape_md(name)}]({anchor_prefix}#{anchor})"
 
         oss = "Yes" if e.get("open_source") else "No"
         license_str = e.get("license")
@@ -381,13 +372,23 @@ def generate_definition_entry(entry: dict, heading_level: int = 4) -> str:
     return "\n".join(lines)
 
 
-def generate_reference_docs(entries: list[dict]) -> dict[str, str]:
-    """Generate per-category reference docs.
+def generate_reference_doc(entries: list[dict]) -> str:
+    """Generate the standalone Detailed Sandboxes Reference doc.
 
-    Returns a dict of {filename: content}. Product categories each get
-    their own file. Building blocks share one file.
+    Has its own H1, intro, and uses heading levels appropriate for a
+    standalone document (H1 title, H2 categories, H3 entries, with
+    Building Blocks as a sibling H2).
     """
-    docs = {}
+    lines = []
+    lines.append("# Detailed Sandboxes Reference")
+    lines.append("")
+    lines.append(
+        "Full information for every sandbox tracked in "
+        "[awesome-agent-sandboxes](../README.md), grouped by category. "
+        "Use your browser's back button or the link above to return to "
+        "the main guide."
+    )
+    lines.append("")
 
     product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
     building_cats = [c for c in CATEGORY_ORDER if c[0] in BUILDING_BLOCK_CATEGORIES]
@@ -396,39 +397,25 @@ def generate_reference_docs(entries: list[dict]) -> dict[str, str]:
         cat_entries = [e for e in entries if e.get("category") == cat_key]
         if not cat_entries:
             continue
-        lines = []
-        lines.append(f"# {cat_name}")
-        lines.append("")
-        lines.append(f"[Back to main guide](../README.md)")
+        lines.append(f"## {cat_name}")
         lines.append("")
         for e in sorted(cat_entries, key=lambda x: x["name"].lower()):
-            lines.append(generate_definition_entry(e, heading_level=2))
+            lines.append(generate_definition_entry(e, heading_level=3))
             lines.append("")
-        docs[f"ref-{cat_key}.md"] = "\n".join(lines)
 
-    # Building blocks — one combined file
-    bb_lines = []
-    bb_lines.append("# Building Blocks")
-    bb_lines.append("")
-    bb_lines.append("[Back to main guide](../README.md)")
-    bb_lines.append("")
-    bb_lines.append(
-        "The underlying technologies that sandbox products are built on."
-    )
-    bb_lines.append("")
+    lines.append("## Building Blocks")
+    lines.append("")
     for cat_key, cat_name in building_cats:
         cat_entries = [e for e in entries if e.get("category") == cat_key]
         if not cat_entries:
             continue
-        bb_lines.append(f"## {cat_name}")
-        bb_lines.append("")
+        lines.append(f"### {cat_name}")
+        lines.append("")
         for e in sorted(cat_entries, key=lambda x: x["name"].lower()):
-            bb_lines.append(generate_definition_entry(e, heading_level=3))
-            bb_lines.append("")
-    if len(bb_lines) > 5:  # Has actual content beyond header
-        docs[BUILDING_BLOCKS_REF_FILE] = "\n".join(bb_lines)
+            lines.append(generate_definition_entry(e, heading_level=4))
+            lines.append("")
 
-    return docs
+    return "\n".join(lines)
 
 
 CHART_PATH = ROOT / "docs" / "additions-chart.svg"
@@ -509,22 +496,16 @@ def generate_additions_chart(additions: list[dict]) -> None:
     print(f"Generated {CHART_PATH}")
 
 
-def generate_additions_section(
-    additions: list[dict], entries: list[dict]
-) -> str:
+def generate_additions_section(additions: list[dict]) -> str:
     """Generate the additions image + collapsible breakdown.
 
     No section heading — this sits at the very top of the README as a
-    visual summary. `entries` is needed to look up each entry's category
-    for linking to the correct per-category reference file.
+    visual summary.
     """
     if not additions:
         return ""
 
     seed = additions[0] if additions else None
-
-    # Build name → category lookup from the YAML entries
-    name_to_cat = {e["name"]: e["category"] for e in entries}
 
     lines = []
     lines.append(f'<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
@@ -542,9 +523,7 @@ def generate_additions_section(
         lines.append(label)
         for name in entry_names:
             anchor = slugify(name)
-            cat = name_to_cat.get(name, "")
-            ref_file = ref_path_for_category(cat) if cat else ""
-            lines.append(f"- [{name}]({ref_file}#{anchor})")
+            lines.append(f"- [{name}]({REFERENCE_REL_PATH}#{anchor})")
         lines.append("")
 
     lines.append("</details>\n")
@@ -560,9 +539,9 @@ def generate_part2(entries: list[dict]) -> str:
     sections.append('<a id="sec-detailed-reference"></a>')
     sections.append("## Detailed Sandboxes Reference\n")
     sections.append(
-        "Full per-entry information lives in per-category reference docs "
-        "in [`docs/`](docs/). The category tables below link directly "
-        "to relevant entries.\n"
+        f"Full per-entry information for every sandbox lives in "
+        f"[{REFERENCE_REL_PATH}]({REFERENCE_REL_PATH}). "
+        f"The category tables below also link directly to relevant entries.\n"
     )
 
     # --- Quick Triage (lenses) ---
@@ -598,7 +577,7 @@ def generate_part2(entries: list[dict]) -> str:
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
             sections.append(f"{intro}\n")
-        sections.append(generate_category_table(cat_entries, cat_key=cat_key))
+        sections.append(generate_category_table(cat_entries, anchor_prefix=REFERENCE_REL_PATH))
         sections.append("")
 
     sections.append("---\n")
@@ -620,7 +599,7 @@ def generate_part2(entries: list[dict]) -> str:
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
             sections.append(f"{intro}\n")
-        sections.append(generate_category_table(cat_entries, cat_key=cat_key))
+        sections.append(generate_category_table(cat_entries, anchor_prefix=REFERENCE_REL_PATH))
         sections.append("")
 
     # --- References ---
@@ -732,7 +711,7 @@ def main():
     additions_section = ""
     if additions:
         generate_additions_chart(additions)
-        additions_section = generate_additions_section(additions, entries) + "\n"
+        additions_section = generate_additions_section(additions) + "\n"
 
     # Generate Part 2
     part2 = generate_part2(entries)
@@ -744,19 +723,11 @@ def main():
     README_PATH.write_text(readme)
     print(f"Generated {README_PATH} ({len(entries)} entries, {len(readme)} chars)")
 
-    # Write per-category reference docs
-    DOCS_DIR.mkdir(parents=True, exist_ok=True)
-    ref_docs = generate_reference_docs(entries)
-    for filename, content in ref_docs.items():
-        path = DOCS_DIR / filename
-        path.write_text(content + "\n")
-        print(f"Generated {path}")
-
-    # Clean up old single reference file if it exists
-    old_ref = DOCS_DIR / "sandboxes-reference.md"
-    if old_ref.exists():
-        old_ref.unlink()
-        print(f"Removed old {old_ref}")
+    # Write standalone Detailed Sandboxes Reference
+    reference_doc = generate_reference_doc(entries) + "\n"
+    REFERENCE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    REFERENCE_PATH.write_text(reference_doc)
+    print(f"Generated {REFERENCE_PATH} ({len(reference_doc)} chars)")
 
 
 if __name__ == "__main__":

@@ -4,93 +4,93 @@
 <summary>Daily breakdown (click to expand)</summary>
 
 **2026-04-18** (2 entries)
-- [code-on-incus](docs/ref-standalone.md#ref-code-on-incus)
-- [hazmat](docs/ref-standalone.md#ref-hazmat)
+- [code-on-incus](docs/sandboxes-reference.md#ref-code-on-incus)
+- [hazmat](docs/sandboxes-reference.md#ref-hazmat)
 
 **2026-04-17** (3 entries)
-- [brood-box](docs/ref-standalone.md#ref-brood-box)
-- [alcless](docs/ref-standalone.md#ref-alcless)
-- [hole](docs/ref-standalone.md#ref-hole)
+- [brood-box](docs/sandboxes-reference.md#ref-brood-box)
+- [alcless](docs/sandboxes-reference.md#ref-alcless)
+- [hole](docs/sandboxes-reference.md#ref-hole)
 
 **2026-04-16** (2 entries)
-- [envpod-ce](docs/ref-standalone.md#ref-envpod-ce)
-- [Superserve](docs/ref-cloud-managed.md#ref-superserve)
+- [envpod-ce](docs/sandboxes-reference.md#ref-envpod-ce)
+- [Superserve](docs/sandboxes-reference.md#ref-superserve)
 
 **2026-04-14** (2 entries)
-- [fence](docs/ref-standalone.md#ref-fence)
-- [aide](docs/ref-standalone.md#ref-aide)
+- [fence](docs/sandboxes-reference.md#ref-fence)
+- [aide](docs/sandboxes-reference.md#ref-aide)
 
 **2026-04-13** (1 entries)
-- [llm-sandbox](docs/ref-standalone.md#ref-llm-sandbox)
+- [llm-sandbox](docs/sandboxes-reference.md#ref-llm-sandbox)
 
 **2026-04-12** (5 entries)
-- [skilllite](docs/ref-standalone.md#ref-skilllite)
-- [sandcastle](docs/ref-standalone.md#ref-sandcastle)
-- [cleanroom](docs/ref-standalone.md#ref-cleanroom)
-- [openkruise/agents](docs/ref-kubernetes.md#ref-openkruise-agents)
-- [sandbox0](docs/ref-kubernetes.md#ref-sandbox0)
+- [skilllite](docs/sandboxes-reference.md#ref-skilllite)
+- [sandcastle](docs/sandboxes-reference.md#ref-sandcastle)
+- [cleanroom](docs/sandboxes-reference.md#ref-cleanroom)
+- [openkruise/agents](docs/sandboxes-reference.md#ref-openkruise-agents)
+- [sandbox0](docs/sandboxes-reference.md#ref-sandbox0)
 
 **2026-04-10** (2 entries)
-- [sevorix-lite](docs/ref-standalone.md#ref-sevorix-lite)
-- [treadstone](docs/ref-kubernetes.md#ref-treadstone)
+- [sevorix-lite](docs/sandboxes-reference.md#ref-sevorix-lite)
+- [treadstone](docs/sandboxes-reference.md#ref-treadstone)
 
 **2026-04-09** (6 entries)
-- [monty](docs/ref-standalone.md#ref-monty)
-- [locki](docs/ref-standalone.md#ref-locki)
-- [ai-sandbox-wrapper](docs/ref-standalone.md#ref-ai-sandbox-wrapper)
-- [agentsh](docs/ref-standalone.md#ref-agentsh)
-- [jailoc](docs/ref-standalone.md#ref-jailoc)
-- [sand](docs/ref-standalone.md#ref-sand)
+- [monty](docs/sandboxes-reference.md#ref-monty)
+- [locki](docs/sandboxes-reference.md#ref-locki)
+- [ai-sandbox-wrapper](docs/sandboxes-reference.md#ref-ai-sandbox-wrapper)
+- [agentsh](docs/sandboxes-reference.md#ref-agentsh)
+- [jailoc](docs/sandboxes-reference.md#ref-jailoc)
+- [sand](docs/sandboxes-reference.md#ref-sand)
 
 **2026-04-07** (48 entries) — initial seed
-- [E2B](docs/ref-cloud-managed.md#ref-e2b)
-- [Daytona](docs/ref-cloud-managed.md#ref-daytona)
-- [Modal](docs/ref-cloud-managed.md#ref-modal)
-- [Runloop](docs/ref-cloud-managed.md#ref-runloop)
-- [Northflank](docs/ref-cloud-managed.md#ref-northflank)
-- [Fly Sprites](docs/ref-cloud-managed.md#ref-fly-sprites)
-- [CodeSandbox SDK](docs/ref-cloud-managed.md#ref-codesandbox-sdk)
-- [Bunnyshell AI Sandboxes](docs/ref-cloud-managed.md#ref-bunnyshell-ai-sandboxes)
-- [Vercel Sandbox](docs/ref-cloud-managed.md#ref-vercel-sandbox)
-- [Koyeb](docs/ref-dev-environment.md#ref-koyeb)
-- [Cloudflare Dynamic Workers](docs/ref-cloud-managed.md#ref-cloudflare-dynamic-workers)
-- [Claude Code Sandbox](docs/ref-agent-integrated.md#ref-claude-code-sandbox)
-- [OpenAI Codex Sandbox](docs/ref-agent-integrated.md#ref-openai-codex-sandbox)
-- [Docker Sandboxes](docs/ref-standalone.md#ref-docker-sandboxes)
-- [nono](docs/ref-standalone.md#ref-nono)
-- [Anthropic sandbox-runtime (srt)](docs/ref-standalone.md#ref-anthropic-sandbox-runtime-srt)
-- [NVIDIA OpenShell](docs/ref-standalone.md#ref-nvidia-openshell)
-- [Agent Safehouse](docs/ref-standalone.md#ref-agent-safehouse)
-- [scode](docs/ref-standalone.md#ref-scode)
-- [microsandbox](docs/ref-standalone.md#ref-microsandbox)
-- [agent-infra/sandbox](docs/ref-standalone.md#ref-agent-infra-sandbox)
-- [Agent Sandbox (kubernetes-sigs)](docs/ref-kubernetes.md#ref-agent-sandbox-kubernetes-sigs)
-- [GKE Agent Sandbox](docs/ref-kubernetes.md#ref-gke-agent-sandbox)
-- [Ona (formerly Gitpod)](docs/ref-dev-environment.md#ref-ona-formerly-gitpod)
-- [GitHub Codespaces](docs/ref-dev-environment.md#ref-github-codespaces)
-- [Coder](docs/ref-dev-environment.md#ref-coder)
-- [DevPod](docs/ref-dev-environment.md#ref-devpod)
-- [ComputeSDK](docs/ref-abstraction.md#ref-computesdk)
-- [LangChain Sandboxes](docs/ref-abstraction.md#ref-langchain-sandboxes)
-- [OpenSandbox](docs/ref-standalone.md#ref-opensandbox)
-- [NanoClaw](docs/ref-abstraction.md#ref-nanoclaw)
-- [Firecracker](docs/ref-building-blocks.md#ref-firecracker)
-- [gVisor](docs/ref-building-blocks.md#ref-gvisor)
-- [Kata Containers](docs/ref-building-blocks.md#ref-kata-containers)
-- [libkrun](docs/ref-building-blocks.md#ref-libkrun)
-- [Zeroboot](docs/ref-building-blocks.md#ref-zeroboot)
-- [bubblewrap (bwrap)](docs/ref-building-blocks.md#ref-bubblewrap-bwrap)
-- [macOS Seatbelt / sandbox-exec](docs/ref-building-blocks.md#ref-macos-seatbelt-sandbox-exec)
-- [Firejail](docs/ref-building-blocks.md#ref-firejail)
-- [Landlock LSM](docs/ref-building-blocks.md#ref-landlock-lsm)
-- [seccomp-BPF](docs/ref-building-blocks.md#ref-seccomp-bpf)
-- [Linux Namespaces + cgroups](docs/ref-building-blocks.md#ref-linux-namespaces-cgroups)
-- [nsjail](docs/ref-building-blocks.md#ref-nsjail)
-- [Wasmtime](docs/ref-building-blocks.md#ref-wasmtime)
-- [WasmEdge](docs/ref-building-blocks.md#ref-wasmedge)
-- [wasmCloud](docs/ref-building-blocks.md#ref-wasmcloud)
-- [Wassette](docs/ref-building-blocks.md#ref-wassette)
-- [Pyodide](docs/ref-building-blocks.md#ref-pyodide)
+- [E2B](docs/sandboxes-reference.md#ref-e2b)
+- [Daytona](docs/sandboxes-reference.md#ref-daytona)
+- [Modal](docs/sandboxes-reference.md#ref-modal)
+- [Runloop](docs/sandboxes-reference.md#ref-runloop)
+- [Northflank](docs/sandboxes-reference.md#ref-northflank)
+- [Fly Sprites](docs/sandboxes-reference.md#ref-fly-sprites)
+- [CodeSandbox SDK](docs/sandboxes-reference.md#ref-codesandbox-sdk)
+- [Bunnyshell AI Sandboxes](docs/sandboxes-reference.md#ref-bunnyshell-ai-sandboxes)
+- [Vercel Sandbox](docs/sandboxes-reference.md#ref-vercel-sandbox)
+- [Koyeb](docs/sandboxes-reference.md#ref-koyeb)
+- [Cloudflare Dynamic Workers](docs/sandboxes-reference.md#ref-cloudflare-dynamic-workers)
+- [Claude Code Sandbox](docs/sandboxes-reference.md#ref-claude-code-sandbox)
+- [OpenAI Codex Sandbox](docs/sandboxes-reference.md#ref-openai-codex-sandbox)
+- [Docker Sandboxes](docs/sandboxes-reference.md#ref-docker-sandboxes)
+- [nono](docs/sandboxes-reference.md#ref-nono)
+- [Anthropic sandbox-runtime (srt)](docs/sandboxes-reference.md#ref-anthropic-sandbox-runtime-srt)
+- [NVIDIA OpenShell](docs/sandboxes-reference.md#ref-nvidia-openshell)
+- [Agent Safehouse](docs/sandboxes-reference.md#ref-agent-safehouse)
+- [scode](docs/sandboxes-reference.md#ref-scode)
+- [microsandbox](docs/sandboxes-reference.md#ref-microsandbox)
+- [agent-infra/sandbox](docs/sandboxes-reference.md#ref-agent-infra-sandbox)
+- [Agent Sandbox (kubernetes-sigs)](docs/sandboxes-reference.md#ref-agent-sandbox-kubernetes-sigs)
+- [GKE Agent Sandbox](docs/sandboxes-reference.md#ref-gke-agent-sandbox)
+- [Ona (formerly Gitpod)](docs/sandboxes-reference.md#ref-ona-formerly-gitpod)
+- [GitHub Codespaces](docs/sandboxes-reference.md#ref-github-codespaces)
+- [Coder](docs/sandboxes-reference.md#ref-coder)
+- [DevPod](docs/sandboxes-reference.md#ref-devpod)
+- [ComputeSDK](docs/sandboxes-reference.md#ref-computesdk)
+- [LangChain Sandboxes](docs/sandboxes-reference.md#ref-langchain-sandboxes)
+- [OpenSandbox](docs/sandboxes-reference.md#ref-opensandbox)
+- [NanoClaw](docs/sandboxes-reference.md#ref-nanoclaw)
+- [Firecracker](docs/sandboxes-reference.md#ref-firecracker)
+- [gVisor](docs/sandboxes-reference.md#ref-gvisor)
+- [Kata Containers](docs/sandboxes-reference.md#ref-kata-containers)
+- [libkrun](docs/sandboxes-reference.md#ref-libkrun)
+- [Zeroboot](docs/sandboxes-reference.md#ref-zeroboot)
+- [bubblewrap (bwrap)](docs/sandboxes-reference.md#ref-bubblewrap-bwrap)
+- [macOS Seatbelt / sandbox-exec](docs/sandboxes-reference.md#ref-macos-seatbelt-sandbox-exec)
+- [Firejail](docs/sandboxes-reference.md#ref-firejail)
+- [Landlock LSM](docs/sandboxes-reference.md#ref-landlock-lsm)
+- [seccomp-BPF](docs/sandboxes-reference.md#ref-seccomp-bpf)
+- [Linux Namespaces + cgroups](docs/sandboxes-reference.md#ref-linux-namespaces-cgroups)
+- [nsjail](docs/sandboxes-reference.md#ref-nsjail)
+- [Wasmtime](docs/sandboxes-reference.md#ref-wasmtime)
+- [WasmEdge](docs/sandboxes-reference.md#ref-wasmedge)
+- [wasmCloud](docs/sandboxes-reference.md#ref-wasmcloud)
+- [Wassette](docs/sandboxes-reference.md#ref-wassette)
+- [Pyodide](docs/sandboxes-reference.md#ref-pyodide)
 
 </details>
 
@@ -363,7 +363,7 @@ _The sections below are generated from [`data/sandboxes.yaml`](data/sandboxes.ya
 <a id="sec-detailed-reference"></a>
 ## Detailed Sandboxes Reference
 
-Full per-entry information lives in per-category reference docs in [`docs/`](docs/). The category tables below link directly to relevant entries.
+Full per-entry information for every sandbox lives in [docs/sandboxes-reference.md](docs/sandboxes-reference.md). The category tables below also link directly to relevant entries.
 
 <a id="sec-quick-triage"></a>
 ## Quick Triage
@@ -408,17 +408,17 @@ Managed cloud services that provide sandbox environments via API/SDK. You sign u
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [Bunnyshell AI Sandboxes](docs/ref-cloud-managed.md#ref-bunnyshell-ai-sandboxes) | No | microvm | MCP server integration is notable — direct plugin for Claude Code, Cursor, and Windsurf. |
-| [Cloudflare Dynamic Workers](docs/ref-cloud-managed.md#ref-cloudflare-dynamic-workers) | No | v8-isolate | Unique edge-first approach using V8 isolates instead of containers/VMs. Credential injection without agent visibility is a strong security feature. Open beta early 2026. |
-| [CodeSandbox SDK](docs/ref-cloud-managed.md#ref-codesandbox-sdk) | No | microvm | Well-established brand from the browser IDE space, expanding to agent use. |
-| [Daytona](docs/ref-cloud-managed.md#ref-daytona) | Yes (Apache-2.0) | container | Pivoted from CDE space (Feb 2025). $31M Series A (Feb 2026). State management (pause/resume) is a key differentiator vs. ephemeral-only platforms. |
-| [E2B](docs/ref-cloud-managed.md#ref-e2b) | Yes (Apache-2.0) | microvm | One of the earliest and most widely adopted agent sandbox platforms. Docker MCP Catalog partnership. |
-| [Fly Sprites](docs/ref-cloud-managed.md#ref-fly-sprites) | No | microvm | Persistence is the key differentiator — most sandboxes are ephemeral. Checkpoint/restore enables warm resumption of long-running agent sessions. |
-| [Modal](docs/ref-cloud-managed.md#ref-modal) | No | microvm | Only major sandbox platform with GPU support — unique differentiator for ML/AI workloads that need compute. |
-| [Northflank](docs/ref-cloud-managed.md#ref-northflank) | No | kata, gvisor | BYOC option is unusual in this space — most cloud sandboxes are single-provider. Production-proven at scale (2M+ workloads/month). |
-| [Runloop](docs/ref-cloud-managed.md#ref-runloop) | No | microvm | Enterprise compliance focus (SOC 2) differentiates from developer-oriented alternatives. GA May 2025. |
-| [Superserve](docs/ref-cloud-managed.md#ref-superserve) | Yes (Apache-2.0) | microvm | Firecracker-based like E2B. SDK is open source (Apache-2.0) but the sandbox backend infrastructure is in a separate private repo. Beta — evaluate maturity before committing to production use. |
-| [Vercel Sandbox](docs/ref-cloud-managed.md#ref-vercel-sandbox) | No | microvm | Tightly integrated with Vercel deployment pipeline and v0. |
+| [Bunnyshell AI Sandboxes](docs/sandboxes-reference.md#ref-bunnyshell-ai-sandboxes) | No | microvm | MCP server integration is notable — direct plugin for Claude Code, Cursor, and Windsurf. |
+| [Cloudflare Dynamic Workers](docs/sandboxes-reference.md#ref-cloudflare-dynamic-workers) | No | v8-isolate | Unique edge-first approach using V8 isolates instead of containers/VMs. Credential injection without agent visibility is a strong security feature. Open beta early 2026. |
+| [CodeSandbox SDK](docs/sandboxes-reference.md#ref-codesandbox-sdk) | No | microvm | Well-established brand from the browser IDE space, expanding to agent use. |
+| [Daytona](docs/sandboxes-reference.md#ref-daytona) | Yes (Apache-2.0) | container | Pivoted from CDE space (Feb 2025). $31M Series A (Feb 2026). State management (pause/resume) is a key differentiator vs. ephemeral-only platforms. |
+| [E2B](docs/sandboxes-reference.md#ref-e2b) | Yes (Apache-2.0) | microvm | One of the earliest and most widely adopted agent sandbox platforms. Docker MCP Catalog partnership. |
+| [Fly Sprites](docs/sandboxes-reference.md#ref-fly-sprites) | No | microvm | Persistence is the key differentiator — most sandboxes are ephemeral. Checkpoint/restore enables warm resumption of long-running agent sessions. |
+| [Modal](docs/sandboxes-reference.md#ref-modal) | No | microvm | Only major sandbox platform with GPU support — unique differentiator for ML/AI workloads that need compute. |
+| [Northflank](docs/sandboxes-reference.md#ref-northflank) | No | kata, gvisor | BYOC option is unusual in this space — most cloud sandboxes are single-provider. Production-proven at scale (2M+ workloads/month). |
+| [Runloop](docs/sandboxes-reference.md#ref-runloop) | No | microvm | Enterprise compliance focus (SOC 2) differentiates from developer-oriented alternatives. GA May 2025. |
+| [Superserve](docs/sandboxes-reference.md#ref-superserve) | Yes (Apache-2.0) | microvm | Firecracker-based like E2B. SDK is open source (Apache-2.0) but the sandbox backend infrastructure is in a separate private repo. Beta — evaluate maturity before committing to production use. |
+| [Vercel Sandbox](docs/sandboxes-reference.md#ref-vercel-sandbox) | No | microvm | Tightly integrated with Vercel deployment pipeline and v0. |
 
 <a id="sec-agent-integrated"></a>
 ## Agent-Integrated Sandboxes
@@ -427,8 +427,8 @@ Sandboxing built directly into AI agent products. These activate automatically o
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [Claude Code Sandbox](docs/ref-agent-integrated.md#ref-claude-code-sandbox) | No | user-namespace, seatbelt | Demonstrated escape by Ona (March 2026) via dangerouslyDisableSandbox flag. Uses bubblewrap on Linux, Seatbelt on macOS — different mechanisms per OS. |
-| [OpenAI Codex Sandbox](docs/ref-agent-integrated.md#ref-openai-codex-sandbox) | No | container, landlock, seccomp | Only major agent with sandboxing enabled by default. Two-phase model (online setup, offline agent) is a unique security architecture — the agent never has network access during execution. |
+| [Claude Code Sandbox](docs/sandboxes-reference.md#ref-claude-code-sandbox) | No | user-namespace, seatbelt | Demonstrated escape by Ona (March 2026) via dangerouslyDisableSandbox flag. Uses bubblewrap on Linux, Seatbelt on macOS — different mechanisms per OS. |
+| [OpenAI Codex Sandbox](docs/sandboxes-reference.md#ref-openai-codex-sandbox) | No | container, landlock, seccomp | Only major agent with sandboxing enabled by default. Two-phase model (online setup, offline agent) is a unique security architecture — the agent never has network access during execution. |
 
 <a id="sec-standalone"></a>
 ## Standalone / Self-Hosted Tools
@@ -437,34 +437,34 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [Agent Safehouse](docs/ref-standalone.md#ref-agent-safehouse) | Yes | seatbelt | More mature than it appears — has CI tests, docs site, and thoughtful profile composition. The most polished macOS-specific sandboxing option. |
-| [agent-infra/sandbox](docs/ref-standalone.md#ref-agent-infra-sandbox) | Yes | container | Kitchen-sink approach — good for prototyping and development, less suitable for security-critical production use. |
-| [agentsh](docs/ref-standalone.md#ref-agentsh) | Yes (Apache-2.0) | process, landlock, seatbelt | Real runtime enforcement, not just wrapping. The "redirect" policy decision is unusual — can transparently steer agent network calls or out-of-workspace writes to scratch dirs without the agent knowing it was redirected. |
-| [ai-sandbox-wrapper](docs/ref-standalone.md#ref-ai-sandbox-wrapper) | Yes | container | Opinionated hardening over default Docker — capability dropping and Git fetch-only mode are substantive choices most Docker wrappers don't make. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |
-| [aide](docs/ref-standalone.md#ref-aide) | Yes (MIT) | seatbelt | The capability model is the differentiator — 19 built-in capabilities (docker, k8s, aws, etc.) with composable grants and never-allow hard denials. More opinionated than fence or Agent Safehouse about what agents should be allowed to do. Linux sandbox is planned but not yet implemented. |
-| [alcless](docs/ref-standalone.md#ref-alcless) | Yes (Apache-2.0) | process | From AkihiroSuda (maintainer of Lima, nerdctl). Deliberately positioned as the lightweight complement to Lima (VM-based). Zero VM overhead — just Unix user separation. The rsync + confirm workflow means changes don't land on the host without approval. |
-| [Anthropic sandbox-runtime (srt)](docs/ref-standalone.md#ref-anthropic-sandbox-runtime-srt) | Yes | user-namespace, seatbelt | Designed to sandbox any process, not just Claude Code. Interactive network approval mode is useful for discovering what network access a tool actually needs. |
-| [brood-box](docs/ref-standalone.md#ref-brood-box) | Yes (Apache-2.0) | kvm, microvm | From Stacklok (founded by Luke Hinds of Sigstore). Hardware VM isolation like cleanroom, but adds TOCTOU-resistant diff review — the VM is stopped before the user reviews changes, preventing the agent from modifying files during review. DNS egress firewall and non-overridable secret exclusions are strong default posture. |
-| [cleanroom](docs/ref-standalone.md#ref-cleanroom) | Yes | microvm, kvm | From Buildkite (established CI company). Strongest isolation in recent discovery batches — hardware VM boundary, not containers or namespaces. Credential proxy model is similar to nono (keys never enter the sandbox). cleanroom.yaml per-repo policy is a clean declarative approach. |
-| [code-on-incus](docs/ref-standalone.md#ref-code-on-incus) | Yes (MIT) | container, seccomp | Goes beyond isolation into active defense — the monitoring daemon uses kernel-level nftables packet inspection to detect reverse shells, C2 callbacks, DNS tunneling, and data exfiltration patterns, then auto-pauses or kills the container. Supply-chain hardening (read-only git hooks) is a detail most sandboxes miss. |
-| [Docker Sandboxes](docs/ref-standalone.md#ref-docker-sandboxes) | No | microvm | Very new (March 2026). Multi-agent support is notable — works with most major coding agents out of the box. |
-| [envpod-ce](docs/ref-standalone.md#ref-envpod-ce) | Yes (BSL-1.1) | user-namespace, seccomp | The diff/commit/rollback workflow is unique — agents work on real host files via an OverlayFS overlay, and changes are staged for human review before committing to the host. Most sandboxes either fully isolate (agent can't touch host files) or don't isolate at all. This is a middle ground that enables real work with reversibility. BSL-1.1 license restricts production use without a commercial license. |
-| [fence](docs/ref-standalone.md#ref-fence) | Yes (Apache-2.0) | seatbelt, user-namespace | Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture. |
-| [hazmat](docs/ref-standalone.md#ref-hazmat) | Yes (MIT) | seatbelt, process | Strongest macOS-specific sandbox — layers everything alcless (user isolation) and Agent Safehouse (Seatbelt) do individually, plus pf firewall and DNS blocklists. TLA+ formal verification of session lifecycle is unusual rigor for a sandbox tool. Honest about limitations (HTTPS exfil, shared /tmp). |
-| [hole](docs/ref-standalone.md#ref-hole) | Yes (Apache-2.0) | container | The --dump-network-access flag is useful for discovering what network access an agent actually needs — similar to Anthropic srt's interactive approval mode but post-hoc. Docker-in-Docker support is unusual and needed for agents that themselves use containers. |
-| [jailoc](docs/ref-standalone.md#ref-jailoc) | Yes (MIT) | container | Backed by Seznam (Czech search engine). Network isolation via iptables allowlist prevents pivot to internal infra. The DinD sidecar approach avoids the common docker.sock mount escape vector. |
-| [llm-sandbox](docs/ref-standalone.md#ref-llm-sandbox) | Yes (MIT) | container | Multi-backend support is the differentiator — same API across Docker, Podman, and K8s. Good for sandboxing LLM-generated code execution specifically. SonarCloud + codecov CI suggests reasonable code quality standards. |
-| [locki](docs/ref-standalone.md#ref-locki) | Yes | kvm, container | One of the few sandboxes that layers VM (Lima/QEMU) plus container (Incus) for coding agents — interesting design worth tracking. Author is candid about "no security guarantees" in the README. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |
-| [microsandbox](docs/ref-standalone.md#ref-microsandbox) | Yes | microvm | Local-first is the key differentiator — no credentials leave your machine. Good for privacy-conscious users handling sensitive API keys. |
-| [monty](docs/ref-standalone.md#ref-monty) | Yes (MIT) | process | Different approach from Pyodide — a custom Rust interpreter rather than CPython compiled to Wasm. Will power Pydantic AI's codemode feature. Backed by Pydantic, but explicitly experimental. Categorized in the wasm tier because language-runtime sandboxing fits the same isolation strength characterization (fastest/lightest, limited to specific runtimes), even though it's not actually Wasm. |
-| [nono](docs/ref-standalone.md#ref-nono) | Yes | landlock, seatbelt | Unique combination of properties no other tool offers: credential proxy (API keys never enter the sandbox), attestation, and atomic rollback. Easy setup (brew install, then nono run -- claude). Very active development. |
-| [NVIDIA OpenShell](docs/ref-standalone.md#ref-nvidia-openshell) | Yes (Apache-2.0) | landlock, seccomp | NVIDIA backing gives visibility. OPA/Rego policy support targets enterprise governance workflows. Announced at GTC 2026. |
-| [OpenSandbox](docs/ref-standalone.md#ref-opensandbox) | Yes | container | Broadest scope of any sandbox — covers evaluation and RL training environments, not just agent sandboxing. |
-| [sand](docs/ref-standalone.md#ref-sand) | Yes (Apache-2.0) | microvm | Apple Containerization gives hardware-isolated micro-VMs (Kata-based) on Apple Silicon. APFS clonefile makes workspace clones instant without copying files. eBPF egress filtering is a notable hardening choice for a solo project. |
-| [sandcastle](docs/ref-standalone.md#ref-sandcastle) | Yes (MIT) | container | Uses Docker containers it creates directly — not delegating to E2B or Daytona. The git branch strategy (agents work on branches, commits merge back) is the differentiator. Useful if you want multi-agent orchestration with isolation included. |
-| [scode](docs/ref-standalone.md#ref-scode) | Yes | process | Early entry in the space (Sept 2025), motivated by Claude Code's initial lack of built-in sandboxing. |
-| [sevorix-lite](docs/ref-standalone.md#ref-sevorix-lite) | Yes (AGPL-3.0) | seccomp, user-namespace | Multi-layered runtime containment rather than VM/container isolation. The "Yellow Lane" human-in-the-loop model with countdown timer is unusual — the agent pauses pending human approval via dashboard. Claude Code support is built in, not bolted on. |
-| [skilllite](docs/ref-standalone.md#ref-skilllite) | Yes (MIT) | seatbelt, user-namespace, seccomp | The skilllite-sandbox component is independently usable — you don't have to use the agent engine to get the sandbox. Three-layer defense model (install scan + pre-exec auth + runtime sandbox) is more depth than most standalone tools offer. |
+| [Agent Safehouse](docs/sandboxes-reference.md#ref-agent-safehouse) | Yes | seatbelt | More mature than it appears — has CI tests, docs site, and thoughtful profile composition. The most polished macOS-specific sandboxing option. |
+| [agent-infra/sandbox](docs/sandboxes-reference.md#ref-agent-infra-sandbox) | Yes | container | Kitchen-sink approach — good for prototyping and development, less suitable for security-critical production use. |
+| [agentsh](docs/sandboxes-reference.md#ref-agentsh) | Yes (Apache-2.0) | process, landlock, seatbelt | Real runtime enforcement, not just wrapping. The "redirect" policy decision is unusual — can transparently steer agent network calls or out-of-workspace writes to scratch dirs without the agent knowing it was redirected. |
+| [ai-sandbox-wrapper](docs/sandboxes-reference.md#ref-ai-sandbox-wrapper) | Yes | container | Opinionated hardening over default Docker — capability dropping and Git fetch-only mode are substantive choices most Docker wrappers don't make. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |
+| [aide](docs/sandboxes-reference.md#ref-aide) | Yes (MIT) | seatbelt | The capability model is the differentiator — 19 built-in capabilities (docker, k8s, aws, etc.) with composable grants and never-allow hard denials. More opinionated than fence or Agent Safehouse about what agents should be allowed to do. Linux sandbox is planned but not yet implemented. |
+| [alcless](docs/sandboxes-reference.md#ref-alcless) | Yes (Apache-2.0) | process | From AkihiroSuda (maintainer of Lima, nerdctl). Deliberately positioned as the lightweight complement to Lima (VM-based). Zero VM overhead — just Unix user separation. The rsync + confirm workflow means changes don't land on the host without approval. |
+| [Anthropic sandbox-runtime (srt)](docs/sandboxes-reference.md#ref-anthropic-sandbox-runtime-srt) | Yes | user-namespace, seatbelt | Designed to sandbox any process, not just Claude Code. Interactive network approval mode is useful for discovering what network access a tool actually needs. |
+| [brood-box](docs/sandboxes-reference.md#ref-brood-box) | Yes (Apache-2.0) | kvm, microvm | From Stacklok (founded by Luke Hinds of Sigstore). Hardware VM isolation like cleanroom, but adds TOCTOU-resistant diff review — the VM is stopped before the user reviews changes, preventing the agent from modifying files during review. DNS egress firewall and non-overridable secret exclusions are strong default posture. |
+| [cleanroom](docs/sandboxes-reference.md#ref-cleanroom) | Yes | microvm, kvm | From Buildkite (established CI company). Strongest isolation in recent discovery batches — hardware VM boundary, not containers or namespaces. Credential proxy model is similar to nono (keys never enter the sandbox). cleanroom.yaml per-repo policy is a clean declarative approach. |
+| [code-on-incus](docs/sandboxes-reference.md#ref-code-on-incus) | Yes (MIT) | container, seccomp | Goes beyond isolation into active defense — the monitoring daemon uses kernel-level nftables packet inspection to detect reverse shells, C2 callbacks, DNS tunneling, and data exfiltration patterns, then auto-pauses or kills the container. Supply-chain hardening (read-only git hooks) is a detail most sandboxes miss. |
+| [Docker Sandboxes](docs/sandboxes-reference.md#ref-docker-sandboxes) | No | microvm | Very new (March 2026). Multi-agent support is notable — works with most major coding agents out of the box. |
+| [envpod-ce](docs/sandboxes-reference.md#ref-envpod-ce) | Yes (BSL-1.1) | user-namespace, seccomp | The diff/commit/rollback workflow is unique — agents work on real host files via an OverlayFS overlay, and changes are staged for human review before committing to the host. Most sandboxes either fully isolate (agent can't touch host files) or don't isolate at all. This is a middle ground that enables real work with reversibility. BSL-1.1 license restricts production use without a commercial license. |
+| [fence](docs/sandboxes-reference.md#ref-fence) | Yes (Apache-2.0) | seatbelt, user-namespace | Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture. |
+| [hazmat](docs/sandboxes-reference.md#ref-hazmat) | Yes (MIT) | seatbelt, process | Strongest macOS-specific sandbox — layers everything alcless (user isolation) and Agent Safehouse (Seatbelt) do individually, plus pf firewall and DNS blocklists. TLA+ formal verification of session lifecycle is unusual rigor for a sandbox tool. Honest about limitations (HTTPS exfil, shared /tmp). |
+| [hole](docs/sandboxes-reference.md#ref-hole) | Yes (Apache-2.0) | container | The --dump-network-access flag is useful for discovering what network access an agent actually needs — similar to Anthropic srt's interactive approval mode but post-hoc. Docker-in-Docker support is unusual and needed for agents that themselves use containers. |
+| [jailoc](docs/sandboxes-reference.md#ref-jailoc) | Yes (MIT) | container | Backed by Seznam (Czech search engine). Network isolation via iptables allowlist prevents pivot to internal infra. The DinD sidecar approach avoids the common docker.sock mount escape vector. |
+| [llm-sandbox](docs/sandboxes-reference.md#ref-llm-sandbox) | Yes (MIT) | container | Multi-backend support is the differentiator — same API across Docker, Podman, and K8s. Good for sandboxing LLM-generated code execution specifically. SonarCloud + codecov CI suggests reasonable code quality standards. |
+| [locki](docs/sandboxes-reference.md#ref-locki) | Yes | kvm, container | One of the few sandboxes that layers VM (Lima/QEMU) plus container (Incus) for coding agents — interesting design worth tracking. Author is candid about "no security guarantees" in the README. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |
+| [microsandbox](docs/sandboxes-reference.md#ref-microsandbox) | Yes | microvm | Local-first is the key differentiator — no credentials leave your machine. Good for privacy-conscious users handling sensitive API keys. |
+| [monty](docs/sandboxes-reference.md#ref-monty) | Yes (MIT) | process | Different approach from Pyodide — a custom Rust interpreter rather than CPython compiled to Wasm. Will power Pydantic AI's codemode feature. Backed by Pydantic, but explicitly experimental. Categorized in the wasm tier because language-runtime sandboxing fits the same isolation strength characterization (fastest/lightest, limited to specific runtimes), even though it's not actually Wasm. |
+| [nono](docs/sandboxes-reference.md#ref-nono) | Yes | landlock, seatbelt | Unique combination of properties no other tool offers: credential proxy (API keys never enter the sandbox), attestation, and atomic rollback. Easy setup (brew install, then nono run -- claude). Very active development. |
+| [NVIDIA OpenShell](docs/sandboxes-reference.md#ref-nvidia-openshell) | Yes (Apache-2.0) | landlock, seccomp | NVIDIA backing gives visibility. OPA/Rego policy support targets enterprise governance workflows. Announced at GTC 2026. |
+| [OpenSandbox](docs/sandboxes-reference.md#ref-opensandbox) | Yes | container | Broadest scope of any sandbox — covers evaluation and RL training environments, not just agent sandboxing. |
+| [sand](docs/sandboxes-reference.md#ref-sand) | Yes (Apache-2.0) | microvm | Apple Containerization gives hardware-isolated micro-VMs (Kata-based) on Apple Silicon. APFS clonefile makes workspace clones instant without copying files. eBPF egress filtering is a notable hardening choice for a solo project. |
+| [sandcastle](docs/sandboxes-reference.md#ref-sandcastle) | Yes (MIT) | container | Uses Docker containers it creates directly — not delegating to E2B or Daytona. The git branch strategy (agents work on branches, commits merge back) is the differentiator. Useful if you want multi-agent orchestration with isolation included. |
+| [scode](docs/sandboxes-reference.md#ref-scode) | Yes | process | Early entry in the space (Sept 2025), motivated by Claude Code's initial lack of built-in sandboxing. |
+| [sevorix-lite](docs/sandboxes-reference.md#ref-sevorix-lite) | Yes (AGPL-3.0) | seccomp, user-namespace | Multi-layered runtime containment rather than VM/container isolation. The "Yellow Lane" human-in-the-loop model with countdown timer is unusual — the agent pauses pending human approval via dashboard. Claude Code support is built in, not bolted on. |
+| [skilllite](docs/sandboxes-reference.md#ref-skilllite) | Yes (MIT) | seatbelt, user-namespace, seccomp | The skilllite-sandbox component is independently usable — you don't have to use the agent engine to get the sandbox. Three-layer defense model (install scan + pre-exec auth + runtime sandbox) is more depth than most standalone tools offer. |
 
 <a id="sec-kubernetes"></a>
 ## Kubernetes-Native
@@ -473,11 +473,11 @@ Sandbox solutions designed for Kubernetes clusters.
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [Agent Sandbox (kubernetes-sigs)](docs/ref-kubernetes.md#ref-agent-sandbox-kubernetes-sigs) | Yes (Apache-2.0) | gvisor, kata | Official Kubernetes SIG project (launched KubeCon Atlanta Nov 2025). Likely to become the standard for K8s agent sandboxing. |
-| [GKE Agent Sandbox](docs/ref-kubernetes.md#ref-gke-agent-sandbox) | No | gvisor, kata | Managed wrapper around the open-source agent-sandbox project. If you're already on GKE, this is the path of least resistance. |
-| [openkruise/agents](docs/ref-kubernetes.md#ref-openkruise-agents) | Yes (Apache-2.0) | container | CNCF-affiliated via OpenKruise (Alibaba). The E2B API compatibility is notable — lets you use existing E2B SDK integrations against self-hosted K8s instead of E2B's cloud. Sandbox hibernation with GPU memory checkpoint is unusual. |
-| [sandbox0](docs/ref-kubernetes.md#ref-sandbox0) | Yes (Apache-2.0) | container, gvisor | The procd process manager inside pods provides REPL session management — unusual for a K8s sandbox. Egress credential injection keeps secrets outside the sandbox boundary, similar to nono's credential proxy model but at the K8s level. |
-| [treadstone](docs/ref-kubernetes.md#ref-treadstone) | Yes (Apache-2.0) | gvisor | Built on kubernetes-sigs/agent-sandbox as the underlying CRD. Browser handoff is an unusual feature — enables smooth transitions from autonomous agent execution to human intervention. Offered both as open source and as a hosted service. |
+| [Agent Sandbox (kubernetes-sigs)](docs/sandboxes-reference.md#ref-agent-sandbox-kubernetes-sigs) | Yes (Apache-2.0) | gvisor, kata | Official Kubernetes SIG project (launched KubeCon Atlanta Nov 2025). Likely to become the standard for K8s agent sandboxing. |
+| [GKE Agent Sandbox](docs/sandboxes-reference.md#ref-gke-agent-sandbox) | No | gvisor, kata | Managed wrapper around the open-source agent-sandbox project. If you're already on GKE, this is the path of least resistance. |
+| [openkruise/agents](docs/sandboxes-reference.md#ref-openkruise-agents) | Yes (Apache-2.0) | container | CNCF-affiliated via OpenKruise (Alibaba). The E2B API compatibility is notable — lets you use existing E2B SDK integrations against self-hosted K8s instead of E2B's cloud. Sandbox hibernation with GPU memory checkpoint is unusual. |
+| [sandbox0](docs/sandboxes-reference.md#ref-sandbox0) | Yes (Apache-2.0) | container, gvisor | The procd process manager inside pods provides REPL session management — unusual for a K8s sandbox. Egress credential injection keeps secrets outside the sandbox boundary, similar to nono's credential proxy model but at the K8s level. |
+| [treadstone](docs/sandboxes-reference.md#ref-treadstone) | Yes (Apache-2.0) | gvisor | Built on kubernetes-sigs/agent-sandbox as the underlying CRD. Browser handoff is an unusual feature — enables smooth transitions from autonomous agent execution to human intervention. Offered both as open source and as a hosted service. |
 
 <a id="sec-dev-environment"></a>
 ## Development Environments
@@ -486,11 +486,11 @@ Development environment platforms that can be repurposed for agent isolation. Th
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [Coder](docs/ref-dev-environment.md#ref-coder) | Yes (AGPL-3.0) | container | Not agent-specific, but good for teams wanting self-hosted isolation without cloud dependency. AGPL license means modifications must be shared. |
-| [DevPod](docs/ref-dev-environment.md#ref-devpod) | Yes | container | Not agent-specific. Good open-source alternative to Codespaces for local-first workflows where you want reproducible isolated environments. |
-| [GitHub Codespaces](docs/ref-dev-environment.md#ref-github-codespaces) | No | container | Not purpose-built for agents, but accessible to anyone familiar with GitHub. A "good enough" isolation option for personal agent use without learning new tools. |
-| [Koyeb](docs/ref-dev-environment.md#ref-koyeb) | No | container | General-purpose serverless platform, not purpose-built for agents, but usable for agent isolation out of the box with standard container workflows. |
-| [Ona (formerly Gitpod)](docs/ref-dev-environment.md#ref-ona-formerly-gitpod) | No | container | Major pivot from Gitpod (rebranded Sept 2025). Demonstrated Claude Code sandbox escape (March 2026). Not agent-specific but increasingly agent-oriented. |
+| [Coder](docs/sandboxes-reference.md#ref-coder) | Yes (AGPL-3.0) | container | Not agent-specific, but good for teams wanting self-hosted isolation without cloud dependency. AGPL license means modifications must be shared. |
+| [DevPod](docs/sandboxes-reference.md#ref-devpod) | Yes | container | Not agent-specific. Good open-source alternative to Codespaces for local-first workflows where you want reproducible isolated environments. |
+| [GitHub Codespaces](docs/sandboxes-reference.md#ref-github-codespaces) | No | container | Not purpose-built for agents, but accessible to anyone familiar with GitHub. A "good enough" isolation option for personal agent use without learning new tools. |
+| [Koyeb](docs/sandboxes-reference.md#ref-koyeb) | No | container | General-purpose serverless platform, not purpose-built for agents, but usable for agent isolation out of the box with standard container workflows. |
+| [Ona (formerly Gitpod)](docs/sandboxes-reference.md#ref-ona-formerly-gitpod) | No | container | Major pivot from Gitpod (rebranded Sept 2025). Demonstrated Claude Code sandbox escape (March 2026). Not agent-specific but increasingly agent-oriented. |
 
 <a id="sec-abstraction"></a>
 ## Abstraction Layers
@@ -499,9 +499,9 @@ SDKs and frameworks that abstract across multiple sandbox providers.
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [ComputeSDK](docs/ref-abstraction.md#ref-computesdk) | No | microvm, container | Useful if you want to avoid vendor lock-in. Isolation strength depends entirely on the chosen backend provider. |
-| [LangChain Sandboxes](docs/ref-abstraction.md#ref-langchain-sandboxes) | Yes | container | Only relevant if already using LangChain. The sandbox capabilities come from the underlying provider, not LangChain itself. |
-| [NanoClaw](docs/ref-abstraction.md#ref-nanoclaw) | Yes (MIT) | container | More of an agent orchestration framework with sandbox support than a sandbox itself. High adoption. Sandbox capability comes from Docker or Docker Sandboxes underneath. |
+| [ComputeSDK](docs/sandboxes-reference.md#ref-computesdk) | No | microvm, container | Useful if you want to avoid vendor lock-in. Isolation strength depends entirely on the chosen backend provider. |
+| [LangChain Sandboxes](docs/sandboxes-reference.md#ref-langchain-sandboxes) | Yes | container | Only relevant if already using LangChain. The sandbox capabilities come from the underlying provider, not LangChain itself. |
+| [NanoClaw](docs/sandboxes-reference.md#ref-nanoclaw) | Yes (MIT) | container | More of an agent orchestration framework with sandbox support than a sandbox itself. High adoption. Sandbox capability comes from Docker or Docker Sandboxes underneath. |
 
 ---
 
@@ -517,11 +517,11 @@ The underlying VM and container runtimes that sandbox products are built on. Use
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [Firecracker](docs/ref-building-blocks.md#ref-firecracker) | Yes (Apache-2.0) | kvm, microvm | The foundation most cloud sandbox platforms build on. Battle-tested at AWS scale (Lambda, Fargate). If you're building a sandbox product, this is likely your starting point. |
-| [gVisor](docs/ref-building-blocks.md#ref-gvisor) | Yes (Apache-2.0) | gvisor | Used by GKE and kubernetes-sigs/agent-sandbox. Good middle ground between container and VM isolation — stronger than containers, lighter than full VMs. |
-| [Kata Containers](docs/ref-building-blocks.md#ref-kata-containers) | Yes (Apache-2.0) | kata, kvm | Production-proven at scale via Northflank (2M+ workloads/month). Good for Kubernetes environments that need VM-level isolation per pod. |
-| [libkrun](docs/ref-building-blocks.md#ref-libkrun) | Yes (Apache-2.0) | kvm | macOS support via Apple Virtualization.framework is unique among VM runtimes — Firecracker and Kata are Linux-only. Used by microsandbox. |
-| [Zeroboot](docs/ref-building-blocks.md#ref-zeroboot) | Yes | kvm, microvm | 0.8ms sandbox creation via COW forking is remarkable if verified at scale. Worth watching as a potential next-gen approach to sandbox provisioning. |
+| [Firecracker](docs/sandboxes-reference.md#ref-firecracker) | Yes (Apache-2.0) | kvm, microvm | The foundation most cloud sandbox platforms build on. Battle-tested at AWS scale (Lambda, Fargate). If you're building a sandbox product, this is likely your starting point. |
+| [gVisor](docs/sandboxes-reference.md#ref-gvisor) | Yes (Apache-2.0) | gvisor | Used by GKE and kubernetes-sigs/agent-sandbox. Good middle ground between container and VM isolation — stronger than containers, lighter than full VMs. |
+| [Kata Containers](docs/sandboxes-reference.md#ref-kata-containers) | Yes (Apache-2.0) | kata, kvm | Production-proven at scale via Northflank (2M+ workloads/month). Good for Kubernetes environments that need VM-level isolation per pod. |
+| [libkrun](docs/sandboxes-reference.md#ref-libkrun) | Yes (Apache-2.0) | kvm | macOS support via Apple Virtualization.framework is unique among VM runtimes — Firecracker and Kata are Linux-only. Used by microsandbox. |
+| [Zeroboot](docs/sandboxes-reference.md#ref-zeroboot) | Yes | kvm, microvm | 0.8ms sandbox creation via COW forking is remarkable if verified at scale. Worth watching as a potential next-gen approach to sandbox provisioning. |
 
 <a id="sec-os-primitive"></a>
 ### OS-Level Sandboxing
@@ -530,13 +530,13 @@ OS-level isolation primitives. These are building blocks — most users interact
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [bubblewrap (bwrap)](docs/ref-building-blocks.md#ref-bubblewrap-bwrap) | Yes (LGPL-2.0+) | user-namespace | Years of hardening via Flatpak. Claude Code's Linux sandbox builds on this. The go-to unprivileged sandbox primitive on Linux. |
-| [Firejail](docs/ref-building-blocks.md#ref-firejail) | Yes (GPL-2.0) | user-namespace, seccomp | Primarily for desktop app sandboxing, but applicable to agent processes. SUID requirement is a trade-off — convenience vs. attack surface. |
-| [Landlock LSM](docs/ref-building-blocks.md#ref-landlock-lsm) | Yes (GPL-2.0) | landlock | The modern Linux answer to unprivileged sandboxing. Network support in kernel 6.7 makes it much more complete. Used by Codex CLI and OpenShell. |
-| [Linux Namespaces + cgroups](docs/ref-building-blocks.md#ref-linux-namespaces-cgroups) | Yes (GPL-2.0) | user-namespace | Everything in the container and VM space builds on these primitives. Understanding namespaces and cgroups is foundational to evaluating any Linux-based sandbox's isolation claims. |
-| [macOS Seatbelt / sandbox-exec](docs/ref-building-blocks.md#ref-macos-seatbelt-sandbox-exec) | No | seatbelt | Deprecated but still the only game in town for macOS process sandboxing. Used by Claude Code, Agent Safehouse, and srt on macOS. No replacement announced by Apple. |
-| [nsjail](docs/ref-building-blocks.md#ref-nsjail) | Yes (Apache-2.0) | user-namespace, seccomp | Google-maintained. Kafel policy language is more ergonomic than raw seccomp-BPF. Used by competitive programming judges for untrusted code execution. |
-| [seccomp-BPF](docs/ref-building-blocks.md#ref-seccomp-bpf) | Yes (GPL-2.0) | seccomp | Building block, not standalone. Almost always used alongside Landlock or namespaces to provide full sandbox coverage. |
+| [bubblewrap (bwrap)](docs/sandboxes-reference.md#ref-bubblewrap-bwrap) | Yes (LGPL-2.0+) | user-namespace | Years of hardening via Flatpak. Claude Code's Linux sandbox builds on this. The go-to unprivileged sandbox primitive on Linux. |
+| [Firejail](docs/sandboxes-reference.md#ref-firejail) | Yes (GPL-2.0) | user-namespace, seccomp | Primarily for desktop app sandboxing, but applicable to agent processes. SUID requirement is a trade-off — convenience vs. attack surface. |
+| [Landlock LSM](docs/sandboxes-reference.md#ref-landlock-lsm) | Yes (GPL-2.0) | landlock | The modern Linux answer to unprivileged sandboxing. Network support in kernel 6.7 makes it much more complete. Used by Codex CLI and OpenShell. |
+| [Linux Namespaces + cgroups](docs/sandboxes-reference.md#ref-linux-namespaces-cgroups) | Yes (GPL-2.0) | user-namespace | Everything in the container and VM space builds on these primitives. Understanding namespaces and cgroups is foundational to evaluating any Linux-based sandbox's isolation claims. |
+| [macOS Seatbelt / sandbox-exec](docs/sandboxes-reference.md#ref-macos-seatbelt-sandbox-exec) | No | seatbelt | Deprecated but still the only game in town for macOS process sandboxing. Used by Claude Code, Agent Safehouse, and srt on macOS. No replacement announced by Apple. |
+| [nsjail](docs/sandboxes-reference.md#ref-nsjail) | Yes (Apache-2.0) | user-namespace, seccomp | Google-maintained. Kafel policy language is more ergonomic than raw seccomp-BPF. Used by competitive programming judges for untrusted code execution. |
+| [seccomp-BPF](docs/sandboxes-reference.md#ref-seccomp-bpf) | Yes (GPL-2.0) | seccomp | Building block, not standalone. Almost always used alongside Landlock or namespaces to provide full sandbox coverage. |
 
 <a id="sec-wasm-runtime"></a>
 ### WebAssembly Runtimes
@@ -545,11 +545,11 @@ WebAssembly runtimes providing language-level sandboxing. Architecturally elegan
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
-| [Pyodide](docs/ref-building-blocks.md#ref-pyodide) | Yes (MPL-2.0) | wasm | Good for sandboxing Python-only agent code execution where you need browser-grade isolation guarantees without running a VM. |
-| [wasmCloud](docs/ref-building-blocks.md#ref-wasmcloud) | Yes (Apache-2.0) | wasm | Higher-level than Wasmtime or WasmEdge — it's an application platform, not just a runtime. Useful if building distributed agent systems with Wasm isolation. |
-| [WasmEdge](docs/ref-building-blocks.md#ref-wasmedge) | Yes (Apache-2.0) | wasm | CNCF project. Differentiates from Wasmtime with AI/ML inference extensions and edge deployment focus. |
-| [Wasmtime](docs/ref-building-blocks.md#ref-wasmtime) | Yes (Apache-2.0) | wasm | The reference Wasm runtime from Bytecode Alliance. Architecturally elegant sandboxing but requires toolchain buy-in — you can't run arbitrary binaries. |
-| [Wassette](docs/ref-building-blocks.md#ref-wassette) | Yes | wasm | Interesting intersection of MCP and Wasm — agents discover and load sandboxed tools via MCP from OCI registries. Microsoft backing. Released Aug 2025. |
+| [Pyodide](docs/sandboxes-reference.md#ref-pyodide) | Yes (MPL-2.0) | wasm | Good for sandboxing Python-only agent code execution where you need browser-grade isolation guarantees without running a VM. |
+| [wasmCloud](docs/sandboxes-reference.md#ref-wasmcloud) | Yes (Apache-2.0) | wasm | Higher-level than Wasmtime or WasmEdge — it's an application platform, not just a runtime. Useful if building distributed agent systems with Wasm isolation. |
+| [WasmEdge](docs/sandboxes-reference.md#ref-wasmedge) | Yes (Apache-2.0) | wasm | CNCF project. Differentiates from Wasmtime with AI/ML inference extensions and edge deployment focus. |
+| [Wasmtime](docs/sandboxes-reference.md#ref-wasmtime) | Yes (Apache-2.0) | wasm | The reference Wasm runtime from Bytecode Alliance. Architecturally elegant sandboxing but requires toolchain buy-in — you can't run arbitrary binaries. |
+| [Wassette](docs/sandboxes-reference.md#ref-wassette) | Yes | wasm | Interesting intersection of MCP and Wasm — agents discover and load sandboxed tools via MCP from OCI registries. Microsoft backing. Released Aug 2025. |
 
 <a id="sec-references"></a>
 ## References
