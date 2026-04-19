@@ -448,7 +448,7 @@ def generate_additions_chart(additions: list[dict]) -> None:
 
     BAR_COLOR = "#e87043"  # Claude Code orange
 
-    fig, ax = plt.subplots(figsize=(5, 1.8))
+    fig, ax = plt.subplots(figsize=(5, 2.7))
     fig.patch.set_alpha(0)
     ax.set_facecolor("none")
 
@@ -484,14 +484,6 @@ def generate_additions_chart(additions: list[dict]) -> None:
     # Tick styling — same color as bars and title
     ax.tick_params(axis="x", labelsize=7.5, colors=BAR_COLOR, length=0, pad=4)
 
-    # Title in bar color
-    ax.set_title(
-        f"Additions by date  ·  initial seed: {seed_count} items ({seed_date})",
-        fontsize=8.5,
-        color=BAR_COLOR,
-        fontfamily="sans-serif",
-        pad=10,
-    )
 
     fig.tight_layout()
     CHART_PATH.parent.mkdir(parents=True, exist_ok=True)
