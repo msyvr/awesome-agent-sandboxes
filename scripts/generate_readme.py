@@ -270,17 +270,14 @@ def slugify(name: str) -> str:
     return f"ref-{s}"
 
 
-def generate_category_table(entries: list[dict], anchor_prefix: str = "") -> str:
+def generate_category_table(entries: list[dict]) -> str:
     """Generate a compact 4-column table for a category's entries.
 
-    Columns: Name (linked to detailed reference) | OSS? | Isolation | Notes
+    Columns: Name (linked to category section anchor) | OSS? | Isolation | Notes
 
-    `anchor_prefix` is prepended to entry anchor links. Pass an empty
-    string for in-document links (e.g., "#ref-foo"), or a file path to
-    link out to a separate reference doc (e.g., "docs/sandboxes-reference.md#ref-foo").
-
-    Maintainer, capabilities, requirements, and limitations live in the
-    detailed reference doc that the table links to.
+    Name links to the category section anchor in the README (e.g.,
+    #sec-standalone) so the user stays in the README. Full entry details
+    live in docs/sandboxes-reference.md for anyone who wants them.
     """
     lines = []
     lines.append("| Name | OSS? | Isolation | Notes |")
@@ -288,8 +285,8 @@ def generate_category_table(entries: list[dict], anchor_prefix: str = "") -> str
 
     for e in sorted(entries, key=lambda x: x["name"].lower()):
         name = e["name"]
-        anchor = slugify(name)
-        name_cell = f"[{escape_md(name)}]({anchor_prefix}#{anchor})"
+        cat = e.get("category", "")
+        name_cell = f"[{escape_md(name)}](#sec-{cat})"
 
         oss = "Yes" if e.get("open_source") else "No"
         license_str = e.get("license")
@@ -496,16 +493,21 @@ def generate_additions_chart(additions: list[dict]) -> None:
     print(f"Generated {CHART_PATH}")
 
 
-def generate_additions_section(additions: list[dict]) -> str:
+def generate_additions_section(
+    additions: list[dict], entries: list[dict]
+) -> str:
     """Generate the additions image + collapsible breakdown.
 
     No section heading — this sits at the very top of the README as a
-    visual summary.
+    visual summary. Links go to the category section in the README.
     """
     if not additions:
         return ""
 
     seed = additions[0] if additions else None
+
+    # Build name → category lookup
+    name_to_cat = {e["name"]: e["category"] for e in entries}
 
     lines = []
     lines.append(f'<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
@@ -522,8 +524,8 @@ def generate_additions_section(additions: list[dict]) -> str:
             label += " — initial seed"
         lines.append(label)
         for name in entry_names:
-            anchor = slugify(name)
-            lines.append(f"- [{name}]({REFERENCE_REL_PATH}#{anchor})")
+            cat = name_to_cat.get(name, "")
+            lines.append(f"- [{name}](#sec-{cat})")
         lines.append("")
 
     lines.append("</details>\n")
@@ -535,29 +537,28 @@ def generate_part2(entries: list[dict]) -> str:
     """Generate the full Part 2: landscape content."""
     sections = []
 
-    # --- Detailed Sandboxes Reference (link section) ---
+    # --- Detailed Sandboxes Reference (parent section) ---
     sections.append('<a id="sec-detailed-reference"></a>')
     sections.append("## Detailed Sandboxes Reference\n")
     sections.append(
-        f"Full per-entry information for every sandbox lives in "
-        f"[{REFERENCE_REL_PATH}]({REFERENCE_REL_PATH}). "
-        f"The category tables below also link directly to relevant entries.\n"
+        "The landscape at a glance, followed by per-category tables. "
+        f"Full per-entry details are in [{REFERENCE_REL_PATH}]({REFERENCE_REL_PATH}).\n"
     )
 
-    # --- Quick Triage (lenses) ---
+    # --- Quick Triage (lenses) — subsection ---
     sections.append('<a id="sec-quick-triage"></a>')
-    sections.append("## Quick Triage\n")
+    sections.append("### Quick Triage\n")
     sections.append("Three views of the same landscape to help you find what fits.\n")
 
-    sections.append("### How strong is the isolation?\n")
+    sections.append("#### How strong is the isolation?\n")
     sections.append(generate_lens_table(entries, ISOLATION_TIER_ORDER, "isolation_tier"))
     sections.append("")
 
-    sections.append("### How do I get started?\n")
+    sections.append("#### How do I get started?\n")
     sections.append(generate_lens_table(entries, ADOPTION_EFFORT_ORDER, "adoption_effort"))
     sections.append("")
 
-    sections.append("### Where does it run?\n")
+    sections.append("#### Where does it run?\n")
     sections.append(generate_lens_table(entries, DEPLOYMENT_MODEL_ORDER, "deployment_model"))
     sections.append("")
 
@@ -573,16 +574,16 @@ def generate_part2(entries: list[dict]) -> str:
         if not cat_entries:
             continue
         sections.append(f'<a id="sec-{cat_key}"></a>')
-        sections.append(f"## {cat_name}\n")
+        sections.append(f"### {cat_name}\n")
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
             sections.append(f"{intro}\n")
-        sections.append(generate_category_table(cat_entries, anchor_prefix=REFERENCE_REL_PATH))
+        sections.append(generate_category_table(cat_entries))
         sections.append("")
 
     sections.append("---\n")
     sections.append('<a id="sec-building-blocks"></a>')
-    sections.append("## Building Blocks\n")
+    sections.append("### Building Blocks\n")
     sections.append(
         "The underlying technologies that sandbox products are built on. "
         "Most users interact with these indirectly — this section is for "
@@ -595,11 +596,11 @@ def generate_part2(entries: list[dict]) -> str:
         if not cat_entries:
             continue
         sections.append(f'<a id="sec-{cat_key}"></a>')
-        sections.append(f"### {cat_name}\n")
+        sections.append(f"#### {cat_name}\n")
         intro = CATEGORY_INTROS.get(cat_key, "")
         if intro:
             sections.append(f"{intro}\n")
-        sections.append(generate_category_table(cat_entries, anchor_prefix=REFERENCE_REL_PATH))
+        sections.append(generate_category_table(cat_entries))
         sections.append("")
 
     # --- References ---
@@ -637,22 +638,22 @@ def generate_toc(entries: list[dict]) -> str:
     lines.append("- [Choosing a sandbox](#sec-choosing)")
     lines.append("  - [Safety & Alignment Research](#sec-safety-research)")
 
-    # --- Part 2: lenses + categories ---
+    # --- Part 2: all under Detailed Sandboxes Reference ---
     lines.append("- [Detailed Sandboxes Reference](#sec-detailed-reference)")
-    lines.append("- [Quick Triage](#sec-quick-triage)")
+    lines.append("  - [Quick Triage](#sec-quick-triage)")
 
     product_cats = [c for c in CATEGORY_ORDER if c[0] not in BUILDING_BLOCK_CATEGORIES]
     building_cats = [c for c in CATEGORY_ORDER if c[0] in BUILDING_BLOCK_CATEGORIES]
 
     for cat_key, cat_name in product_cats:
         if any(e.get("category") == cat_key for e in entries):
-            lines.append(f"- [{cat_name}](#sec-{cat_key})")
+            lines.append(f"  - [{cat_name}](#sec-{cat_key})")
 
     if any(e.get("category") in BUILDING_BLOCK_CATEGORIES for e in entries):
-        lines.append("- [Building Blocks](#sec-building-blocks)")
+        lines.append("  - [Building Blocks](#sec-building-blocks)")
         for cat_key, cat_name in building_cats:
             if any(e.get("category") == cat_key for e in entries):
-                lines.append(f"  - [{cat_name}](#sec-{cat_key})")
+                lines.append(f"    - [{cat_name}](#sec-{cat_key})")
 
     lines.append("- [References](#sec-references)")
     lines.append("- [Contributing](#sec-contributing)")
@@ -711,7 +712,7 @@ def main():
     additions_section = ""
     if additions:
         generate_additions_chart(additions)
-        additions_section = generate_additions_section(additions) + "\n"
+        additions_section = generate_additions_section(additions, entries) + "\n"
 
     # Generate Part 2
     part2 = generate_part2(entries)

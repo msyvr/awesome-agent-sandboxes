@@ -26,7 +26,6 @@ from generate_readme import (
     generate_definition_entry,
     generate_reference_doc,
     generate_toc,
-    REFERENCE_REL_PATH,
 )
 
 
@@ -295,21 +294,16 @@ class TestGenerateCategoryTable:
         table = generate_category_table(entries)
         assert "MySandbox" in table
 
-    def test_links_to_local_anchor_by_default(self):
-        entries = [make_entry(name="Tool")]
+    def test_links_to_category_section(self):
+        entries = [make_entry(name="Tool", category="standalone")]
         table = generate_category_table(entries)
-        # No prefix → in-document anchor link
-        assert "[Tool](#ref-tool)" in table
+        # Links to category section anchor in the README
+        assert "[Tool](#sec-standalone)" in table
 
-    def test_links_to_external_anchor_with_prefix(self):
-        entries = [make_entry(name="Tool")]
-        table = generate_category_table(entries, anchor_prefix="docs/sandboxes-reference.md")
-        assert "[Tool](docs/sandboxes-reference.md#ref-tool)" in table
-
-    def test_anchor_link_for_complex_name(self):
-        entries = [make_entry(name="agent-infra/sandbox")]
-        table = generate_category_table(entries, anchor_prefix="docs/sandboxes-reference.md")
-        assert "[agent-infra/sandbox](docs/sandboxes-reference.md#ref-agent-infra-sandbox)" in table
+    def test_links_use_entry_category(self):
+        entries = [make_entry(name="Tool", category="cloud-managed")]
+        table = generate_category_table(entries)
+        assert "[Tool](#sec-cloud-managed)" in table
 
     def test_oss_yes_with_license(self):
         entries = [make_entry(open_source=True, license="MIT")]
@@ -528,13 +522,11 @@ class TestGenerateReferenceDoc:
         assert "### Tool" in result
         assert "#### Tool" not in result
 
-    def test_anchors_match_external_table_links(self):
-        """Reference doc anchors must match what README category tables link to."""
+    def test_table_links_to_category_section(self):
+        """Category table links go to category section in the README."""
         entries = [make_entry(name="Tool", category="standalone")]
-        table = generate_category_table(entries, anchor_prefix=REFERENCE_REL_PATH)
-        doc = generate_reference_doc(entries)
-        assert f"({REFERENCE_REL_PATH}#ref-tool)" in table
-        assert '<a id="ref-tool"></a>' in doc
+        table = generate_category_table(entries)
+        assert "(#sec-standalone)" in table
 
     def test_alphabetical_within_category(self):
         entries = [
