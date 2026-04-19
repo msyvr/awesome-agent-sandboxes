@@ -273,11 +273,10 @@ def slugify(name: str) -> str:
 def generate_category_table(entries: list[dict]) -> str:
     """Generate a compact 4-column table for a category's entries.
 
-    Columns: Name (linked to category section anchor) | OSS? | Isolation | Notes
+    Columns: Name (linked to sandbox URL) | OSS? | Isolation | Notes
 
-    Name links to the category section anchor in the README (e.g.,
-    #sec-standalone) so the user stays in the README. Full entry details
-    live in docs/sandboxes-reference.md for anyone who wants them.
+    Name links to the sandbox's product page or repo URL so the user
+    can go straight to the source.
     """
     lines = []
     lines.append("| Name | OSS? | Isolation | Notes |")
@@ -285,8 +284,14 @@ def generate_category_table(entries: list[dict]) -> str:
 
     for e in sorted(entries, key=lambda x: x["name"].lower()):
         name = e["name"]
-        cat = e.get("category", "")
-        name_cell = f"[{escape_md(name)}](#sec-{cat})"
+        url = e.get("url")
+        repo_url = e.get("repo_url")
+        if url:
+            name_cell = f"[{escape_md(name)}]({url})"
+        elif repo_url:
+            name_cell = f"[{escape_md(name)}]({repo_url})"
+        else:
+            name_cell = escape_md(name)
 
         oss = "Yes" if e.get("open_source") else "No"
         license_str = e.get("license")
@@ -499,15 +504,17 @@ def generate_additions_section(
     """Generate the additions image + collapsible breakdown.
 
     No section heading — this sits at the very top of the README as a
-    visual summary. Links go to the category section in the README.
+    visual summary. Links go to the sandbox's product page or repo URL.
     """
     if not additions:
         return ""
 
     seed = additions[0] if additions else None
 
-    # Build name → category lookup
-    name_to_cat = {e["name"]: e["category"] for e in entries}
+    # Build name → URL lookup (prefer url, fallback to repo_url)
+    name_to_url = {}
+    for e in entries:
+        name_to_url[e["name"]] = e.get("url") or e.get("repo_url") or ""
 
     lines = []
     lines.append(f'<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
@@ -524,8 +531,11 @@ def generate_additions_section(
             label += " — initial seed"
         lines.append(label)
         for name in entry_names:
-            cat = name_to_cat.get(name, "")
-            lines.append(f"- [{name}](#sec-{cat})")
+            url = name_to_url.get(name, "")
+            if url:
+                lines.append(f"- [{name}]({url})")
+            else:
+                lines.append(f"- {name}")
         lines.append("")
 
     lines.append("</details>\n")
@@ -542,7 +552,7 @@ def generate_part2(entries: list[dict]) -> str:
     sections.append("## Detailed Sandboxes Reference\n")
     sections.append(
         "The landscape at a glance, followed by per-category tables. "
-        f"Full per-entry details are in [{REFERENCE_REL_PATH}]({REFERENCE_REL_PATH}).\n"
+        "Full per-entry details are in [`docs/`](docs/).\n"
     )
 
     # --- Quick Triage (lenses) — subsection ---

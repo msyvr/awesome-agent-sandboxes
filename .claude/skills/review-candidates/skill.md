@@ -137,7 +137,7 @@ Commit with a message that lists:
 - Any updates to getting-started.md or safety-research.md
 
 ```bash
-git add data/sandboxes.yaml README.md docs/sandboxes-reference.md [other changed files]
+git add data/sandboxes.yaml README.md docs/ [other changed files]
 git commit -m "..."
 git push upstream main
 ```

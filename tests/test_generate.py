@@ -294,16 +294,21 @@ class TestGenerateCategoryTable:
         table = generate_category_table(entries)
         assert "MySandbox" in table
 
-    def test_links_to_category_section(self):
-        entries = [make_entry(name="Tool", category="standalone")]
+    def test_links_to_url(self):
+        entries = [make_entry(name="Tool", url="https://example.com")]
         table = generate_category_table(entries)
-        # Links to category section anchor in the README
-        assert "[Tool](#sec-standalone)" in table
+        assert "[Tool](https://example.com)" in table
 
-    def test_links_use_entry_category(self):
-        entries = [make_entry(name="Tool", category="cloud-managed")]
+    def test_falls_back_to_repo_url(self):
+        entries = [make_entry(name="Tool", url=None, repo_url="https://github.com/t/t")]
         table = generate_category_table(entries)
-        assert "[Tool](#sec-cloud-managed)" in table
+        assert "[Tool](https://github.com/t/t)" in table
+
+    def test_no_link_when_no_urls(self):
+        entries = [make_entry(name="Tool", url=None, repo_url=None)]
+        table = generate_category_table(entries)
+        assert "[Tool]" not in table
+        assert "| Tool |" in table
 
     def test_oss_yes_with_license(self):
         entries = [make_entry(open_source=True, license="MIT")]
@@ -522,11 +527,11 @@ class TestGenerateReferenceDoc:
         assert "### Tool" in result
         assert "#### Tool" not in result
 
-    def test_table_links_to_category_section(self):
-        """Category table links go to category section in the README."""
-        entries = [make_entry(name="Tool", category="standalone")]
+    def test_table_links_to_sandbox_url(self):
+        """Category table entry names link to sandbox product/repo URL."""
+        entries = [make_entry(name="Tool", url="https://example.com", category="standalone")]
         table = generate_category_table(entries)
-        assert "(#sec-standalone)" in table
+        assert "[Tool](https://example.com)" in table
 
     def test_alphabetical_within_category(self):
         entries = [
