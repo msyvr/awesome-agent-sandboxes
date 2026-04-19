@@ -511,10 +511,8 @@ def generate_additions_section(
 
     seed = additions[0] if additions else None
 
-    # Build name → URL lookup (prefer url, fallback to repo_url)
-    name_to_url = {}
-    for e in entries:
-        name_to_url[e["name"]] = e.get("url") or e.get("repo_url") or ""
+    # Build name → category lookup
+    name_to_cat = {e["name"]: e["category"] for e in entries}
 
     lines = []
     lines.append(f'<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
@@ -531,11 +529,8 @@ def generate_additions_section(
             label += " — initial seed"
         lines.append(label)
         for name in entry_names:
-            url = name_to_url.get(name, "")
-            if url:
-                lines.append(f"- [{name}]({url})")
-            else:
-                lines.append(f"- {name}")
+            cat = name_to_cat.get(name, "")
+            lines.append(f"- [{name}](#sec-{cat})")
         lines.append("")
 
     lines.append("</details>\n")
