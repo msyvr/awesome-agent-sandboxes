@@ -418,54 +418,80 @@ def generate_reference_doc(entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def generate_additions_section(additions: list[dict]) -> str:
-    """Generate the additions chart and collapsible breakdown.
+CHART_PATH = ROOT / "docs" / "additions-chart.png"
+CHART_REL_PATH = "docs/additions-chart.png"
 
-    No section heading — this sits at the very top of the README as a
-    visual summary. The chart excludes the initial seed to keep the
-    scale readable; seed info is in the chart title.
+
+def generate_additions_chart(additions: list[dict]) -> None:
+    """Generate a static PNG bar chart of discovery additions.
+
+    Excludes the initial seed to keep the scale readable. Saves to
+    docs/additions-chart.png.
     """
-    if not additions:
-        return ""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
 
-    lines = []
-    lines.append('<a id="sec-additions"></a>')
-
-    # Separate the initial seed from discovery additions
     seed = additions[0] if additions else None
     discovery = additions[1:] if len(additions) > 1 else []
+
+    if not discovery:
+        return
 
     seed_count = len(seed["entries"]) if seed else 0
     seed_date = seed["date"] if seed else "unknown"
 
-    # --- Mermaid bar chart (discovery only, compact) ---
-    if discovery:
-        short_dates = [a["date"][5:] for a in discovery]
-        counts = [len(a["entries"]) for a in discovery]
-        max_count = max(counts)
+    dates = [a["date"][5:] for a in discovery]
+    counts = [len(a["entries"]) for a in discovery]
 
-        lines.append("```mermaid")
-        lines.append("---")
-        lines.append("config:")
-        lines.append("    xyChart:")
-        lines.append("        height: 200")
-        lines.append("        width: 700")
-        lines.append("        xAxis:")
-        lines.append("            labelFontSize: 10")
-        lines.append("        yAxis:")
-        lines.append("            labelFontSize: 10")
-        lines.append("---")
-        lines.append("xychart-beta")
-        lines.append(
-            f'    title "Additions by date after initial seed'
-            f' ({seed_count} items {seed_date})"'
+    fig, ax = plt.subplots(figsize=(7, 2))
+    bars = ax.bar(dates, counts, color="#3b82f6", width=0.6)
+
+    # Value labels on top of each bar
+    for bar, count in zip(bars, counts):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 0.15,
+            str(count),
+            ha="center",
+            va="bottom",
+            fontsize=8,
+            color="#666",
         )
-        x_labels = ", ".join(f'"{d}"' for d in short_dates)
-        lines.append(f"    x-axis [{x_labels}]")
-        lines.append(f'    y-axis "Entries added" 0 --> {max_count + 2}')
-        bar_data = ", ".join(str(c) for c in counts)
-        lines.append(f"    bar [{bar_data}]")
-        lines.append("```\n")
+
+    ax.set_ylabel("Entries added", fontsize=9)
+    ax.set_title(
+        f"Additions by date after initial seed ({seed_count} items {seed_date})",
+        fontsize=10,
+        pad=8,
+    )
+    ax.set_ylim(0, max(counts) + 2)
+    ax.tick_params(axis="x", labelsize=8, rotation=0)
+    ax.tick_params(axis="y", labelsize=8)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    fig.tight_layout()
+    CHART_PATH.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(CHART_PATH, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Generated {CHART_PATH}")
+
+
+def generate_additions_section(additions: list[dict]) -> str:
+    """Generate the additions image + collapsible breakdown.
+
+    No section heading — this sits at the very top of the README as a
+    visual summary.
+    """
+    if not additions:
+        return ""
+
+    seed = additions[0] if additions else None
+
+    lines = []
+    lines.append('<a id="sec-additions"></a>')
+    lines.append(f"\n![Additions chart]({CHART_REL_PATH})\n")
 
     # --- Collapsible daily breakdown with links (reverse-chron) ---
     lines.append("<details>")
@@ -667,6 +693,7 @@ def main():
     # Generate additions chart (sits at the very top, before Part 1)
     additions_section = ""
     if additions:
+        generate_additions_chart(additions)
         additions_section = generate_additions_section(additions) + "\n"
 
     # Generate Part 2

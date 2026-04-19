@@ -1,21 +1,6 @@
 <a id="sec-additions"></a>
-```mermaid
----
-config:
-    xyChart:
-        height: 200
-        width: 700
-        xAxis:
-            labelFontSize: 10
-        yAxis:
-            labelFontSize: 10
----
-xychart-beta
-    title "Additions by date after initial seed (48 items 2026-04-07)"
-    x-axis ["04-09", "04-10", "04-12", "04-13", "04-14", "04-16", "04-17", "04-18"]
-    y-axis "Entries added" 0 --> 8
-    bar [6, 2, 5, 1, 2, 2, 3, 2]
-```
+
+![Additions chart](docs/additions-chart.png)
 
 <details>
 <summary>Daily breakdown (click to expand)</summary>
