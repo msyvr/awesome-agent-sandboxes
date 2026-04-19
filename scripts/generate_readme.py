@@ -489,7 +489,7 @@ def generate_additions_chart(additions: list[dict]) -> None:
     CHART_PATH.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(
         CHART_PATH, bbox_inches="tight",
-        transparent=True, pad_inches=0.15,
+        transparent=True, pad_inches=0.05,
         format="svg",
     )
     plt.close(fig)
@@ -508,8 +508,7 @@ def generate_additions_section(additions: list[dict]) -> str:
     seed = additions[0] if additions else None
 
     lines = []
-    lines.append('<a id="sec-additions"></a>')
-    lines.append(f'\n<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
+    lines.append(f'<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
 
     # --- Collapsible daily breakdown with links (reverse-chron) ---
     lines.append("<details>")
