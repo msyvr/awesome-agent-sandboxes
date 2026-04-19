@@ -473,9 +473,9 @@ def generate_additions_chart(additions: list[dict]) -> None:
             fontfamily="sans-serif",
         )
 
-    # Y-axis: fixed 0-10 range, show only 0 and 10
-    ax.set_ylim(0, 10)
-    ax.set_yticks([0, 10])
+    # Y-axis: hidden entirely — value labels on bars are sufficient
+    ax.set_ylim(0, max_count + 2)
+    ax.set_yticks([])
 
     # No spines at all
     for spine in ax.spines.values():
@@ -483,7 +483,6 @@ def generate_additions_chart(additions: list[dict]) -> None:
 
     # Tick styling — same color as bars and title
     ax.tick_params(axis="x", labelsize=7.5, colors=BAR_COLOR, length=0, pad=4)
-    ax.tick_params(axis="y", labelsize=7, colors=BAR_COLOR, length=0, pad=4)
 
     # Title in bar color
     ax.set_title(
