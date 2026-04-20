@@ -301,6 +301,19 @@
 - url: https://github.com/sandst1/nav
   reason: Coding agent, not a sandbox
 
+# --- Reviewed in issue #16 (2026-04-20) ---
+
+- url: https://github.com/SonarSource/sonarqube-mcp-server
+  reason: MCP server for SonarQube, not a sandbox
+- url: https://github.com/mendixlabs/mxcli
+  reason: Mendix CLI tool, not a sandbox
+- url: https://github.com/oyasmi/pipiclaw
+  reason: AI assistant runtime, not a sandbox
+- url: https://github.com/formatho/awesome-ai-tools
+  reason: Curated list, not a sandbox
+- url: https://github.com/beautyfree/skiller-desktop-skills-manager
+  reason: Skills manager, not a sandbox
+
 # --- Reviewed in issue #15 (2026-04-19) ---
 
 - url: https://github.com/dagucloud/dagu

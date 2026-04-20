@@ -1629,6 +1629,40 @@
   adoption_effort: install
   deployment_model: local
 
+- name: AgentScope Runtime
+  category: abstraction
+  maintainer: agentscope-ai (Alibaba)
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/agentscope-ai/agentscope-runtime
+  repo_url: https://github.com/agentscope-ai/agentscope-runtime
+  description: Agent runtime framework with real sandbox backends (Docker, gVisor, BoxLite, K8s, serverless) and pre-built sandbox images for GUI, browser, and mobile.
+  isolation_type: [container, gvisor]
+  capabilities:
+    - Docker container sandboxing (default)
+    - Optional gVisor hardening
+    - BoxLite sandbox backend
+    - K8s and serverless (Alibaba Cloud) backends
+    - Pre-built sandbox images (base, GUI/VNC, browser, filesystem, mobile/Android)
+    - Multi-framework compatibility (AgentScope, LangGraph, Agno, AutoGen)
+    - Async sandbox support
+  requirements:
+    - Docker (local)
+    - K8s or Alibaba Cloud (production)
+    - Python
+  limitations:
+    - Primarily an agent runtime framework — sandboxing is one feature among many
+    - Alibaba Cloud for serverless backend
+  notes: >-
+    Real sandbox depth despite being a runtime framework — pre-built
+    images covering GUI (VNC), browser, and mobile (Android emulator)
+    environments go well beyond typical container sandboxes. Multiple
+    sandbox backends (Docker, gVisor, BoxLite, K8s) abstracted behind
+    a single API.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: cloud
+
 # =============================================================================
 # VM & Container Runtimes (Building Blocks)
 # =============================================================================

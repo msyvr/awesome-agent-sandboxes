@@ -3,6 +3,9 @@
 <details>
 <summary>Daily breakdown (click to expand)</summary>
 
+**2026-04-20** (1 entries)
+- [AgentScope Runtime](#sec-abstraction)
+
 **2026-04-18** (2 entries)
 - [code-on-incus](#sec-standalone)
 - [hazmat](#sec-standalone)
@@ -376,7 +379,7 @@ Three views of the same landscape to help you find what fits.
 |------|-----------|----------|-----------|
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, brood-box, cleanroom, Firecracker, Kata Containers, +2 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +8 more | Slightly weaker than full VMs; Linux-only for most options. |
-| **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +18 more | Shared kernel means a kernel exploit can bypass isolation. |
+| **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +19 more | Shared kernel means a kernel exploit can bypass isolation. |
 | **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +16 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, Wasmtime, WasmEdge, wasmCloud, +2 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
@@ -386,7 +389,7 @@ Three views of the same landscape to help you find what fits.
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +11 more |
-| **Install a tool** | Install a standalone tool or runtime on your machine. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +32 more |
+| **Install a tool** | Install a standalone tool or runtime on your machine. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +33 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | Firecracker, gVisor, Kata Containers, libkrun, Zeroboot, +11 more |
 
 #### Where does it run?
@@ -394,7 +397,7 @@ Three views of the same landscape to help you find what fits.
 | Model | What it means | Examples |
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox |
-| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +11 more |
+| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +12 more |
 | **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +35 more |
 | **Self-hosted** | You host and manage the infrastructure. | Coder, OpenSandbox, Firecracker, gVisor, Kata Containers, +3 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0 |
@@ -499,6 +502,7 @@ SDKs and frameworks that abstract across multiple sandbox providers.
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
+| [AgentScope Runtime](https://github.com/agentscope-ai/agentscope-runtime) | Yes (Apache-2.0) | container, gvisor | Real sandbox depth despite being a runtime framework — pre-built images covering GUI (VNC), browser, and mobile (Android emulator) environments go well beyond typical container sandboxes. Multiple sandbox backends (Docker, gVisor, BoxLite, K8s) abstracted behind a single API. |
 | [ComputeSDK](https://www.computesdk.com) | No | microvm, container | Useful if you want to avoid vendor lock-in. Isolation strength depends entirely on the chosen backend provider. |
 | [LangChain Sandboxes](https://docs.langchain.com/oss/python/deepagents/sandboxes) | Yes | container | Only relevant if already using LangChain. The sandbox capabilities come from the underlying provider, not LangChain itself. |
 | [NanoClaw](https://github.com/qwibitai/nanoclaw) | Yes (MIT) | container | More of an agent orchestration framework with sandbox support than a sandbox itself. High adoption. Sandbox capability comes from Docker or Docker Sandboxes underneath. |

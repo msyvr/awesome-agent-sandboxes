@@ -99,3 +99,7 @@
   entries:
     - code-on-incus
     - hazmat
+
+- date: "2026-04-20"
+  entries:
+    - AgentScope Runtime

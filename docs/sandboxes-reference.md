@@ -728,6 +728,20 @@ _Notes: Major pivot from Gitpod (rebranded Sept 2025). Demonstrated Claude Code 
 
 ## Abstraction Layers
 
+<a id="ref-agentscope-runtime"></a>
+### AgentScope Runtime
+
+**Maintainer:** agentscope-ai (Alibaba) · **License:** Apache-2.0 · [Home](https://github.com/agentscope-ai/agentscope-runtime)
+
+Agent runtime framework with real sandbox backends (Docker, gVisor, BoxLite, K8s, serverless) and pre-built sandbox images for GUI, browser, and mobile.
+
+- **Isolation:** container, gvisor
+- **Capabilities:** Docker container sandboxing (default); Optional gVisor hardening; BoxLite sandbox backend; K8s and serverless (Alibaba Cloud) backends; Pre-built sandbox images (base, GUI/VNC, browser, filesystem, mobile/Android); Multi-framework compatibility (AgentScope, LangGraph, Agno, AutoGen); Async sandbox support
+- **Requirements:** Docker (local); K8s or Alibaba Cloud (production); Python
+- **Limitations:** Primarily an agent runtime framework — sandboxing is one feature among many; Alibaba Cloud for serverless backend
+
+_Notes: Real sandbox depth despite being a runtime framework — pre-built images covering GUI (VNC), browser, and mobile (Android emulator) environments go well beyond typical container sandboxes. Multiple sandbox backends (Docker, gVisor, BoxLite, K8s) abstracted behind a single API._
+
 <a id="ref-computesdk"></a>
 ### ComputeSDK
 
