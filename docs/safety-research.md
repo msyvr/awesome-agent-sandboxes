@@ -69,7 +69,7 @@ This guide covers sandbox selection for safety and alignment research, including
 | Audit trail | nono | Cryptographic audit chain with Sigstore attestation. The agent cannot tamper with the record of what it did. |
 | Observability / intervention | sevorix-lite, gVisor | sevorix-lite's "Yellow Lane" dashboard lets researchers observe and intervene in real time (approve/deny/redirect). gVisor logs denied syscalls. Different flavors: sevorix-lite is human-in-the-loop; gVisor is post-hoc analysis. |
 | Reproducibility | Firecracker snapshots, Fly Sprites (persistent) | Snapshot before evaluation, restore to replay. Fly Sprites offers persistent 100GB NVMe if you need durable eval environments. |
-| Controlled capability exposure | nono (L7 API filtering), Wasm/WASI (capability grants) | Gradually increase what the agent can access and study behavioral changes at each level. |
+| Controlled capability exposure | nono (L7 API filtering), gondolin (programmable egress hooks), Wasm/WASI (capability grants) | Gradually increase what the agent can access and study behavioral changes at each level. gondolin's TypeScript control plane lets you script per-secret, per-destination credential injection — useful for testing whether an agent misuses credentials when given access to specific endpoints. |
 
 ### Adversarial red-teaming
 

@@ -1247,6 +1247,40 @@
   adoption_effort: install
   deployment_model: local
 
+- name: gondolin
+  category: standalone
+  maintainer: earendil-works
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/earendil-works/gondolin
+  repo_url: https://github.com/earendil-works/gondolin
+  description: TypeScript-controlled Linux microVM sandbox (QEMU/KVM or libkrun) with programmable network egress hooks and per-secret credential injection.
+  isolation_type: [kvm, microvm]
+  capabilities:
+    - Hardware VM isolation (QEMU/KVM default, experimental libkrun)
+    - TypeScript control plane (programmable sandbox API)
+    - Host-side HTTP/TLS egress hooks
+    - Per-secret, per-destination credential injection (agent never sees real keys)
+    - Filesystem controls
+    - Snapshot and resume
+    - macOS + Linux
+  requirements:
+    - Linux (KVM) or macOS (libkrun/Hypervisor.framework)
+    - Node.js / TypeScript
+  limitations:
+    - libkrun backend is experimental
+    - Linux-focused (macOS via experimental backend)
+  notes: >-
+    The programmable egress hooks are the differentiator — host-side
+    HTTP/TLS interception with per-secret, per-destination injection
+    gives fine-grained control over what credentials reach which
+    endpoints, without the agent ever seeing the real values. Similar
+    credential model to nono and cleanroom but with a TypeScript
+    programmable control plane rather than CLI/config.
+  isolation_tier: hardware-vm
+  adoption_effort: install
+  deployment_model: local
+
 # =============================================================================
 # Kubernetes-Native
 # =============================================================================

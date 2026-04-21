@@ -372,6 +372,20 @@ Container-free CLI sandbox using OS-native primitives for network domain allowli
 
 _Notes: Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture._
 
+<a id="ref-gondolin"></a>
+### gondolin
+
+**Maintainer:** earendil-works · **License:** Apache-2.0 · [Home](https://github.com/earendil-works/gondolin)
+
+TypeScript-controlled Linux microVM sandbox (QEMU/KVM or libkrun) with programmable network egress hooks and per-secret credential injection.
+
+- **Isolation:** kvm, microvm
+- **Capabilities:** Hardware VM isolation (QEMU/KVM default, experimental libkrun); TypeScript control plane (programmable sandbox API); Host-side HTTP/TLS egress hooks; Per-secret, per-destination credential injection (agent never sees real keys); Filesystem controls; Snapshot and resume; macOS + Linux
+- **Requirements:** Linux (KVM) or macOS (libkrun/Hypervisor.framework); Node.js / TypeScript
+- **Limitations:** libkrun backend is experimental; Linux-focused (macOS via experimental backend)
+
+_Notes: The programmable egress hooks are the differentiator — host-side HTTP/TLS interception with per-secret, per-destination injection gives fine-grained control over what credentials reach which endpoints, without the agent ever seeing the real values. Similar credential model to nono and cleanroom but with a TypeScript programmable control plane rather than CLI/config._
+
 <a id="ref-hazmat"></a>
 ### hazmat
 

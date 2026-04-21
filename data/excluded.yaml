@@ -314,6 +314,25 @@
 - url: https://github.com/beautyfree/skiller-desktop-skills-manager
   reason: Skills manager, not a sandbox
 
+# --- Reviewed in issue #17 (2026-04-21) ---
+
+- url: https://github.com/alibaba/anolisa
+  reason: Agent-enhanced Linux distro, not a sandbox for isolating agents
+- url: https://github.com/mkn8rn/SharpClaw
+  reason: Application-level permission model in .NET, no kernel/container/VM isolation
+- url: https://github.com/datum-cloud/awesome-alt-clouds
+  reason: List, not a sandbox
+- url: https://github.com/sliamh11/Deus
+  reason: AI assistant, not a sandbox
+- url: https://github.com/BlackBeltTechnology/pi-agent-dashboard
+  reason: Dashboard, not a sandbox
+- url: https://github.com/shellonback/yessir-cli
+  reason: Empty description, not a sandbox
+- url: https://github.com/twaldin/flt
+  reason: Agent orchestration tool, not a sandbox
+- url: https://github.com/s-gehring/litus
+  reason: Claude Code orchestrator, not a sandbox
+
 # --- Reviewed in issue #15 (2026-04-19) ---
 
 - url: https://github.com/dagucloud/dagu
