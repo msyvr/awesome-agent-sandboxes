@@ -1247,6 +1247,39 @@
   adoption_effort: install
   deployment_model: local
 
+- name: gocker
+  category: standalone
+  maintainer: lunguini
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/lunguini/gocker
+  repo_url: https://github.com/lunguini/gocker
+  description: Docker-compatible CLI and API daemon for Apple Container on macOS 26+, where each container runs as a hardware-isolated Linux microVM.
+  isolation_type: [microvm]
+  capabilities:
+    - Apple Container (Virtualization.framework) microVMs
+    - Docker-compatible CLI and REST API
+    - Docker compose support
+    - Configurable isolation modes (full/hybrid/shared)
+    - gocker sandbox run claude command for agent sandboxing
+    - Claude session sync
+    - Portainer and Testcontainers compatible
+  requirements:
+    - macOS 26+ (Apple Silicon)
+  limitations:
+    - macOS only
+    - Very early (6 stars)
+    - Requires macOS 26+
+  notes: >-
+    Different from cleanroom/sand/locki — gocker is a Docker replacement
+    on macOS, not an embeddable sandbox library. The Docker-compatible
+    API means existing Docker workflows and tools (compose, Portainer,
+    Testcontainers) work out of the box, but each container is a
+    hardware-isolated microVM via Apple Virtualization.framework.
+  isolation_tier: microvm
+  adoption_effort: install
+  deployment_model: local
+
 - name: cleanroom
   category: standalone
   maintainer: Buildkite

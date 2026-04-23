@@ -360,6 +360,23 @@
 - url: https://github.com/Achelous1/aide
   reason: IDE plugin, not a sandbox
 
+# --- Reviewed in issue #19 (2026-04-23) ---
+
+- url: https://github.com/rohitg00/ai-engineering-from-scratch
+  reason: Learning resource, not a sandbox
+- url: https://github.com/platformplatform/PlatformPlatform
+  reason: Enterprise SaaS platform, not a sandbox
+- url: https://github.com/darkamenosa/openzalo
+  reason: Messaging plugin, not a sandbox
+- url: https://github.com/seamus-brady/springdrift
+  reason: Persistent agent runtime, not a sandbox
+- url: https://github.com/tigrisdata/storage
+  reason: Object storage, not a sandbox
+- url: https://github.com/RonaldJEN/OpenCapyBox
+  reason: Agent platform delegating to OpenSandbox (already listed), no own isolation
+- url: https://github.com/esengine/reasonix
+  reason: Agent framework, not a sandbox
+
 # --- Reviewed in issue #15 (2026-04-19) ---
 
 - url: https://github.com/dagucloud/dagu

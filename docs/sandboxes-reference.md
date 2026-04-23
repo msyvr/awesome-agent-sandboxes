@@ -386,6 +386,20 @@ Container-free CLI sandbox using OS-native primitives for network domain allowli
 
 _Notes: Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture._
 
+<a id="ref-gocker"></a>
+### gocker
+
+**Maintainer:** lunguini · **License:** Apache-2.0 · [Home](https://github.com/lunguini/gocker)
+
+Docker-compatible CLI and API daemon for Apple Container on macOS 26+, where each container runs as a hardware-isolated Linux microVM.
+
+- **Isolation:** microvm
+- **Capabilities:** Apple Container (Virtualization.framework) microVMs; Docker-compatible CLI and REST API; Docker compose support; Configurable isolation modes (full/hybrid/shared); gocker sandbox run claude command for agent sandboxing; Claude session sync; Portainer and Testcontainers compatible
+- **Requirements:** macOS 26+ (Apple Silicon)
+- **Limitations:** macOS only; Very early (6 stars); Requires macOS 26+
+
+_Notes: Different from cleanroom/sand/locki — gocker is a Docker replacement on macOS, not an embeddable sandbox library. The Docker-compatible API means existing Docker workflows and tools (compose, Portainer, Testcontainers) work out of the box, but each container is a hardware-isolated microVM via Apple Virtualization.framework._
+
 <a id="ref-gondolin"></a>
 ### gondolin
 
