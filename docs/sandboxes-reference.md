@@ -344,6 +344,20 @@ MicroVM sandboxes for AI coding agents, each with its own Docker daemon, filesys
 
 _Notes: Very new (March 2026). Multi-agent support is notable — works with most major coding agents out of the box._
 
+<a id="ref-edgebox"></a>
+### EdgeBox
+
+**Maintainer:** BIGPPWONG · **License:** GPL-3.0 · [Home](https://github.com/BIGPPWONG/EdgeBox)
+
+Local Electron/Docker desktop app that runs LLM agents in isolated Docker containers with both CLI and full GUI (VNC) desktop environments, exposed via MCP.
+
+- **Isolation:** container
+- **Capabilities:** Docker container isolation per session; Full GUI desktop environment (VNC) for computer-use agents; CLI shell environments; Multi-session concurrency with separate containers; MCP protocol support
+- **Requirements:** Docker; Electron (desktop app)
+- **Limitations:** Container isolation only (shared kernel); GPL-3.0 license
+
+_Notes: The GUI desktop environment (VNC) is the differentiator — agents can operate browsers and desktop apps, not just execute code. Essentially a self-hosted E2B with a GUI layer for computer-use agent workflows._
+
 <a id="ref-envpod-ce"></a>
 ### envpod-ce
 

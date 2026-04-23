@@ -333,6 +333,33 @@
 - url: https://github.com/s-gehring/litus
   reason: Claude Code orchestrator, not a sandbox
 
+# --- Reviewed in issue #18 (2026-04-22) ---
+
+- url: https://github.com/Dicklesworthstone/agentic_coding_flywheel_setup
+  reason: VPS provisioning script, actively anti-isolation (vibe mode disables safety)
+- url: https://github.com/angrykoala/awesome-browser-automation
+  reason: Curated list, not a sandbox
+- url: https://github.com/handsome-rich/Awesome-Auto-Research-Tools
+  reason: Curated list, not a sandbox
+- url: https://github.com/Dicklesworthstone/flywheel_connectors
+  reason: Connector isolation protocol, too early and different from sandbox isolation
+- url: https://github.com/Infisical/agent-vault
+  reason: HTTP credential proxy, not runtime isolation (mentioned in complementary defenses)
+- url: https://github.com/recodeee/gitguardex
+  reason: Git worktree separation and file locks, no process/filesystem/network isolation
+- url: https://github.com/cheikh2shift/godex
+  reason: Coding agent, not a sandbox
+- url: https://github.com/jayeshmepani/Media-AI
+  reason: Media tools list, not a sandbox
+- url: https://github.com/buda-ai/bunny-agent
+  reason: Empty description, not a sandbox
+- url: https://github.com/HabitGraylight/NanoHarness
+  reason: Agent harness framework, not a sandbox
+- url: https://github.com/jayeshmepani/Google-AI
+  reason: Google AI catalogue, not a sandbox
+- url: https://github.com/Achelous1/aide
+  reason: IDE plugin, not a sandbox
+
 # --- Reviewed in issue #15 (2026-04-19) ---
 
 - url: https://github.com/dagucloud/dagu

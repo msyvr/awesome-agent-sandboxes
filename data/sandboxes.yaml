@@ -1087,6 +1087,36 @@
   adoption_effort: install
   deployment_model: local
 
+- name: EdgeBox
+  category: standalone
+  maintainer: BIGPPWONG
+  open_source: true
+  license: GPL-3.0
+  url: https://github.com/BIGPPWONG/EdgeBox
+  repo_url: https://github.com/BIGPPWONG/EdgeBox
+  description: Local Electron/Docker desktop app that runs LLM agents in isolated Docker containers with both CLI and full GUI (VNC) desktop environments, exposed via MCP.
+  isolation_type: [container]
+  capabilities:
+    - Docker container isolation per session
+    - Full GUI desktop environment (VNC) for computer-use agents
+    - CLI shell environments
+    - Multi-session concurrency with separate containers
+    - MCP protocol support
+  requirements:
+    - Docker
+    - Electron (desktop app)
+  limitations:
+    - Container isolation only (shared kernel)
+    - GPL-3.0 license
+  notes: >-
+    The GUI desktop environment (VNC) is the differentiator — agents
+    can operate browsers and desktop apps, not just execute code.
+    Essentially a self-hosted E2B with a GUI layer for computer-use
+    agent workflows.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
 - name: code-on-incus
   category: standalone
   maintainer: mensfeld
