@@ -388,6 +388,23 @@
 - url: https://github.com/tobyilee/course-builder
   reason: Agent harness, not a sandbox
 
+# --- Reviewed in issue #21 (2026-04-25) ---
+
+- url: https://github.com/apify/mcpc
+  reason: MCP CLI client, not a sandbox
+- url: https://github.com/by-scott/cortex
+  reason: Cognitive runtime, not a sandbox
+- url: https://github.com/Agent-Analytics/awesome-multi-agent-orchestrators
+  reason: Curated list, not a sandbox
+- url: https://github.com/8gi-foundation/8gent-code
+  reason: Coding agent, not a sandbox
+- url: https://github.com/cookiesheep/claude-code-diy
+  reason: Claude Code source tool, not a sandbox
+- url: https://github.com/loonghao/dcc-mcp-core
+  reason: MCP core library, not a sandbox
+- url: https://github.com/shaftoe/awesome-pi-coding-agent
+  reason: Curated list, not a sandbox
+
 # --- Reviewed in issue #15 (2026-04-19) ---
 
 - url: https://github.com/dagucloud/dagu
