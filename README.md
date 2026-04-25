@@ -584,3 +584,5 @@ To add or update a sandbox entry:
 
 The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.
 
+See [docs/strategy-update-2026-04-25.md](docs/strategy-update-2026-04-25.md) for how the landscape is evolving and what we're looking for in new entries.
+

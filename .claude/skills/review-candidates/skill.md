@@ -196,3 +196,16 @@ For false positives (URL works in browser but fails automated check), close with
 - The notes field must add context not already obvious from other fields. "Good sandbox" is not a note. "Uses eBPF syscall interception similar to gVisor but outside the sandbox kernel" is.
 - When in doubt about a borderline case, include it. The repo's ethos is comprehensive coverage with honest notes, not gatekeeping.
 - Don't batch multiple reviews silently. Present each batch of recommendations, get approval, then proceed.
+
+### Raised bar for container-tier additions (as of 2026-04-25)
+
+The standalone sandbox space is maturing. "Runs agents in Docker" is now a commodity feature of agent frameworks, not a standalone product. New container-tier additions should have a clear differentiator not found in existing entries:
+
+- A novel security property (credential proxy, threat detection, audit chain, formal verification)
+- A governance model (diff/commit/rollback, human-in-the-loop approval)
+- A unique operational feature (GUI desktop, Apple Container integration, multi-backend abstraction)
+- A specialized use case (MCP server sandboxing, RL training environments)
+
+A new tool that wraps Docker without adding something beyond what the existing ~20 container-tier entries already cover should be rejected with a note like "no differentiator from existing container-tier entries."
+
+See [docs/strategy-update-2026-04-25.md](docs/strategy-update-2026-04-25.md) for the full analysis behind this guidance.

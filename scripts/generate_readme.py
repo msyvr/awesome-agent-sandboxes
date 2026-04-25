@@ -621,6 +621,10 @@ def generate_part2(entries: list[dict]) -> str:
     sections.append("2. Run `python scripts/generate_readme.py` to regenerate the README")
     sections.append("3. Open a PR\n")
     sections.append("The generate script validates the YAML schema and will fail fast on missing required fields or invalid vocabulary values.\n")
+    sections.append(
+        "See [docs/strategy-update-2026-04-25.md](docs/strategy-update-2026-04-25.md) "
+        "for how the landscape is evolving and what we're looking for in new entries.\n"
+    )
 
     return "\n".join(sections)
 
