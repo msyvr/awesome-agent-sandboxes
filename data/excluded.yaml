@@ -377,6 +377,17 @@
 - url: https://github.com/esengine/reasonix
   reason: Agent framework, not a sandbox
 
+# --- Reviewed in issue #20 (2026-04-24) ---
+
+- url: https://github.com/kortix-ai/suna
+  reason: Agent platform, not a sandbox
+- url: https://github.com/serverlessclaw/serverlessclaw
+  reason: Agent swarm framework, not a sandbox
+- url: https://github.com/sane-apps/SaneProcess
+  reason: Hook-based workflow enforcement, no kernel isolation
+- url: https://github.com/tobyilee/course-builder
+  reason: Agent harness, not a sandbox
+
 # --- Reviewed in issue #15 (2026-04-19) ---
 
 - url: https://github.com/dagucloud/dagu
