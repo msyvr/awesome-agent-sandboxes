@@ -3,6 +3,9 @@
 <details>
 <summary>Daily breakdown (click to expand)</summary>
 
+**2026-04-29** (1 entries)
+- [pixels](#sec-standalone)
+
 **2026-04-27** (2 entries)
 - [pi-sandbox](#sec-agent-integrated)
 - [LINCE](#sec-standalone)
@@ -396,7 +399,7 @@ Three views of the same landscape to help you find what fits.
 |------|-----------|----------|-----------|
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, brood-box, cleanroom, gondolin, cua, +4 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +9 more | Slightly weaker than full VMs; Linux-only for most options. |
-| **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +20 more | Shared kernel means a kernel exploit can bypass isolation. |
+| **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +21 more | Shared kernel means a kernel exploit can bypass isolation. |
 | **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +18 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, Wasmtime, WasmEdge, wasmCloud, +2 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
@@ -406,7 +409,7 @@ Three views of the same landscape to help you find what fits.
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +11 more |
-| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +39 more |
+| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +40 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | Firecracker, gVisor, Kata Containers, libkrun, Zeroboot, +11 more |
 
 #### Where does it run?
@@ -415,7 +418,7 @@ Three views of the same landscape to help you find what fits.
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
 | **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +12 more |
-| **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +40 more |
+| **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +41 more |
 | **Self-hosted** | You host and manage the infrastructure. | Coder, OpenSandbox, Firecracker, gVisor, Kata Containers, +3 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0 |
 
@@ -486,6 +489,7 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 | [nono](https://nono.sh) | Yes | landlock, seatbelt | Unique combination of properties no other tool offers: credential proxy (API keys never enter the sandbox), attestation, and atomic rollback. Easy setup (brew install, then nono run -- claude). Very active development. |
 | [NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell) | Yes (Apache-2.0) | landlock, seccomp | NVIDIA backing gives visibility. OPA/Rego policy support targets enterprise governance workflows. Announced at GTC 2026. |
 | [OpenSandbox](https://github.com/alibaba/OpenSandbox) | Yes | container | Broadest scope of any sandbox — covers evaluation and RL training environments, not just agent sandboxing. |
+| [pixels](https://github.com/deevus/pixels) | Yes (MIT) | container | Second Incus-based entry alongside code-on-incus, but distinct differentiators: ZFS snapshot fan-out makes spinning up N task containers from a "ready" base a first-class primitive, and the built-in MCP server fits the "MCP server sandboxing" specialized use case called out in the raised-bar criteria. Has a SECURITY.md with documented threat model. |
 | [sand](https://github.com/banksean/sand) | Yes (Apache-2.0) | microvm | Apple Containerization gives hardware-isolated micro-VMs (Kata-based) on Apple Silicon. APFS clonefile makes workspace clones instant without copying files. eBPF egress filtering is a notable hardening choice for a solo project. |
 | [sandcastle](https://github.com/mattpocock/sandcastle) | Yes (MIT) | container | Uses Docker containers it creates directly — not delegating to E2B or Daytona. The git branch strategy (agents work on branches, commits merge back) is the differentiator. Useful if you want multi-agent orchestration with isolation included. |
 | [scode](https://binds.ch/blog/scode-sandbox-for-ai-coding-tools/) | Yes | process | Early entry in the space (Sept 2025), motivated by Claude Code's initial lack of built-in sandboxing. |

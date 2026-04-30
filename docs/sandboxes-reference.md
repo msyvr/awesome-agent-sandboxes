@@ -596,6 +596,20 @@ Universal sandbox for AI apps with multi-language SDKs, Docker + K8s runtimes, c
 
 _Notes: Broadest scope of any sandbox — covers evaluation and RL training environments, not just agent sandboxing._
 
+<a id="ref-pixels"></a>
+### pixels
+
+**Maintainer:** deevus (Simon Hartcher) · **License:** MIT · [Home](https://github.com/deevus/pixels)
+
+Disposable Incus container sandboxes for AI coding agents with ZFS-backed snapshot/clone fan-out, nftables egress allowlists, and a built-in MCP server exposing sandbox lifecycle as MCP tools.
+
+- **Isolation:** container
+- **Capabilities:** Incus (LXD-derived) system containers — kernel namespaces and cgroups; ZFS/btrfs-backed snapshots with checkpoint and clone-from-checkpoint workflow; nftables-based egress allowlist (curated AI API list); Restricted sudoers inside container; Built-in MCP server for sandbox lifecycle and file CRUD as MCP tools; Pluggable backends (local Incus, TrueNAS SCALE-managed Incus); Preloaded coding agents (Claude Code, Codex, OpenCode)
+- **Requirements:** Linux with Incus; Optionally TrueNAS SCALE for remote backend
+- **Limitations:** Egress is best-effort — root with cap_net_admin can bypass nftables rules; MCP server path is alpha with weaker isolation than pixels create; MCP daemon relies on loopback binding for auth; Solo maintainer
+
+_Notes: Second Incus-based entry alongside code-on-incus, but distinct differentiators: ZFS snapshot fan-out makes spinning up N task containers from a "ready" base a first-class primitive, and the built-in MCP server fits the "MCP server sandboxing" specialized use case called out in the raised-bar criteria. Has a SECURITY.md with documented threat model._
+
 <a id="ref-sand"></a>
 ### sand
 

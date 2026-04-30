@@ -460,3 +460,18 @@
   reason: Coding agent, not a sandbox
 - url: https://github.com/mishrasanjeev/agentic-org
   reason: Agent orchestration platform, not a sandbox
+
+# --- Reviewed in issue #25 (2026-04-29) ---
+
+- url: https://github.com/jaywcjlove/awesome-mac
+  reason: Curated list, not a sandbox
+- url: https://github.com/ChromeDevTools/chrome-devtools-mcp
+  reason: MCP server for Chrome DevTools, not a sandbox
+- url: https://github.com/nexu-io/open-design
+  reason: Design tool, not a sandbox
+- url: https://github.com/tmgthb/Autonomous-Agents
+  reason: Research papers list, not a sandbox
+- url: https://github.com/hua-bang/pulse-agent
+  reason: Coding agent, not a sandbox
+- url: https://github.com/SponsioLabs/Sponsio
+  reason: User-space LTL policy hooks, no kernel enforcement (positions itself as complement to sandboxing, not a sandbox)
