@@ -3,6 +3,13 @@
 <details>
 <summary>Daily breakdown (click to expand)</summary>
 
+**2026-04-27** (2 entries)
+- [pi-sandbox](#sec-agent-integrated)
+- [LINCE](#sec-standalone)
+
+**2026-04-26** (1 entries)
+- [cua](#sec-standalone)
+
 **2026-04-23** (1 entries)
 - [gocker](#sec-standalone)
 
@@ -387,10 +394,10 @@ Three views of the same landscape to help you find what fits.
 
 | Tier | Mechanism | Examples | Trade-off |
 |------|-----------|----------|-----------|
-| **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, brood-box, cleanroom, gondolin, Firecracker, +3 more | Higher overhead and resource use; requires KVM/hypervisor. |
+| **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, brood-box, cleanroom, gondolin, cua, +4 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +9 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +20 more | Shared kernel means a kernel exploit can bypass isolation. |
-| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +16 more | Weakest containment boundary; not for adversarial workloads. |
+| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +18 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, Wasmtime, WasmEdge, wasmCloud, +2 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
 #### How do I get started?
@@ -399,16 +406,16 @@ Three views of the same landscape to help you find what fits.
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +11 more |
-| **Install a tool** | Install a standalone tool or runtime on your machine. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +36 more |
+| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +39 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | Firecracker, gVisor, Kata Containers, libkrun, Zeroboot, +11 more |
 
 #### Where does it run?
 
 | Model | What it means | Examples |
 |-------|---------------|----------|
-| **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox |
+| **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
 | **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +12 more |
-| **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +38 more |
+| **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +40 more |
 | **Self-hosted** | You host and manage the infrastructure. | Coder, OpenSandbox, Firecracker, gVisor, Kata Containers, +3 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0 |
 
@@ -442,6 +449,7 @@ Sandboxing built directly into AI agent products. These activate automatically o
 |------|------|-----------|-------|
 | [Claude Code Sandbox](https://code.claude.com/docs/en/sandboxing) | No | user-namespace, seatbelt | Demonstrated escape by Ona (March 2026) via dangerouslyDisableSandbox flag. Uses bubblewrap on Linux, Seatbelt on macOS — different mechanisms per OS. |
 | [OpenAI Codex Sandbox](https://developers.openai.com/codex/concepts/sandboxing) | No | container, landlock, seccomp | Only major agent with sandboxing enabled by default. Two-phase model (online setup, offline agent) is a unique security architecture — the agent never has network access during execution. |
+| [pi-sandbox](https://github.com/carderne/pi-sandbox) | Yes (MIT) | seatbelt, user-namespace | Thin agent-specific layer atop Anthropic sandbox-runtime, demonstrating that runtime as a reusable library for non-Anthropic agents. Differentiator over Claude Code's sandbox is the four-tier permission persistence with explicit asymmetric precedence between read and write rules. |
 
 <a id="sec-standalone"></a>
 ### Standalone / Self-Hosted Tools
@@ -460,6 +468,7 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 | [brood-box](https://github.com/stacklok/brood-box) | Yes (Apache-2.0) | kvm, microvm | From Stacklok (founded by Luke Hinds of Sigstore). Hardware VM isolation like cleanroom, but adds TOCTOU-resistant diff review — the VM is stopped before the user reviews changes, preventing the agent from modifying files during review. DNS egress firewall and non-overridable secret exclusions are strong default posture. |
 | [cleanroom](https://github.com/buildkite/cleanroom) | Yes | microvm, kvm | From Buildkite (established CI company). Strongest isolation in recent discovery batches — hardware VM boundary, not containers or namespaces. Credential proxy model is similar to nono (keys never enter the sandbox). cleanroom.yaml per-repo policy is a clean declarative approach. |
 | [code-on-incus](https://github.com/mensfeld/code-on-incus) | Yes (MIT) | container, seccomp | Goes beyond isolation into active defense — the monitoring daemon uses kernel-level nftables packet inspection to detect reverse shells, C2 callbacks, DNS tunneling, and data exfiltration patterns, then auto-pauses or kills the container. Supply-chain hardening (read-only git hooks) is a detail most sandboxes miss. |
+| [cua](https://www.trycua.com) | Yes (MIT) | microvm | Provisions full graphical desktops for macOS, Windows, Linux, and Android — distinct from container/microVM sandboxes that only give Linux shells. One of few options that legally and performantly virtualizes macOS for agent workloads, via Apple Virtualization.framework on Apple Silicon. Designed for visual/UI-driven agents rather than code-execution agents. |
 | [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/) | No | microvm | Very new (March 2026). Multi-agent support is notable — works with most major coding agents out of the box. |
 | [EdgeBox](https://github.com/BIGPPWONG/EdgeBox) | Yes (GPL-3.0) | container | The GUI desktop environment (VNC) is the differentiator — agents can operate browsers and desktop apps, not just execute code. Essentially a self-hosted E2B with a GUI layer for computer-use agent workflows. |
 | [envpod-ce](https://github.com/markamo/envpod-ce) | Yes (BSL-1.1) | user-namespace, seccomp | The diff/commit/rollback workflow is unique — agents work on real host files via an OverlayFS overlay, and changes are staged for human review before committing to the host. Most sandboxes either fully isolate (agent can't touch host files) or don't isolate at all. This is a middle ground that enables real work with reversibility. BSL-1.1 license restricts production use without a commercial license. |
@@ -469,6 +478,7 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 | [hazmat](https://github.com/dredozubov/hazmat) | Yes (MIT) | seatbelt, process | Strongest macOS-specific sandbox — layers everything alcless (user isolation) and Agent Safehouse (Seatbelt) do individually, plus pf firewall and DNS blocklists. TLA+ formal verification of session lifecycle is unusual rigor for a sandbox tool. Honest about limitations (HTTPS exfil, shared /tmp). |
 | [hole](https://github.com/lukashornych/hole) | Yes (Apache-2.0) | container | The --dump-network-access flag is useful for discovering what network access an agent actually needs — similar to Anthropic srt's interactive approval mode but post-hoc. Docker-in-Docker support is unusual and needed for agents that themselves use containers. |
 | [jailoc](https://github.com/seznam/jailoc) | Yes (MIT) | container | Backed by Seznam (Czech search engine). Network isolation via iptables allowlist prevents pivot to internal infra. The DinD sidecar approach avoids the common docker.sock mount escape vector. |
+| [LINCE](https://lince.sh) | Yes (MIT) | user-namespace | Bundled agent-sandbox module is usable independently of the dashboard (agent-sandbox run -a codex). Differentiator is the multi-agent TUI orchestration plus voice input layered on standard bubblewrap isolation, packaged as a complete coding workstation. |
 | [llm-sandbox](https://github.com/vndee/llm-sandbox) | Yes (MIT) | container | Multi-backend support is the differentiator — same API across Docker, Podman, and K8s. Good for sandboxing LLM-generated code execution specifically. SonarCloud + codecov CI suggests reasonable code quality standards. |
 | [locki](https://github.com/JanPokorny/locki) | Yes | kvm, container | One of the few sandboxes that layers VM (Lima/QEMU) plus container (Incus) for coding agents — interesting design worth tracking. Author is candid about "no security guarantees" in the README. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |
 | [microsandbox](https://github.com/zerocore-ai/microsandbox) | Yes | microvm | Local-first is the key differentiator — no credentials leave your machine. Good for privacy-conscious users handling sensitive API keys. |

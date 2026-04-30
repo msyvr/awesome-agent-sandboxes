@@ -415,3 +415,48 @@
   reason: List, not a sandbox
 - url: https://github.com/akillness/oh-my-skills
   reason: Skills configs, not a sandbox
+
+# --- Reviewed in issues #22, #23, #24 (2026-04-26 to 2026-04-28) ---
+
+- url: https://github.com/rust-unofficial/awesome-rust
+  reason: Curated list, not a sandbox
+- url: https://github.com/Dicklesworthstone/beads_rust
+  reason: Issue tracker, not a sandbox
+- url: https://github.com/Dicklesworthstone/pi_agent_rust
+  reason: AI coding agent, not a sandbox
+- url: https://github.com/itgoyo/awesome-agent-skills
+  reason: Curated list, not a sandbox
+- url: https://github.com/viktorbezdek/skillstack
+  reason: Skills collection, not a sandbox
+- url: https://github.com/phact/agentd
+  reason: Agent framework that delegates to existing sandboxes (microsandbox, Anthropic sandbox-runtime), not a distinct sandbox
+- url: https://github.com/sipyourdrink-ltd/bernstein
+  reason: Multi-agent orchestrator, isolation delegated to existing backends (E2B/Modal/Docker), not a sandbox itself
+- url: https://github.com/joelazar/dotfiles
+  reason: Dotfiles, not a sandbox
+- url: https://github.com/nirholas/defi-agents
+  reason: DeFi agent definitions, not a sandbox
+- url: https://github.com/Growth-Circle/cadis
+  reason: Pre-alpha agent runtime with soft policy gating, no kernel/container/VM isolation
+- url: https://github.com/thePM001/AEP-agent-element-protocol
+  reason: Governance/policy protocol with no kernel enforcement, not a sandbox
+- url: https://github.com/wangmanqin/sciagent-thermal
+  reason: Scientific computing agent, not a sandbox
+- url: https://github.com/jackzhaojin/continuous-agent
+  reason: Agent framework, not a sandbox
+- url: https://github.com/liliang-cn/agent-go
+  reason: Agent SDK for Go, not a sandbox
+- url: https://github.com/phanbaohuy96/flutter_base_structure
+  reason: Flutter project template, not a sandbox
+- url: https://github.com/quemsah/awesome-claude-plugins
+  reason: Plugin metrics collection, not a sandbox
+- url: https://github.com/AIOSAI/AIPass
+  reason: Multi-agent framework, not a sandbox
+- url: https://github.com/kivo360/OmoiOS
+  reason: Multi-agent orchestration, not a sandbox
+- url: https://github.com/drvoss/everything-copilot-cli
+  reason: Copilot CLI configuration system, not a sandbox
+- url: https://github.com/phuetz/code-buddy
+  reason: Coding agent, not a sandbox
+- url: https://github.com/mishrasanjeev/agentic-org
+  reason: Agent orchestration platform, not a sandbox

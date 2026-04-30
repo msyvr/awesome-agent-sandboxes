@@ -408,6 +408,41 @@
   adoption_effort: zero-config
   deployment_model: built-in
 
+- name: pi-sandbox
+  category: agent-integrated
+  maintainer: carderne (Chris Arderne)
+  open_source: true
+  license: MIT
+  url: https://github.com/carderne/pi-sandbox
+  repo_url: https://github.com/carderne/pi-sandbox
+  description: Sandbox extension for the pi coding agent that wraps bash subprocesses with macOS sandbox-exec / Linux bubblewrap and intercepts read/write/edit tool calls with allow/deny lists and interactive permission prompts.
+  isolation_type: [seatbelt, user-namespace]
+  capabilities:
+    - macOS Seatbelt (sandbox-exec) for bash subprocesses
+    - Linux bubblewrap for bash subprocesses
+    - In-process policy enforcement for read/write/edit tools
+    - Four-tier permission persistence (Abort / session / project / global)
+    - Asymmetric read/write rule precedence (denyWrite is hard-block, denyRead is overridable default)
+    - Project config via .pi/sandbox.json, global via ~/.pi/agent/sandbox.json
+    - /sandbox slash command in pi
+  requirements:
+    - pi coding agent
+    - macOS or Linux
+    - Anthropic sandbox-runtime
+    - ripgrep
+  limitations:
+    - Specific to pi agent only
+    - In-process file tool policy is not OS-enforced
+    - README acknowledges example browser config opens "significant security loopholes"
+  notes: >-
+    Thin agent-specific layer atop Anthropic sandbox-runtime, demonstrating
+    that runtime as a reusable library for non-Anthropic agents. Differentiator
+    over Claude Code's sandbox is the four-tier permission persistence with
+    explicit asymmetric precedence between read and write rules.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: built-in
+
 - name: Docker Sandboxes
   category: standalone
   maintainer: Docker
@@ -1341,6 +1376,76 @@
     credential model to nono and cleanroom but with a TypeScript
     programmable control plane rather than CLI/config.
   isolation_tier: hardware-vm
+  adoption_effort: install
+  deployment_model: local
+
+- name: cua
+  category: standalone
+  maintainer: trycua
+  open_source: true
+  license: MIT
+  url: https://www.trycua.com
+  repo_url: https://github.com/trycua/cua
+  description: Open-source infrastructure for computer-use agents providing OS-level VM sandboxes (macOS, Windows, Linux, Android) via QEMU and Apple Virtualization.framework with a unified SDK for screen, mouse, and keyboard control.
+  isolation_type: [microvm]
+  capabilities:
+    - Multi-OS desktop sandboxes (macOS, Windows, Linux, Android)
+    - Apple Virtualization.framework on Apple Silicon (Lume)
+    - QEMU-based VMs for Linux/Windows (lumier)
+    - Unified SDK for screen capture, mouse, keyboard, multi-touch
+    - Computer-use agent benchmarks (OSWorld, ScreenSpot, Windows Arena)
+    - Optional cuabot wrapper with H.265 streaming and shared clipboard
+    - BYOI .qcow2/.iso support
+    - Optional cua.ai cloud-managed offering
+  requirements:
+    - macOS, Linux, or Windows (depending on backend)
+    - Apple Silicon for native macOS VMs via Lume
+  limitations:
+    - Bundled "Cua Driver" component runs unsandboxed on host (use Sandbox/Lume/cuabot for isolation)
+    - Optional ML components include AGPL-3.0 (ultralytics) and CC-BY-4.0 (OmniParser)
+  notes: >-
+    Provisions full graphical desktops for macOS, Windows, Linux, and Android
+    — distinct from container/microVM sandboxes that only give Linux shells.
+    One of few options that legally and performantly virtualizes macOS for
+    agent workloads, via Apple Virtualization.framework on Apple Silicon.
+    Designed for visual/UI-driven agents rather than code-execution agents.
+  isolation_tier: hardware-vm
+  adoption_effort: install
+  deployment_model: local
+
+- name: LINCE
+  category: standalone
+  maintainer: RisorseArtificiali
+  open_source: true
+  license: MIT
+  url: https://lince.sh
+  repo_url: https://github.com/RisorseArtificiali/lince
+  description: Multi-agent TUI dashboard (Zellij-based) that orchestrates parallel CLI coding agents inside a bundled bubblewrap-based agent-sandbox module, with experimental nono backend on macOS.
+  isolation_type: [user-namespace]
+  capabilities:
+    - Bubblewrap-based agent-sandbox module (usable independently)
+    - Filesystem isolation and bind-mount control
+    - Environment variable filtering
+    - Process namespace isolation (hides host processes)
+    - Blocks git push out of sandbox
+    - Multi-agent parallel execution via Zellij panes (up to 8 agents)
+    - Real-time status and token tracking dashboard
+    - VoxCode/Whisper voice input integration
+    - Experimental macOS support via nono backend
+  requirements:
+    - Linux (Fedora 43 tested; Ubuntu/Debian/Arch claimed)
+    - bubblewrap
+    - Zellij
+  limitations:
+    - macOS support flagged experimental (delegates to nono)
+    - Standard bubblewrap isolation, no novel security primitive
+    - Early-stage (16 stars)
+  notes: >-
+    Bundled agent-sandbox module is usable independently of the dashboard
+    (agent-sandbox run -a codex). Differentiator is the multi-agent TUI
+    orchestration plus voice input layered on standard bubblewrap isolation,
+    packaged as a complete coding workstation.
+  isolation_tier: process
   adoption_effort: install
   deployment_model: local
 
