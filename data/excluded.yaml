@@ -475,3 +475,26 @@
   reason: Coding agent, not a sandbox
 - url: https://github.com/SponsioLabs/Sponsio
   reason: User-space LTL policy hooks, no kernel enforcement (positions itself as complement to sandboxing, not a sandbox)
+
+# --- Reviewed in issue #26 (2026-04-30) ---
+
+- url: https://github.com/AgentsMesh/AgentsMesh
+  reason: AI agent workforce platform / orchestration, not a sandbox
+- url: https://github.com/fastclaw-ai/fastclaw
+  reason: Coding agent (openclaw alternative), not a sandbox
+- url: https://github.com/Aradotso/trending-skills
+  reason: Auto-generated skills collection, not a sandbox
+- url: https://github.com/gossipcat-ai/gossipcat-ai
+  reason: Multi-agent code-review orchestration, not a sandbox
+- url: https://github.com/accuknox/agentic-ai-strands
+  reason: One-off demo Flask app showcasing KubeArmor; the thing being sandboxed, not a reusable sandbox
+- url: https://github.com/neo4j-field/neo4j-mcp-workspace-template
+  reason: MCP template repo for Neo4j, not a sandbox
+- url: https://github.com/jwbron/egg
+  reason: Multi-agent SDLC pipeline; isolation delegated to k3s, governance is application-layer policy
+- url: https://github.com/octo-patch/MorningAI
+  reason: AI news tracking skill, not a sandbox
+- url: https://github.com/eminwux/kukeon
+  reason: Containerd orchestrator (alpha), isolation fully delegated to containerd+CNI+cgroups with no novel security property
+- url: https://github.com/spences10/my-pi
+  reason: Composable pi coding agent, not a sandbox
