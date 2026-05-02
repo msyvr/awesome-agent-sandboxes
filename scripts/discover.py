@@ -34,6 +34,13 @@ SEARCH_QUERIES = [
 MIN_STARS = 5
 MAX_STALENESS_MONTHS = 12
 
+# Hosts whose Cloudflare JS-challenge protection blocks all automated requests
+# regardless of User-Agent or headers. Only a real browser engine can pass.
+# Skip staleness checks for these — manual review required if URLs change.
+STALENESS_SKIP_HOSTS = {
+    "codesandbox.io",
+}
+
 
 def get_headers(token: str | None) -> dict:
     headers = {"Accept": "application/vnd.github+json"}
@@ -201,6 +208,8 @@ def check_staleness(token: str | None, yaml_path: Path) -> list[dict]:
     for entry in entries:
         url = entry.get("url")
         if not url or "github.com" in url.lower():
+            continue
+        if any(host in url.lower() for host in STALENESS_SKIP_HOSTS):
             continue
         status = None
         try:
