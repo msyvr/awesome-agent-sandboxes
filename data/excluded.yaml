@@ -498,3 +498,25 @@
   reason: Containerd orchestrator (alpha), isolation fully delegated to containerd+CNI+cgroups with no novel security property
 - url: https://github.com/spences10/my-pi
   reason: Composable pi coding agent, not a sandbox
+
+# --- Reviewed in issue #28 (2026-05-01) ---
+
+- url: https://github.com/badrisnarayanan/antigravity-claude-proxy
+  reason: Auth/model proxy for Antigravity, not a sandbox
+- url: https://github.com/raine/workmux
+  reason: git worktree + tmux manager, no kernel enforcement
+- url: https://github.com/Vinix24/vnx-orchestration
+  reason: Governance-first orchestrator with audit chains over commodity git-worktree isolation; codex gate even uses --dangerously-bypass-approvals-and-sandbox
+- url: https://github.com/zapplyjobs/New-Grad-Software-Engineering-Jobs-2026
+  reason: Job listings repo, not a sandbox
+- url: https://github.com/yschimke/compose-ai-tools
+  reason: Compose Multiplatform AI tooling, not a sandbox
+- url: https://github.com/lllyys/vreader
+  reason: iOS reader app, not a sandbox
+
+# --- Reviewed in issue #30 (2026-05-02) ---
+
+- url: https://github.com/barun-saha/kodeagent
+  reason: Minimal AI agent engine, not a sandbox
+- url: https://github.com/gosha70/code-copilot-team
+  reason: Multi-agent project templates / skill collection, not a sandbox
