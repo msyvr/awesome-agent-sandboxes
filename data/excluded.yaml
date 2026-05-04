@@ -520,3 +520,16 @@
   reason: Minimal AI agent engine, not a sandbox
 - url: https://github.com/gosha70/code-copilot-team
   reason: Multi-agent project templates / skill collection, not a sandbox
+
+# --- Reviewed in issue #32 (2026-05-03) ---
+
+- url: https://github.com/doctarock/local-ai-home-assistant
+  reason: Home Assistant integration, not a sandbox
+- url: https://github.com/overdrive-sh/overdrive
+  reason: General-purpose Kubernetes/Nomad competitor that composes existing isolation primitives, not agent-focused
+- url: https://github.com/taka-avantgarde/Due-diligence-engine
+  reason: VC technical due diligence tool, not a sandbox
+- url: https://github.com/wlejon/bro
+  reason: Local app builder (HTML/CSS/JS), not a sandbox
+- url: https://github.com/KoinaAI/MiMo-CLI
+  reason: Coding agent for Xiaomi Mimo, not a sandbox
