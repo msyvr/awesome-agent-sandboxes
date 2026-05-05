@@ -209,3 +209,16 @@ The standalone sandbox space is maturing. "Runs agents in Docker" is now a commo
 A new tool that wraps Docker without adding something beyond what the existing ~20 container-tier entries already cover should be rejected with a note like "no differentiator from existing container-tier entries."
 
 See [docs/strategy-update-2026-04-25.md](docs/strategy-update-2026-04-25.md) for the full analysis behind this guidance.
+
+### Reject governance-orchestrator pattern without investigation (as of 2026-05-05)
+
+The EU AI Act becomes enforceable in August 2026, classifying multi-agent orchestration in high-impact sectors as "high-risk" and demanding immutable audit trails, human-in-the-loop, and incident testing. This has produced a wave of compliance-flavored orchestrators. Already rejected with this exact pattern: bernstein, kukeon, egg, vnx-orchestration, cadis, agentic-org.
+
+**Auto-reject** without investigation if the candidate description includes ALL of:
+- Orchestrates multiple agents/CLIs (Claude Code, Codex, Gemini, etc.) in parallel
+- Names governance/audit/receipts/dispatch-chain features prominently
+- Isolation is git worktree, Docker, or k3s (not novel kernel enforcement)
+
+These layer audit chains over commodity isolation; they're chasing compliance signaling, not security primitives. The audit chain is a governance feature that does not qualify as a sandbox unless paired with a novel isolation property the existing entries lack. vnx-orchestration even shipped with `--dangerously-bypass-approvals-and-sandbox` on its codex gate, demonstrating the pattern: governance receipts on, real sandbox off.
+
+Note in the rejection: "Governance-orchestrator pattern (audit chain over delegated isolation) — same as bernstein/kukeon/egg/vnx."

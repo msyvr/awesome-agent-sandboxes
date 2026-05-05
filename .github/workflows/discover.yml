@@ -2,8 +2,11 @@ name: Discover New Sandboxes
 
 on:
   schedule:
-    # Daily at 9am UTC (switch to weekly "0 9 * * 1" once stable)
-    - cron: "0 9 * * *"
+    # Weekly: Mondays at 9am UTC. The yield curve flattened to 0–1 adds/day
+    # by late April 2026 (see docs/strategy-update-2026-04-25.md), and noise
+    # from EU-AI-Act-driven governance orchestrators makes daily discovery
+    # net-negative. Weekly is sufficient.
+    - cron: "0 9 * * 1"
   workflow_dispatch:
 
 permissions:
