@@ -3,6 +3,13 @@
 <details>
 <summary>Daily breakdown (click to expand)</summary>
 
+**2026-05-05** (2 entries)
+- [agentbox-sdk](#sec-abstraction)
+- [agent_sandbox](#sec-standalone)
+
+**2026-05-04** (1 entries)
+- [loop](#sec-agent-integrated)
+
 **2026-04-29** (1 entries)
 - [pixels](#sec-standalone)
 
@@ -398,9 +405,9 @@ Three views of the same landscape to help you find what fits.
 | Tier | Mechanism | Examples | Trade-off |
 |------|-----------|----------|-----------|
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, brood-box, cleanroom, gondolin, cua, +4 more | Higher overhead and resource use; requires KVM/hypervisor. |
-| **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +9 more | Slightly weaker than full VMs; Linux-only for most options. |
+| **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +10 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +21 more | Shared kernel means a kernel exploit can bypass isolation. |
-| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +18 more | Weakest containment boundary; not for adversarial workloads. |
+| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +20 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, Wasmtime, WasmEdge, wasmCloud, +2 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
 #### How do I get started?
@@ -409,7 +416,7 @@ Three views of the same landscape to help you find what fits.
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +11 more |
-| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +40 more |
+| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), +43 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | Firecracker, gVisor, Kata Containers, libkrun, Zeroboot, +11 more |
 
 #### Where does it run?
@@ -417,8 +424,8 @@ Three views of the same landscape to help you find what fits.
 | Model | What it means | Examples |
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
-| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +12 more |
-| **Local** | Runs on your machine, data stays local. | Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, Agent Safehouse, +41 more |
+| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +13 more |
+| **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +43 more |
 | **Self-hosted** | You host and manage the infrastructure. | Coder, OpenSandbox, Firecracker, gVisor, Kata Containers, +3 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0 |
 
@@ -451,6 +458,7 @@ Sandboxing built directly into AI agent products. These activate automatically o
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
 | [Claude Code Sandbox](https://code.claude.com/docs/en/sandboxing) | No | user-namespace, seatbelt | Demonstrated escape by Ona (March 2026) via dangerouslyDisableSandbox flag. Uses bubblewrap on Linux, Seatbelt on macOS — different mechanisms per OS. |
+| [loop](https://github.com/radutopala/loop) | Yes (Apache-2.0) | container, seccomp | Differentiator vs commodity Docker-tier entries is the seccomp RET_USER_NOTIF + chat-routed HITL approval stack: kernel-parked traps resume only on SECCOMP_IOCTL_NOTIF_SEND with the CONTINUE flag, with path arguments read via process_vm_readv and symlink-resolved before the chat card is rendered. README credits agentsh for design inspiration; novel axis here is HITL governance via team chat rather than CLI prompts. ~11,500 LOC with a 1:1 test ratio despite low star count — code is production-grade on the security-critical paths. |
 | [OpenAI Codex Sandbox](https://developers.openai.com/codex/concepts/sandboxing) | No | container, landlock, seccomp | Only major agent with sandboxing enabled by default. Two-phase model (online setup, offline agent) is a unique security architecture — the agent never has network access during execution. |
 | [pi-sandbox](https://github.com/carderne/pi-sandbox) | Yes (MIT) | seatbelt, user-namespace | Thin agent-specific layer atop Anthropic sandbox-runtime, demonstrating that runtime as a reusable library for non-Anthropic agents. Differentiator over Claude Code's sandbox is the four-tier permission persistence with explicit asymmetric precedence between read and write rules. |
 
@@ -463,6 +471,7 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 |------|------|-----------|-------|
 | [Agent Safehouse](https://github.com/eugene1g/agent-safehouse) | Yes | seatbelt | More mature than it appears — has CI tests, docs site, and thoughtful profile composition. The most polished macOS-specific sandboxing option. |
 | [agent-infra/sandbox](https://github.com/agent-infra/sandbox) | Yes | container | Kitchen-sink approach — good for prototyping and development, less suitable for security-critical production use. |
+| [agent_sandbox](https://github.com/katosh/agent_sandbox) | Yes (MIT) | user-namespace, landlock, seccomp | Only sandbox surveyed with first-class HPC/Slurm awareness — the chaperon proxy intercepts Slurm submission and wraps job commands so an agent cannot escape by submitting an unsandboxed job to a compute node. Munge auth is deliberately blocked inside the sandbox so only the outside chaperon can submit. Bind-mount filesystem isolation returns ENOENT rather than EACCES, which sidesteps the ld-linux and /proc/self/root evasions that have hit Landlock-allowlist sandboxes. Ships with a 32 KB threat model and a documented pentest cycle. |
 | [agentsh](https://github.com/canyonroad/agentsh) | Yes (Apache-2.0) | process, landlock, seatbelt | Real runtime enforcement, not just wrapping. The "redirect" policy decision is unusual — can transparently steer agent network calls or out-of-workspace writes to scratch dirs without the agent knowing it was redirected. |
 | [ai-sandbox-wrapper](https://github.com/nano-step/ai-sandbox-wrapper) | Yes | container | Opinionated hardening over default Docker — capability dropping and Git fetch-only mode are substantive choices most Docker wrappers don't make. No license means the code is technically all-rights-reserved by default; consider asking the author to add one before relying on it. |
 | [aide](https://github.com/jskswamy/aide) | Yes (MIT) | seatbelt | The capability model is the differentiator — 19 built-in capabilities (docker, k8s, aws, etc.) with composable grants and never-allow hard denials. More opinionated than fence or Agent Safehouse about what agents should be allowed to do. Linux sandbox is planned but not yet implemented. |
@@ -529,6 +538,7 @@ SDKs and frameworks that abstract across multiple sandbox providers.
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
+| [agentbox-sdk](https://github.com/TwillAI/agentbox-sdk) | Yes (MIT) | microvm, container | Differentiator vs other abstraction-tier entries is heterogeneous-protocol agent transport: each upstream agent is reached via its native protocol rather than CLI-wrapped, so mid-run interactivity, approval flows, and sub-agent orchestration survive being inside a sandbox. ComputeSDK is closed-source and sandbox-only; LangChain Sandboxes is framework-bound; NanoClaw is Claude-only; AgentScope Runtime is Python-only and ships its own agent framework. |
 | [AgentScope Runtime](https://github.com/agentscope-ai/agentscope-runtime) | Yes (Apache-2.0) | container, gvisor | Real sandbox depth despite being a runtime framework — pre-built images covering GUI (VNC), browser, and mobile (Android emulator) environments go well beyond typical container sandboxes. Multiple sandbox backends (Docker, gVisor, BoxLite, K8s) abstracted behind a single API. |
 | [ComputeSDK](https://www.computesdk.com) | No | microvm, container | Useful if you want to avoid vendor lock-in. Isolation strength depends entirely on the chosen backend provider. |
 | [LangChain Sandboxes](https://docs.langchain.com/oss/python/deepagents/sandboxes) | Yes | container | Only relevant if already using LangChain. The sandbox capabilities come from the underlying provider, not LangChain itself. |

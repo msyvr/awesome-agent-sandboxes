@@ -174,6 +174,20 @@ Native OS-level sandboxing using bubblewrap (Linux) and Seatbelt/sandbox-exec (m
 
 _Notes: Demonstrated escape by Ona (March 2026) via dangerouslyDisableSandbox flag. Uses bubblewrap on Linux, Seatbelt on macOS — different mechanisms per OS._
 
+<a id="ref-loop"></a>
+### loop
+
+**Maintainer:** radutopala (Radu Topala) · **License:** Apache-2.0 · [Home](https://github.com/radutopala/loop)
+
+Multi-platform (desktop, Slack, Discord) Claude Code runner that traps syscalls inside Docker containers via seccomp RET_USER_NOTIF and routes each trap to a three-button chat approval card, with a body-filtering Docker API proxy as a second gate.
+
+- **Isolation:** container, seccomp
+- **Capabilities:** Hand-written seccomp BPF filter via RET_USER_NOTIF traps 12 syscalls (connect, execve, execveat, openat, openat2, renameat2, unlinkat, linkat, symlinkat, fchmodat, fchownat, mkdirat); ERRNO-denies io_uring family (closes seccomp bypass); PR_SET_NO_NEW_PRIVS + TSYNC; arch-locked with kill-process on mismatch; Trap blocks in kernel's seccomp_do_user_notification until chat click resolves; Three-button approval cards (once / session / deny / deny-session) routed to Slack or Discord; Per-container Approval Manager caches session decisions; rate limits; Docker HTTP proxy with JSONPath-lite body filtering on POST /containers/create; Symlink-resolved bind-mount source paths to defeat /workdir/link bind-escape; Bundles Claude Code; desktop, Slack, and Discord front-ends
+- **Requirements:** Linux (seccomp RET_USER_NOTIF is Linux-only); Docker
+- **Limitations:** Solo maintainer; project ~3 months old at time of inclusion; Approval UX depends on a responsive operator or session-cached "allow"; macOS and Windows not supported
+
+_Notes: Differentiator vs commodity Docker-tier entries is the seccomp RET_USER_NOTIF + chat-routed HITL approval stack: kernel-parked traps resume only on SECCOMP_IOCTL_NOTIF_SEND with the CONTINUE flag, with path arguments read via process_vm_readv and symlink-resolved before the chat card is rendered. README credits agentsh for design inspiration; novel axis here is HITL governance via team chat rather than CLI prompts. ~11,500 LOC with a 1:1 test ratio despite low star count — code is production-grade on the security-critical paths._
+
 <a id="ref-openai-codex-sandbox"></a>
 ### OpenAI Codex Sandbox
 
@@ -231,6 +245,20 @@ All-in-one sandbox combining Browser, Shell, File management, MCP, and VSCode Se
 - **Limitations:** Container isolation only (shared kernel); Monolithic design
 
 _Notes: Kitchen-sink approach — good for prototyping and development, less suitable for security-critical production use._
+
+<a id="ref-agent-sandbox"></a>
+### agent_sandbox
+
+**Maintainer:** katosh · **License:** MIT · [Home](https://github.com/katosh/agent_sandbox)
+
+Kernel-enforced user-space sandbox for AI coding agents with multi-backend isolation (bubblewrap, firejail, Landlock LSM) and a Slurm "chaperon" proxy that propagates sandboxing onto HPC compute nodes.
+
+- **Isolation:** user-namespace, landlock, seccomp
+- **Capabilities:** Bubblewrap primary backend (user namespaces + bind mounts, no setuid required); Firejail and Landlock LSM fallback backends; Generated seccomp-BPF filters per syscall (x86_64 and aarch64); Slurm chaperon proxy wrapping sbatch/srun/squeue/scancel/scontrol/sacct/sacctmgr; In-sandbox Slurm stubs talk to outside chaperon via named pipes; Whitelist validation of Slurm flags; denies --pty/--container/--uid/--prolog/--bcast/--get-user-env; Sandbox-exec wrapping injected onto allocated compute nodes; Supports Claude Code, Codex, Gemini, Aider, OpenCode, pi-mono
+- **Requirements:** Linux; Bubblewrap (or firejail/Landlock-capable kernel)
+- **Limitations:** Linux-only — no macOS path; No egress allowlist or credential proxy (acknowledged in landscape doc); Author flags as "best-effort user-space isolation, not a security product"; Young project (2 critical / 3 high pentest findings documented and addressed)
+
+_Notes: Only sandbox surveyed with first-class HPC/Slurm awareness — the chaperon proxy intercepts Slurm submission and wraps job commands so an agent cannot escape by submitting an unsandboxed job to a compute node. Munge auth is deliberately blocked inside the sandbox so only the outside chaperon can submit. Bind-mount filesystem isolation returns ENOENT rather than EACCES, which sidesteps the ld-linux and /proc/self/root evasions that have hit Landlock-allowlist sandboxes. Ships with a 32 KB threat model and a documented pentest cycle._
 
 <a id="ref-agentsh"></a>
 ### agentsh
@@ -825,6 +853,20 @@ Pivoted from CDE to "mission control for AI agents" with sandboxed dev environme
 _Notes: Major pivot from Gitpod (rebranded Sept 2025). Demonstrated Claude Code sandbox escape (March 2026). Not agent-specific but increasingly agent-oriented._
 
 ## Abstraction Layers
+
+<a id="ref-agentbox-sdk"></a>
+### agentbox-sdk
+
+**Maintainer:** TwillAI · **License:** MIT · [Home](https://github.com/TwillAI/agentbox-sdk)
+
+TypeScript SDK that runs coding agents (Claude Code, opencode, codex) as server processes inside swappable sandbox backends (E2B, Modal, Daytona, Vercel, local Docker), each agent reached over its upstream-native protocol.
+
+- **Isolation:** microvm, container
+- **Capabilities:** Five sandbox backends (E2B, Modal, Daytona, Vercel, local-docker); Native-protocol agent transports — Claude Code custom HTTP daemon, opencode SSE with Last-Event-ID resume, codex JSON-RPC WebSocket; Mid-run message injection into a running agent stream; Interactive approval flows preserved across backends; Sub-agent orchestration
+- **Requirements:** Node.js / TypeScript; Account with chosen backend provider (E2B/Modal/Daytona/Vercel) or local Docker
+- **Limitations:** No LICENSE file in repo as of 2026-05-12 (package.json declares MIT); Isolation strength entirely dictated by chosen backend; Pre-release — no formal versions cut yet
+
+_Notes: Differentiator vs other abstraction-tier entries is heterogeneous-protocol agent transport: each upstream agent is reached via its native protocol rather than CLI-wrapped, so mid-run interactivity, approval flows, and sub-agent orchestration survive being inside a sandbox. ComputeSDK is closed-source and sandbox-only; LangChain Sandboxes is framework-bound; NanoClaw is Claude-only; AgentScope Runtime is Python-only and ships its own agent framework._
 
 <a id="ref-agentscope-runtime"></a>
 ### AgentScope Runtime

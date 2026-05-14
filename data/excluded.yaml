@@ -533,3 +533,52 @@
   reason: Local app builder (HTML/CSS/JS), not a sandbox
 - url: https://github.com/KoinaAI/MiMo-CLI
   reason: Coding agent for Xiaomi Mimo, not a sandbox
+
+# --- Reviewed in issue #33 (2026-05-04) ---
+
+- url: https://github.com/laur89/awesome-stars
+  reason: Auto-generated star list
+- url: https://github.com/datagouv/apistration
+  reason: French government API site, not a sandbox
+- url: https://github.com/Dicklesworthstone/Dicklesworthstone
+  reason: GitHub profile README
+- url: https://github.com/yottayoshida/omamori
+  reason: Author self-classifies as "not a sandbox" — userspace PATH shims and PreToolUse hooks, no kernel enforcement
+
+# --- Reviewed in issue #34 (2026-05-05) ---
+
+- url: https://github.com/vercel/ai
+  reason: TypeScript AI SDK, not a sandbox
+- url: https://github.com/chenhg5/cc-connect
+  reason: Messaging platform bridge for AI CLI tools, not a sandbox
+- url: https://github.com/openclaw/acpx
+  reason: Headless ACP protocol CLI client, not a sandbox
+- url: https://github.com/omnirexflora-labs/omnicoreagent
+  reason: Python framework for building autonomous AI agents, not a sandbox
+- url: https://github.com/williamwa/openhermit
+  reason: Agent deployment platform, not a sandbox
+- url: https://github.com/adithya-s-k/RL_Envs_101
+  reason: RL environments tutorial repo, not a sandbox
+- url: https://github.com/Sungmin-Cho/claude-deep-suite
+  reason: Plugin marketplace, not a sandbox
+
+# --- Reviewed in issue #35 (2026-05-11) ---
+
+- url: https://github.com/asgeirtj/system_prompts_leaks
+  reason: Collection of leaked system prompts, not a sandbox
+- url: https://github.com/nomi-sec/PoC-in-GitHub
+  reason: Auto-collected malware PoCs, not a sandbox
+- url: https://github.com/spiceai/spiceai
+  reason: SQL query and LLM inference engine, not a sandbox
+- url: https://github.com/TheMorpheus407/RepoLens
+  reason: Multi-agent code audit tool, not a sandbox
+- url: https://github.com/Azure/git-ape
+  reason: Governance-orchestrator pattern (audit chain over delegated execution; Copilot/Actions are the execution substrate, not an isolation boundary)
+- url: https://github.com/mixpeek/amux
+  reason: tmux-based Claude Code multiplexer with --yolo bypass; explicitly contrasts itself with sandboxed approach (no isolation)
+- url: https://github.com/vobase/vobase
+  reason: App framework for AI coding agents, not a sandbox
+- url: https://github.com/Dicklesworthstone/storage_ballast_helper
+  reason: Disk-full prevention daemon, not a sandbox
+- url: https://github.com/Dragooon/stockade
+  reason: Governance-orchestrator pattern (audit chain over delegated Docker isolation) — same as bernstein/kukeon/egg/vnx

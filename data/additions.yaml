@@ -128,3 +128,12 @@
 - date: "2026-04-29"
   entries:
     - pixels
+
+- date: "2026-05-04"
+  entries:
+    - loop
+
+- date: "2026-05-05"
+  entries:
+    - agentbox-sdk
+    - agent_sandbox
