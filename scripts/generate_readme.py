@@ -425,27 +425,34 @@ CHART_REL_PATH = "docs/additions-chart.svg"
 
 
 def generate_additions_chart(additions: list[dict]) -> None:
-    """Generate a static PNG bar chart of discovery additions.
+    """Generate a static bar chart of discovery additions, bucketed by ISO week.
 
-    Excludes the initial seed to keep the scale readable. Saves to
-    docs/additions-chart.png.
+    Excludes the initial seed to keep the scale readable. Each bar represents
+    entries added in a Monday-starting week; the x-axis label is the week's
+    Monday (MM-DD). Saves to docs/additions-chart.svg.
     """
+    from collections import defaultdict
+    from datetime import date, timedelta
+
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import matplotlib.ticker as ticker
 
-    seed = additions[0] if additions else None
     discovery = additions[1:] if len(additions) > 1 else []
 
     if not discovery:
         return
 
-    seed_count = len(seed["entries"]) if seed else 0
-    seed_date = seed["date"] if seed else "unknown"
+    weekly: dict[str, int] = defaultdict(int)
+    for addition in discovery:
+        day = date.fromisoformat(addition["date"])
+        week_start = day - timedelta(days=day.weekday())
+        weekly[week_start.isoformat()] += len(addition["entries"])
 
-    dates = [a["date"][5:] for a in discovery]
-    counts = [len(a["entries"]) for a in discovery]
+    sorted_weeks = sorted(weekly.keys())
+    dates = [w[5:] for w in sorted_weeks]
+    counts = [weekly[w] for w in sorted_weeks]
     max_count = max(counts)
 
     BAR_COLOR = "#e87043"  # Claude Code orange
