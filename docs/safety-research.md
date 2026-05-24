@@ -2,6 +2,16 @@
 
 This guide covers sandbox selection for safety and alignment research, including RL training, capability evaluation, and adversarial red-teaming. These contexts have fundamentally different containment requirements — what's overkill for RL training may be dangerously insufficient for red-teaming.
 
+## How safety researchers approach sandboxing now (2026)
+
+The practitioner question — "how do I stop an agent wrecking my machine?" — is only part of the alignment-research picture. Three shifts define how safety researchers use sandboxes today:
+
+- **The sandbox is eval infrastructure.** Dangerous-capability evaluations run agents inside sandboxes so frontier models can be probed without real-world blast radius. The UK AI Security Institute's [Inspect Sandboxing Toolkit](https://www.aisi.gov.uk/blog/the-inspect-sandboxing-toolkit-scalable-and-secure-ai-agent-evaluations) is purpose-built for scalable, secure agent evals — the sandbox is research apparatus, not just a safety net.
+- **AI control: the box is one layer, not the mechanism.** [Redwood Research](https://blog.redwoodresearch.org/p/guide)'s control agenda assumes the untrusted model may be actively scheming and designs *protocols* — trusted-model monitoring, interrogation, factored cognition, separation-of-duties — that aim to hold even if the model is adversarial. Evaluated against agentic environments like SHADE-Arena (see [Evaluating Control Protocols for Untrusted AI Agents](https://arxiv.org/abs/2511.02997)) and extended by work such as [TraceGuard](https://arxiv.org/abs/2604.03968) (Apart × Redwood, March 2026) and [Factor(T,U)](https://arxiv.org/abs/2512.02157). Containment is necessary, but the safety claim rests on monitoring as much as on the sandbox wall.
+- **Escape and situational awareness are measured, not assumed.** [SandboxEscapeBench](https://arxiv.org/abs/2603.02277) (open source at [UKGovernmentBEIS/sandbox_escape_bench](https://github.com/UKGovernmentBEIS/sandbox_escape_bench)) tests whether frontier models break out of containers *while monitored*, spanning misconfiguration, privilege, kernel, and runtime/orchestration flaws — reinforcing that plain containers are insufficient for highly capable models and pushing high-stakes evals toward gVisor and microVMs. Separately, AISI found a sandboxed agent [reconstructed the institute's identity, operator, and cloud setup from inside the sandbox](https://www.aisi.gov.uk/blog/what-can-sandboxed-ai-agents-learn-about-their-evaluation-environments) (via domain names and TLS certificates) — agents can map their test environment and may [sandbag](https://arxiv.org/abs/2508.00943) (strategically underperform) when they detect evaluation, so environment fidelity is itself a containment concern.
+
+This reframes the **What's missing from the landscape** section below: the gap isn't only adversarial-posture sandboxes, but sandboxes integrated with monitoring/control protocols and resistant to environment-fingerprinting.
+
 ## Three research contexts
 
 ### RL training

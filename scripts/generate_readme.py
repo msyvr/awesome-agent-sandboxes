@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 YAML_PATH = ROOT / "data" / "sandboxes.yaml"
 ADDITIONS_PATH = ROOT / "data" / "additions.yaml"
 GETTING_STARTED_PATH = ROOT / "docs" / "getting-started.md"
+STATUS_PATH = ROOT / "docs" / "status.md"
 README_PATH = ROOT / "README.md"
 REFERENCE_PATH = ROOT / "docs" / "sandboxes-reference.md"
 # Relative path used in markdown links from README to the reference doc
@@ -733,8 +734,14 @@ def main():
     # Generate Part 2
     part2 = generate_part2(entries)
 
-    # Concatenate: chart at top, then Part 1, then Part 2
-    readme = f"{additions_section}{part1}\n\n{part2}\n"
+    # Load the Status block, if present — sits at the very top of the README,
+    # above the additions chart.
+    status_section = ""
+    if STATUS_PATH.exists():
+        status_section = STATUS_PATH.read_text().rstrip() + "\n\n"
+
+    # Concatenate: status at top, then chart, then Part 1, then Part 2
+    readme = f"{status_section}{additions_section}{part1}\n\n{part2}\n"
 
     # Write README
     README_PATH.write_text(readme)
