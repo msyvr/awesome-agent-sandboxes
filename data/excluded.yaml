@@ -582,3 +582,28 @@
   reason: Disk-full prevention daemon, not a sandbox
 - url: https://github.com/Dragooon/stockade
   reason: Governance-orchestrator pattern (audit chain over delegated Docker isolation) — same as bernstein/kukeon/egg/vnx
+
+# --- Reviewed in issue #36 (2026-05-18) ---
+
+- url: https://github.com/gastownhall/beads
+  reason: Agent memory tool, not a sandbox
+- url: https://github.com/openclaw/crabbox
+  reason: Abstraction/control-plane that leases compute across 18+ providers and SSHes in; isolation delegated to backend (some backends are bare SSH hosts with none) — orchestrator that calls sandbox APIs, not a sandbox
+- url: https://github.com/opencmit/alphora
+  reason: Framework for building composable AI agents, not a sandbox
+- url: https://github.com/navikt/copilot
+  reason: Resource collection of Copilot/agent/MCP/skill material, not a sandbox
+- url: https://github.com/HCF-STUDIOS/openhermit
+  reason: Platform for deploying fleets of AI agents as production services (orchestration/deployment), not a sandbox
+- url: https://github.com/isanchez31/opencode-sandbox-plugin
+  reason: OpenCode IDE plugin and thin wrapper around @anthropic-ai/sandbox-runtime; adds integration glue and config hardening, no novel isolation (srt already listed)
+- url: https://github.com/leeex1/Quillan-Ronin
+  reason: AGI/crank reasoning-engine claims, not a sandbox
+- url: https://github.com/onsails/right-agent
+  reason: Multi-agent harness with Telegram UI; "sandboxed by default" is a feature, not a standalone sandbox
+- url: https://github.com/sundi133/wb-red-team
+  reason: Red-teaming/eval framework for agentic apps, not a sandbox
+- url: https://github.com/the911fund/skill-of-skills
+  reason: Discovery/index engine for AI coding tools (skills, plugins, MCP servers), not a sandbox
+- url: https://github.com/Aureliolo/synthorg
+  reason: Framework for building synthetic organizations with autonomous AI agents, not a sandbox

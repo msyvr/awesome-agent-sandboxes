@@ -547,7 +547,7 @@
   category: standalone
   maintainer: Anthropic
   open_source: true
-  license: null
+  license: Apache-2.0
   url: https://github.com/anthropic-experimental/sandbox-runtime
   repo_url: https://github.com/anthropic-experimental/sandbox-runtime
   description: Lightweight sandboxing for arbitrary processes using bubblewrap (Linux) and Seatbelt (macOS), no container required.

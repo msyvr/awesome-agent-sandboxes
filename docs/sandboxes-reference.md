@@ -319,7 +319,7 @@ _Notes: From AkihiroSuda (maintainer of Lima, nerdctl). Deliberately positioned 
 <a id="ref-anthropic-sandbox-runtime-srt"></a>
 ### Anthropic sandbox-runtime (srt)
 
-**Maintainer:** Anthropic · **License:** OSS · [Home](https://github.com/anthropic-experimental/sandbox-runtime)
+**Maintainer:** Anthropic · **License:** Apache-2.0 · [Home](https://github.com/anthropic-experimental/sandbox-runtime)
 
 Lightweight sandboxing for arbitrary processes using bubblewrap (Linux) and Seatbelt (macOS), no container required.
 
