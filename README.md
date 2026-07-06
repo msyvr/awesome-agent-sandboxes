@@ -32,6 +32,9 @@ Full reasoning: strategy updates [2026-04-25](docs/strategy-update-2026-04-25.md
 - [Containarium](#sec-standalone)
 - [sandcat](#sec-dev-environment)
 
+**2026-05-25** (1 entries)
+- [DAM](#sec-kubernetes)
+
 **2026-05-05** (2 entries)
 - [agentbox-sdk](#sec-abstraction)
 - [agent_sandbox](#sec-standalone)
@@ -435,7 +438,7 @@ Three views of the same landscape to help you find what fits.
 |------|-----------|----------|-----------|
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, brood-box, cleanroom, gondolin, cua, +4 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +11 more | Slightly weaker than full VMs; Linux-only for most options. |
-| **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +24 more | Shared kernel means a kernel exploit can bypass isolation. |
+| **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +25 more | Shared kernel means a kernel exploit can bypass isolation. |
 | **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +21 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, Wasmtime, WasmEdge, wasmCloud, +2 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
@@ -445,7 +448,7 @@ Three views of the same landscape to help you find what fits.
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +11 more |
-| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), +48 more |
+| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), +49 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | Firecracker, gVisor, Kata Containers, libkrun, Zeroboot, +11 more |
 
 #### Where does it run?
@@ -456,7 +459,7 @@ Three views of the same landscape to help you find what fits.
 | **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +13 more |
 | **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +44 more |
 | **Self-hosted** | You host and manage the infrastructure. | Coder, OpenSandbox, Firecracker, gVisor, Kata Containers, +6 more |
-| **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0, +1 more |
+| **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0, +2 more |
 
 ---
 
@@ -544,6 +547,7 @@ Sandbox solutions designed for Kubernetes clusters.
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
 | [Agent Sandbox (kubernetes-sigs)](https://github.com/kubernetes-sigs/agent-sandbox) | Yes (Apache-2.0) | gvisor, kata | Official Kubernetes SIG project (launched KubeCon Atlanta Nov 2025). Likely to become the standard for K8s agent sandboxing. |
+| [DAM](https://github.com/dam-agents/dam) | Yes (Apache-2.0) | container | Brings a credential proxy plus a policy-enforced egress gateway to the Kubernetes tier — most k8s sandbox entries isolate pods but do not proxy credentials. IBM-backed (ibm.biz docs; the bundled "Bob" harness targets IBM workflows). Runs any ACP-compatible harness, not just the bundled ones. |
 | [GKE Agent Sandbox](https://cloud.google.com) | No | gvisor, kata | Managed wrapper around the open-source agent-sandbox project. If you're already on GKE, this is the path of least resistance. |
 | [mitos](https://mitos.run) | Yes (Apache-2.0) | microvm, kvm | Distinct from raw Firecracker (already listed): a live copy-on-write fork of a warm, running microVM plus a Kubernetes operator, CRDs, and a KVM device-plugin. Fast memory-snapshot restore suits parallel agent exploration and RL-style environment resets. |
 | [openkruise/agents](https://github.com/openkruise/agents) | Yes (Apache-2.0) | container | CNCF-affiliated via OpenKruise (Alibaba). The E2B API compatibility is notable — lets you use existing E2B SDK integrations against self-hosted K8s instead of E2B's cloud. Sandbox hibernation with GPU memory checkpoint is unusual. |

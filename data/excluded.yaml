@@ -774,3 +774,24 @@
   reason: Multi-agent security-assessment workbench, not a sandbox
 - url: https://github.com/zaydiscold/robinhood-cli
   reason: Robinhood API CLI/MCP, not a sandbox
+
+# --- Reviewed in issue #37 (2026-05-25) ---
+
+- url: https://github.com/agentxagi/awesome-discoveries
+  reason: Curated list of AI agent projects, not a sandbox
+- url: https://github.com/can1357/oh-my-pi
+  reason: Terminal AI coding agent, not a sandbox
+- url: https://github.com/durable-workflow/sample-app
+  reason: Sample Laravel application with example workflows, not a sandbox
+- url: https://github.com/marcusquinn/aidevops
+  reason: OpenCode/Git AI devops automation, not a sandbox
+- url: https://github.com/nanwang-crea/ReflexionOS
+  reason: Local-first desktop coding agent; its command risk-rating is not an isolation boundary, not a sandbox
+- url: https://github.com/nextain/naia-os
+  reason: Visual-agent desktop shell/app (moved to naia-shell), not a sandbox
+- url: https://github.com/nordbyte/nordrelay
+  reason: Remote-control bridge for coding agents, not a sandbox
+- url: https://github.com/rohitg00/agentmemory
+  reason: Persistent memory for coding agents, not a sandbox
+- url: https://github.com/usewhale/DeepSeek-Code-Whale
+  reason: Terminal AI coding agent for DeepSeek, not a sandbox

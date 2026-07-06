@@ -752,6 +752,20 @@ Kubernetes CRD and controller for isolated agent workloads with gVisor or Kata r
 
 _Notes: Official Kubernetes SIG project (launched KubeCon Atlanta Nov 2025). Likely to become the standard for K8s agent sandboxing._
 
+<a id="ref-dam"></a>
+### DAM
+
+**Maintainer:** dam-agents (IBM) · **License:** Apache-2.0 · [Home](https://github.com/dam-agents/dam)
+
+Self-hostable Kubernetes platform for running headless coding-agent harnesses, each in an isolated pod with deny-all-egress NetworkPolicy, pod SecurityContextConstraints, a policy-enforced access gateway, and zero-trust credential injection.
+
+- **Isolation:** container
+- **Capabilities:** Isolated Kubernetes pod per agent; Deny-all egress NetworkPolicy per agent; OpenShift SecurityContextConstraints (pod hardening); Policy-enforced gateway for all agent access; Zero-trust credential injection (credentials never exposed to the runtime); CRDs (agents/forks/runs) with an operator; Web UI, CLI, Slack, and scheduled triggers; ACP-compatible bring-your-own harness (Claude Code, Pi, Bob, Codex)
+- **Requirements:** Kubernetes (Helm chart); Self-hosted (a hosted option is waitlist-gated)
+- **Limitations:** Very new (~2 months, 10 stars at inclusion); Hosted service is waitlist-gated
+
+_Notes: Brings a credential proxy plus a policy-enforced egress gateway to the Kubernetes tier — most k8s sandbox entries isolate pods but do not proxy credentials. IBM-backed (ibm.biz docs; the bundled "Bob" harness targets IBM workflows). Runs any ACP-compatible harness, not just the bundled ones._
+
 <a id="ref-gke-agent-sandbox"></a>
 ### GKE Agent Sandbox
 
