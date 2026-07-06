@@ -1,6 +1,6 @@
 ## Status — intermittently maintained (May 2026)
 
-> **This repo is now maintained intermittently.** No guarantees on freshness — discovery has wound down from daily → weekly → occasional. The most recent additions are reflected in the **graph below** and its **Daily breakdown** drop-down.
+> **This repo is now maintained intermittently.** No guarantees on freshness — discovery has wound down from daily → weekly → occasional. The most recent additions are reflected in the **graph above** and its **Daily breakdown** drop-down.
 
 **Where did agent sandboxing land?** After ~80 curated entries and a couple of months of discovery ([strategy notes](docs/strategy-update-2026-05-05.md)), the answer isn't "everyone converged on one tool." The category split by tier:
 
