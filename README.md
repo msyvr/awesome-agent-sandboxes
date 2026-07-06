@@ -1,3 +1,11 @@
+# awesome agent sandboxes
+
+A comprehensive guide to sandboxing options for AI agents — coding agents, browsing agents, automation agents, and general-purpose assistants.
+
+Whether you're a developer building with AI agents or someone using them for personal tasks, this guide helps you understand how to keep your system safe while agents work on your behalf.
+
+> **Living repo.** This landscape is moving fast. A daily automated discovery job posts newly found candidates as [open issues](https://github.com/msyvr/awesome-agent-sandboxes/issues?q=is%3Aopen+label%3Adiscovery) for review before they get added to the curated list. If you're looking for the bleeding edge, check those issues — but be aware they're unreviewed and discovery leans toward over-inclusion (rejection on review is common).
+
 <p align="center"><img src="docs/additions-chart.svg" alt="Additions chart" width="66%"></p>
 
 <details>
@@ -154,14 +162,6 @@
 Full reasoning: strategy updates [2026-04-25](docs/strategy-update-2026-04-25.md) and [2026-05-05](docs/strategy-update-2026-05-05.md).
 
 ---
-
-# Awesome Agent Sandboxes
-
-A comprehensive guide to sandboxing options for AI agents — coding agents, browsing agents, automation agents, and general-purpose assistants.
-
-Whether you're a developer building with AI agents or someone using them for personal tasks, this guide helps you understand how to keep your system safe while agents work on your behalf.
-
-> **Living repo.** This landscape is moving fast. A daily automated discovery job posts newly found candidates as [open issues](https://github.com/msyvr/awesome-agent-sandboxes/issues?q=is%3Aopen+label%3Adiscovery) for review before they get added to the curated list. If you're looking for the bleeding edge, check those issues — but be aware they're unreviewed and discovery leans toward over-inclusion (rejection on review is common).
 
 ## Table of Contents
 

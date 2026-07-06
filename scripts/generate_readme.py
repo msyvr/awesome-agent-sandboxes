@@ -527,8 +527,8 @@ def generate_additions_section(
 ) -> str:
     """Generate the additions image + collapsible breakdown.
 
-    No section heading — this sits at the very top of the README as a
-    visual summary. Links go to the sandbox's product page or repo URL.
+    No section heading — this sits near the top of the README (just below the
+    title and intro) as a visual summary. Links go to the product page or repo.
     """
     if not additions:
         return ""
@@ -724,15 +724,19 @@ def main():
 
     part1 = GETTING_STARTED_PATH.read_text().rstrip()
 
-    # Inject the table of contents at the placeholder
-    toc = generate_toc(entries)
+    # Split Part 1 at the TOC placeholder: the title + intro block (everything
+    # before it) is lifted to the very top of the README, above the chart; the
+    # Table of Contents and everything after it sit below the chart and status.
     if "<!-- TOC -->" not in part1:
         print(
             f"Error: {GETTING_STARTED_PATH} is missing the <!-- TOC --> placeholder",
             file=sys.stderr,
         )
         sys.exit(1)
-    part1 = part1.replace("<!-- TOC -->", toc)
+    toc = generate_toc(entries)
+    intro_block, after_toc = part1.split("<!-- TOC -->", 1)
+    intro_block = intro_block.rstrip()
+    after_toc = after_toc.lstrip("\n")
 
     # Load additions history
     additions = None
@@ -741,7 +745,7 @@ def main():
             additions = yaml.safe_load(f) or []
         print(f"Loaded {len(additions)} addition dates from {ADDITIONS_PATH}.")
 
-    # Generate additions chart (sits at the very top, before Part 1)
+    # Generate additions chart (sits below the title/intro, above the rest of Part 1)
     additions_section = ""
     if additions:
         generate_additions_chart(additions)
@@ -756,8 +760,13 @@ def main():
     if STATUS_PATH.exists():
         status_section = STATUS_PATH.read_text().rstrip() + "\n\n"
 
-    # Concatenate: chart at top, then status, then Part 1, then Part 2
-    readme = f"{additions_section}{status_section}{part1}\n\n{part2}\n"
+    # Concatenate: title + intro at the very top, then chart, then status, then
+    # the Table of Contents and the rest of Part 1, then Part 2.
+    readme = (
+        f"{intro_block}\n\n"
+        f"{additions_section}{status_section}"
+        f"{toc}\n\n{after_toc}\n\n{part2}\n"
+    )
 
     # Write README
     README_PATH.write_text(readme)

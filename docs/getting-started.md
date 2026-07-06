@@ -1,4 +1,4 @@
-# Awesome Agent Sandboxes
+# awesome agent sandboxes
 
 A comprehensive guide to sandboxing options for AI agents — coding agents, browsing agents, automation agents, and general-purpose assistants.
 
