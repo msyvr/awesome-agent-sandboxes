@@ -1,19 +1,3 @@
-## Status — intermittently maintained (May 2026)
-
-> **This repo is now maintained intermittently.** No guarantees on freshness — discovery has wound down from daily → weekly → occasional. The most recent additions are reflected in the **graph below** and its **Daily breakdown** drop-down.
-
-**Where did agent sandboxing land?** After ~80 curated entries and a couple of months of discovery ([strategy notes](docs/strategy-update-2026-05-05.md)), the answer isn't "everyone converged on one tool." The category split by tier:
-
-- **Commodity isolation got absorbed into infrastructure.** "Run the agent in a box" stopped being a product. Frontier coding agents ship it built in — Claude Code (macOS Seatbelt + Linux bubblewrap), OpenAI Codex (Seatbelt/Landlock/seccomp). Cloud platforms turned it into a network primitive: [Cloudflare Sandboxes reached GA](https://blog.cloudflare.com/sandbox-ga/) in April 2026 ([InfoQ](https://www.infoq.com/news/2026/04/cloudflare-sandboxes-ga/)), and gateways like [Tailscale's Aperture](https://tailscale.com/blog/aperture-cli-AI-experimentation) now mediate agent credentials and config at the infrastructure layer rather than per-agent.
-- **The cloud-sandbox vendor tier fragmented rather than consolidated.** No M&A among E2B / Daytona / Modal / Runloop (Daytona raised a $24M Series A in February 2026); each carved a niche — cold-start, price, GPU/ML, ecosystem lock-in. The [Superagent 2026 benchmark](https://www.superagent.sh/blog/ai-code-sandbox-benchmark-2026) frames the open question directly: do sandboxes stay a discrete primitive or get absorbed into the platforms above them?
-- **What survives as a distinct, still-evolving category is opinionated security primitives** — credential isolation, audit chains *paired with real isolation*, threat detection, formal verification, and diff/commit/rollback governance — plus the macOS-without-Docker niche. That's what the curated list below is really about.
-- **Regulation became a driver.** The EU AI Act's high-risk obligations [become enforceable August 2, 2026](https://www.artificialintelligence-news.com/news/agentic-ais-governance-challenges-under-the-eu-ai-act-in-2026/), demanding built-in audit logging and human oversight (Article 12) — spawning a wave of governance/audit-flavored orchestrators that layer compliance over commodity isolation. Useful for compliance; not sandboxes by this repo's definition.
-- **Safety researchers reframed the box as one layer, not the mechanism.** Dangerous-capability evaluations now run inside sandboxes ([AISI's Inspect Sandboxing Toolkit](https://www.aisi.gov.uk/blog/the-inspect-sandboxing-toolkit-scalable-and-secure-ai-agent-evaluations)), but the field's [AI-control agenda](https://blog.redwoodresearch.org/p/guide) treats containment as one layer beneath monitoring and control protocols — because [escape benchmarks](https://arxiv.org/abs/2603.02277) show frontier models can break out of plain containers, and [agents can fingerprint their own evaluation environment](https://www.aisi.gov.uk/blog/what-can-sandboxed-ai-agents-learn-about-their-evaluation-environments) from inside the sandbox. See [docs/safety-research.md](docs/safety-research.md) for depth.
-
-Full reasoning: strategy updates [2026-04-25](docs/strategy-update-2026-04-25.md) and [2026-05-05](docs/strategy-update-2026-05-05.md).
-
----
-
 <p align="center"><img src="docs/additions-chart.svg" alt="Additions chart" width="66%"></p>
 
 <details>
@@ -154,6 +138,22 @@ Full reasoning: strategy updates [2026-04-25](docs/strategy-update-2026-04-25.md
 - [Pyodide](#sec-wasm-runtime)
 
 </details>
+
+## Status — intermittently maintained (May 2026)
+
+> **This repo is now maintained intermittently.** No guarantees on freshness — discovery has wound down from daily → weekly → occasional. The most recent additions are reflected in the **graph below** and its **Daily breakdown** drop-down.
+
+**Where did agent sandboxing land?** After ~80 curated entries and a couple of months of discovery ([strategy notes](docs/strategy-update-2026-05-05.md)), the answer isn't "everyone converged on one tool." The category split by tier:
+
+- **Commodity isolation got absorbed into infrastructure.** "Run the agent in a box" stopped being a product. Frontier coding agents ship it built in — Claude Code (macOS Seatbelt + Linux bubblewrap), OpenAI Codex (Seatbelt/Landlock/seccomp). Cloud platforms turned it into a network primitive: [Cloudflare Sandboxes reached GA](https://blog.cloudflare.com/sandbox-ga/) in April 2026 ([InfoQ](https://www.infoq.com/news/2026/04/cloudflare-sandboxes-ga/)), and gateways like [Tailscale's Aperture](https://tailscale.com/blog/aperture-cli-AI-experimentation) now mediate agent credentials and config at the infrastructure layer rather than per-agent.
+- **The cloud-sandbox vendor tier fragmented rather than consolidated.** No M&A among E2B / Daytona / Modal / Runloop (Daytona raised a $24M Series A in February 2026); each carved a niche — cold-start, price, GPU/ML, ecosystem lock-in. The [Superagent 2026 benchmark](https://www.superagent.sh/blog/ai-code-sandbox-benchmark-2026) frames the open question directly: do sandboxes stay a discrete primitive or get absorbed into the platforms above them?
+- **What survives as a distinct, still-evolving category is opinionated security primitives** — credential isolation, audit chains *paired with real isolation*, threat detection, formal verification, and diff/commit/rollback governance — plus the macOS-without-Docker niche. That's what the curated list below is really about.
+- **Regulation became a driver.** The EU AI Act's high-risk obligations [become enforceable August 2, 2026](https://www.artificialintelligence-news.com/news/agentic-ais-governance-challenges-under-the-eu-ai-act-in-2026/), demanding built-in audit logging and human oversight (Article 12) — spawning a wave of governance/audit-flavored orchestrators that layer compliance over commodity isolation. Useful for compliance; not sandboxes by this repo's definition.
+- **Safety researchers reframed the box as one layer, not the mechanism.** Dangerous-capability evaluations now run inside sandboxes ([AISI's Inspect Sandboxing Toolkit](https://www.aisi.gov.uk/blog/the-inspect-sandboxing-toolkit-scalable-and-secure-ai-agent-evaluations)), but the field's [AI-control agenda](https://blog.redwoodresearch.org/p/guide) treats containment as one layer beneath monitoring and control protocols — because [escape benchmarks](https://arxiv.org/abs/2603.02277) show frontier models can break out of plain containers, and [agents can fingerprint their own evaluation environment](https://www.aisi.gov.uk/blog/what-can-sandboxed-ai-agents-learn-about-their-evaluation-environments) from inside the sandbox. See [docs/safety-research.md](docs/safety-research.md) for depth.
+
+Full reasoning: strategy updates [2026-04-25](docs/strategy-update-2026-04-25.md) and [2026-05-05](docs/strategy-update-2026-05-05.md).
+
+---
 
 # Awesome Agent Sandboxes
 

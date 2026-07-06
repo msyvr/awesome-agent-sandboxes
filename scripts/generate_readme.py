@@ -426,11 +426,12 @@ CHART_REL_PATH = "docs/additions-chart.svg"
 
 
 def generate_additions_chart(additions: list[dict]) -> None:
-    """Generate a static bar chart of discovery additions, bucketed by ISO week.
+    """Generate a static bar chart of discovery additions on a linear weekly axis.
 
-    Excludes the initial seed to keep the scale readable. Each bar represents
-    entries added in a Monday-starting week; the x-axis label is the week's
-    Monday (MM-DD). Saves to docs/additions-chart.svg.
+    Excludes the initial seed to keep the scale readable. The x-axis is linear in
+    weeks: every Monday-starting week from the first to the last addition gets a
+    slot, including weeks with no additions (rendered as gaps). The x-axis label
+    is the week's Monday (MM-DD). Saves to docs/additions-chart.svg.
     """
     from collections import defaultdict
     from datetime import date, timedelta
@@ -451,14 +452,24 @@ def generate_additions_chart(additions: list[dict]) -> None:
         week_start = day - timedelta(days=day.weekday())
         weekly[week_start.isoformat()] += len(addition["entries"])
 
-    sorted_weeks = sorted(weekly.keys())
-    dates = [w[5:] for w in sorted_weeks]
-    counts = [weekly[w] for w in sorted_weeks]
+    # Linear weekly axis: fill every Monday-week from first to last, including
+    # empty weeks (count 0) so gaps show on a continuous timeline.
+    weeks_with_data = sorted(date.fromisoformat(w) for w in weekly)
+    first_week, last_week = weeks_with_data[0], weeks_with_data[-1]
+    all_weeks = []
+    w = first_week
+    while w <= last_week:
+        all_weeks.append(w.isoformat())
+        w += timedelta(days=7)
+
+    dates = [wk[5:] for wk in all_weeks]
+    counts = [weekly.get(wk, 0) for wk in all_weeks]
     max_count = max(counts)
 
     BAR_COLOR = "#e87043"  # Claude Code orange
 
-    fig, ax = plt.subplots(figsize=(5, 2.7))
+    # Width scales with the number of weeks so labels stay legible as gaps grow.
+    fig, ax = plt.subplots(figsize=(max(5.0, len(all_weeks) * 0.5), 2.7))
     fig.patch.set_alpha(0)
     ax.set_facecolor("none")
 
@@ -470,8 +481,10 @@ def generate_additions_chart(additions: list[dict]) -> None:
         zorder=3,
     )
 
-    # Value labels on top of each bar
+    # Value labels on top of each non-empty bar
     for bar, count in zip(bars, counts):
+        if count == 0:
+            continue
         ax.text(
             bar.get_x() + bar.get_width() / 2,
             bar.get_height() + 0.2,
@@ -491,8 +504,11 @@ def generate_additions_chart(additions: list[dict]) -> None:
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    # Tick styling — same color as bars and title
-    ax.tick_params(axis="x", labelsize=7.5, colors=BAR_COLOR, length=0, pad=4)
+    # Tick styling — same color as bars and title; rotate to fit a dense weekly axis
+    ax.tick_params(axis="x", labelsize=7, colors=BAR_COLOR, length=0, pad=4)
+    for label in ax.get_xticklabels():
+        label.set_rotation(45)
+        label.set_horizontalalignment("right")
 
 
     fig.tight_layout()
@@ -734,14 +750,14 @@ def main():
     # Generate Part 2
     part2 = generate_part2(entries)
 
-    # Load the Status block, if present — sits at the very top of the README,
-    # above the additions chart.
+    # Load the Status block, if present — sits just below the additions chart
+    # at the top of the README.
     status_section = ""
     if STATUS_PATH.exists():
         status_section = STATUS_PATH.read_text().rstrip() + "\n\n"
 
-    # Concatenate: status at top, then chart, then Part 1, then Part 2
-    readme = f"{status_section}{additions_section}{part1}\n\n{part2}\n"
+    # Concatenate: chart at top, then status, then Part 1, then Part 2
+    readme = f"{additions_section}{status_section}{part1}\n\n{part2}\n"
 
     # Write README
     README_PATH.write_text(readme)
