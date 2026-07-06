@@ -426,12 +426,14 @@ CHART_REL_PATH = "docs/additions-chart.svg"
 
 
 def generate_additions_chart(additions: list[dict]) -> None:
-    """Generate a static bar chart of discovery additions on a linear weekly axis.
+    """Generate a static bar chart of additions.
 
-    Excludes the initial seed to keep the scale readable. The x-axis is linear in
-    weeks: every Monday-starting week from the first to the last addition gets a
-    slot, including weeks with no additions (rendered as gaps). The x-axis label
-    is the week's Monday (MM-DD). Saves to docs/additions-chart.svg.
+    The initial seed is shown as a separate leftmost bar (labeled "seed"); the
+    rest use a linear weekly axis where every Monday-starting week from the first
+    to the last discovery addition gets a slot, including empty weeks (rendered
+    as gaps). Bar labels are the week's Monday (MM-DD). The seed's bulk count
+    dominates the scale by design — per-bar value labels keep the small weeks
+    legible. Saves to docs/additions-chart.svg.
     """
     from collections import defaultdict
     from datetime import date, timedelta
@@ -441,9 +443,10 @@ def generate_additions_chart(additions: list[dict]) -> None:
     import matplotlib.pyplot as plt
     import matplotlib.ticker as ticker
 
+    seed = additions[0] if additions else None
     discovery = additions[1:] if len(additions) > 1 else []
 
-    if not discovery:
+    if not discovery and seed is None:
         return
 
     weekly: dict[str, int] = defaultdict(int)
@@ -454,22 +457,31 @@ def generate_additions_chart(additions: list[dict]) -> None:
 
     # Linear weekly axis: fill every Monday-week from first to last, including
     # empty weeks (count 0) so gaps show on a continuous timeline.
-    weeks_with_data = sorted(date.fromisoformat(w) for w in weekly)
-    first_week, last_week = weeks_with_data[0], weeks_with_data[-1]
     all_weeks = []
-    w = first_week
-    while w <= last_week:
-        all_weeks.append(w.isoformat())
-        w += timedelta(days=7)
+    if weekly:
+        weeks_with_data = sorted(date.fromisoformat(w) for w in weekly)
+        w, last_week = weeks_with_data[0], weeks_with_data[-1]
+        while w <= last_week:
+            all_weeks.append(w.isoformat())
+            w += timedelta(days=7)
 
     dates = [wk[5:] for wk in all_weeks]
     counts = [weekly.get(wk, 0) for wk in all_weeks]
-    max_count = max(counts)
+
+    # Prepend the initial seed as its own leftmost bar. It's a bulk import, not a
+    # discovery week (and is listed separately in the breakdown), so it gets a
+    # dedicated "seed" bar rather than being folded into its calendar week — which
+    # keeps the chart consistent with the weekly breakdown.
+    if seed is not None:
+        dates = ["seed"] + dates
+        counts = [len(seed["entries"])] + counts
+
+    max_count = max(counts) if counts else 0
 
     BAR_COLOR = "#e87043"  # Claude Code orange
 
     # Width scales with the number of weeks so labels stay legible as gaps grow.
-    fig, ax = plt.subplots(figsize=(max(5.0, len(all_weeks) * 0.5), 2.7))
+    fig, ax = plt.subplots(figsize=(max(5.0, len(dates) * 0.5), 2.7))
     fig.patch.set_alpha(0)
     ax.set_facecolor("none")
 
@@ -525,36 +537,56 @@ def generate_additions_chart(additions: list[dict]) -> None:
 def generate_additions_section(
     additions: list[dict], entries: list[dict]
 ) -> str:
-    """Generate the additions image + collapsible breakdown.
+    """Generate the additions image + collapsible weekly breakdown.
 
     No section heading — this sits near the top of the README (just below the
-    title and intro) as a visual summary. Links go to the product page or repo.
+    title and intro) as a visual summary. The breakdown is bucketed into the
+    same Monday-starting weeks as the chart, so each row maps 1:1 to a bar (same
+    week, same count). The initial seed is listed separately, matching its own
+    "seed" bar in the chart. Links go to the product page or repo.
     """
+    from datetime import date, timedelta
+
     if not additions:
         return ""
 
     seed = additions[0] if additions else None
+    discovery = additions[1:]
 
     # Build name → category lookup
     name_to_cat = {e["name"]: e["category"] for e in entries}
 
+    def entry_lines(names: list[str]) -> list[str]:
+        return [f"- [{name}](#sec-{name_to_cat.get(name, '')})" for name in names]
+
+    # Bucket discovery additions into Monday-starting weeks — identical bucketing
+    # to generate_additions_chart, so each week here equals one bar there.
+    weekly: dict[str, list[str]] = {}
+    for addition in discovery:
+        day = date.fromisoformat(addition["date"])
+        week_start = (day - timedelta(days=day.weekday())).isoformat()
+        weekly.setdefault(week_start, []).extend(addition["entries"])
+
     lines = []
     lines.append(f'<p align="center"><img src="{CHART_REL_PATH}" alt="Additions chart" width="66%"></p>\n')
 
-    # --- Collapsible daily breakdown with links (reverse-chron) ---
+    # --- Collapsible weekly breakdown with links (reverse-chron) ---
     lines.append("<details>")
-    lines.append("<summary>Daily breakdown (click to expand)</summary>\n")
+    lines.append("<summary>Weekly breakdown (click to expand)</summary>\n")
 
-    for addition in reversed(additions):
-        date = addition["date"]
-        entry_names = addition["entries"]
-        label = f"**{date}** ({len(entry_names)} entries)"
-        if addition is seed:
-            label += " — initial seed"
-        lines.append(label)
-        for name in entry_names:
-            cat = name_to_cat.get(name, "")
-            lines.append(f"- [{name}](#sec-{cat})")
+    for week_start in sorted(weekly, reverse=True):
+        names = weekly[week_start]
+        noun = "entry" if len(names) == 1 else "entries"
+        lines.append(f"**Week of {week_start}** ({len(names)} {noun})")
+        lines.extend(entry_lines(names))
+        lines.append("")
+
+    # Initial seed — excluded from the chart, listed here for completeness.
+    if seed is not None:
+        lines.append(
+            f"**Initial seed** ({seed['date']}, {len(seed['entries'])} entries — the \"seed\" bar in the chart)"
+        )
+        lines.extend(entry_lines(seed["entries"]))
         lines.append("")
 
     lines.append("</details>\n")

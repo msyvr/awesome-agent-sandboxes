@@ -9,93 +9,69 @@ Whether you're a developer building with AI agents or someone using them for per
 <p align="center"><img src="docs/additions-chart.svg" alt="Additions chart" width="66%"></p>
 
 <details>
-<summary>Daily breakdown (click to expand)</summary>
+<summary>Weekly breakdown (click to expand)</summary>
 
-**2026-07-06** (1 entries)
+**Week of 2026-07-06** (1 entry)
 - [mitos](#sec-kubernetes)
 
-**2026-06-22** (1 entries)
+**Week of 2026-06-22** (1 entry)
 - [klangk](#sec-dev-environment)
 
-**2026-06-15** (1 entries)
+**Week of 2026-06-15** (1 entry)
 - [warren](#sec-standalone)
 
-**2026-06-08** (2 entries)
+**Week of 2026-06-08** (2 entries)
 - [Containarium](#sec-standalone)
 - [sandcat](#sec-dev-environment)
 
-**2026-05-25** (1 entries)
+**Week of 2026-05-25** (1 entry)
 - [DAM](#sec-kubernetes)
 
-**2026-05-05** (2 entries)
+**Week of 2026-05-04** (3 entries)
+- [loop](#sec-agent-integrated)
 - [agentbox-sdk](#sec-abstraction)
 - [agent_sandbox](#sec-standalone)
 
-**2026-05-04** (1 entries)
-- [loop](#sec-agent-integrated)
-
-**2026-04-29** (1 entries)
-- [pixels](#sec-standalone)
-
-**2026-04-27** (2 entries)
+**Week of 2026-04-27** (3 entries)
 - [pi-sandbox](#sec-agent-integrated)
 - [LINCE](#sec-standalone)
+- [pixels](#sec-standalone)
 
-**2026-04-26** (1 entries)
+**Week of 2026-04-20** (5 entries)
+- [AgentScope Runtime](#sec-abstraction)
+- [gondolin](#sec-standalone)
+- [EdgeBox](#sec-standalone)
+- [gocker](#sec-standalone)
 - [cua](#sec-standalone)
 
-**2026-04-23** (1 entries)
-- [gocker](#sec-standalone)
-
-**2026-04-22** (1 entries)
-- [EdgeBox](#sec-standalone)
-
-**2026-04-21** (1 entries)
-- [gondolin](#sec-standalone)
-
-**2026-04-20** (1 entries)
-- [AgentScope Runtime](#sec-abstraction)
-
-**2026-04-18** (2 entries)
-- [code-on-incus](#sec-standalone)
-- [hazmat](#sec-standalone)
-
-**2026-04-17** (3 entries)
+**Week of 2026-04-13** (10 entries)
+- [llm-sandbox](#sec-standalone)
+- [fence](#sec-standalone)
+- [aide](#sec-standalone)
+- [envpod-ce](#sec-standalone)
+- [Superserve](#sec-cloud-managed)
 - [brood-box](#sec-standalone)
 - [alcless](#sec-standalone)
 - [hole](#sec-standalone)
+- [code-on-incus](#sec-standalone)
+- [hazmat](#sec-standalone)
 
-**2026-04-16** (2 entries)
-- [envpod-ce](#sec-standalone)
-- [Superserve](#sec-cloud-managed)
-
-**2026-04-14** (2 entries)
-- [fence](#sec-standalone)
-- [aide](#sec-standalone)
-
-**2026-04-13** (1 entries)
-- [llm-sandbox](#sec-standalone)
-
-**2026-04-12** (5 entries)
-- [skilllite](#sec-standalone)
-- [sandcastle](#sec-standalone)
-- [cleanroom](#sec-standalone)
-- [openkruise/agents](#sec-kubernetes)
-- [sandbox0](#sec-kubernetes)
-
-**2026-04-10** (2 entries)
-- [sevorix-lite](#sec-standalone)
-- [treadstone](#sec-kubernetes)
-
-**2026-04-09** (6 entries)
+**Week of 2026-04-06** (13 entries)
 - [monty](#sec-standalone)
 - [locki](#sec-standalone)
 - [ai-sandbox-wrapper](#sec-standalone)
 - [agentsh](#sec-standalone)
 - [jailoc](#sec-standalone)
 - [sand](#sec-standalone)
+- [sevorix-lite](#sec-standalone)
+- [treadstone](#sec-kubernetes)
+- [skilllite](#sec-standalone)
+- [sandcastle](#sec-standalone)
+- [cleanroom](#sec-standalone)
+- [openkruise/agents](#sec-kubernetes)
+- [sandbox0](#sec-kubernetes)
 
-**2026-04-07** (48 entries) — initial seed
+**Initial seed** (2026-04-07, 48 entries — the "seed" bar in the chart)
 - [E2B](#sec-cloud-managed)
 - [Daytona](#sec-cloud-managed)
 - [Modal](#sec-cloud-managed)
@@ -149,7 +125,7 @@ Whether you're a developer building with AI agents or someone using them for per
 
 ## Status — intermittently maintained (May 2026)
 
-> **This repo is now maintained intermittently.** No guarantees on freshness — discovery has wound down from daily → weekly → occasional. The most recent additions are reflected in the **graph above** and its **Daily breakdown** drop-down.
+> **This repo is now maintained intermittently.** No guarantees on freshness — discovery has wound down from daily → weekly → occasional. The most recent additions are reflected in the **graph above** and its **Weekly breakdown** drop-down.
 
 **Where did agent sandboxing land?** After ~80 curated entries and a couple of months of discovery ([strategy notes](docs/strategy-update-2026-05-05.md)), the answer isn't "everyone converged on one tool." The category split by tier:
 
