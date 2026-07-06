@@ -515,11 +515,11 @@
 
 - name: nono
   category: standalone
-  maintainer: always-further
+  maintainer: nolabs-ai
   open_source: true
-  license: null
+  license: Apache-2.0
   url: https://nono.sh
-  repo_url: https://github.com/always-further/nono
+  repo_url: https://github.com/nolabs-ai/nono
   description: Kernel-enforced agent sandbox with credential proxy, atomic rollback, Sigstore attestation, and cryptographic audit chain.
   isolation_type: [landlock, seatbelt]
   capabilities:
@@ -1895,9 +1895,9 @@
   category: standalone
   maintainer: Alibaba
   open_source: true
-  license: null
-  url: https://github.com/alibaba/OpenSandbox
-  repo_url: https://github.com/alibaba/OpenSandbox
+  license: Apache-2.0
+  url: https://github.com/opensandbox-group/OpenSandbox
+  repo_url: https://github.com/opensandbox-group/OpenSandbox
   description: Universal sandbox for AI apps with multi-language SDKs, Docker + K8s runtimes, covering coding agents, GUI agents, evaluation, and RL training.
   isolation_type: [container]
   capabilities:
@@ -1909,7 +1909,7 @@
     - Docker or Kubernetes
     - Self-hosted
   limitations:
-    - Very new (open-sourced March 2026)
+    - Very new (created December 2025)
   notes: >-
     Broadest scope of any sandbox — covers evaluation and RL training
     environments, not just agent sandboxing.
@@ -2499,3 +2499,172 @@
   isolation_tier: wasm
   adoption_effort: compose
   deployment_model: local
+
+- name: mitos
+  category: kubernetes
+  maintainer: mitos-run
+  open_source: true
+  license: Apache-2.0
+  url: https://mitos.run
+  repo_url: https://github.com/mitos-run/mitos
+  description: Kubernetes-native runtime that gives each agent a Firecracker microVM and live copy-on-write forks a running VM into N siblings in tens of milliseconds, with durable versioned workspaces and declarative CRDs.
+  isolation_type: [microvm, kvm]
+  capabilities:
+    - Firecracker microVM per agent (KVM hardware isolation)
+    - Live copy-on-write fork of a running VM into N siblings (tens of ms)
+    - Restore from memory snapshots in milliseconds
+    - Durable, versioned workspaces
+    - Declarative CRDs with a Kubernetes operator
+    - KVM device-plugin for scheduling microVMs
+    - Go SDK
+  requirements:
+    - Kubernetes
+    - Nodes with KVM (bare-metal or nested virtualization)
+    - Self-hosted
+  limitations:
+    - Very new (created May 2026); prerelease tags
+    - Alpha — features split across "husk" and "engine" paths mid-migration
+    - Linux/KVM only
+  notes: >-
+    Distinct from raw Firecracker (already listed): a live copy-on-write fork
+    of a warm, running microVM plus a Kubernetes operator, CRDs, and a KVM
+    device-plugin. Fast memory-snapshot restore suits parallel agent
+    exploration and RL-style environment resets.
+  isolation_tier: microvm
+  adoption_effort: install
+  deployment_model: kubernetes
+
+- name: Containarium
+  category: standalone
+  maintainer: FootprintAI
+  open_source: true
+  license: Apache-2.0
+  url: https://containarium.dev
+  repo_url: https://github.com/FootprintAI/Containarium
+  description: Self-hostable agent runtime that gives each agent a persistent, SSH-reachable LXC/Incus box with per-tenant network isolation and an in-box MCP server; Kubernetes and LXC backends with GPU passthrough.
+  isolation_type: [container]
+  capabilities:
+    - Persistent, SSH-reachable LXC/Incus box per agent
+    - Per-tenant network isolation (agent holds an SSH key, not a kube-apiserver token)
+    - Userspace SOCKS5 egress proxy for network policy
+    - MCP-native admin CLI plus a second MCP server running inside the box
+    - Kubernetes and LXC/Incus backends
+    - GPU passthrough
+    - Port exposure to the public internet
+  requirements:
+    - Linux with LXC/Incus, or Kubernetes
+    - Go 1.25 to build
+    - Self-hosted
+  limitations:
+    - eBPF egress policy is experimental (under experimental/); the enforced egress path is the SOCKS5 proxy
+    - In-box file-ops sandbox (AGENTBOX_ROOT) is opt-in, default-off
+    - Container isolation (shared kernel)
+  notes: >-
+    SSH-native per-tenant LXC/Incus boxes; blast radius is bounded by an SSH
+    key rather than a cluster token. Ships two MCP servers (host admin and an
+    in-box shell_exec). The tagline advertises eBPF egress, but that code is
+    experimental — the shipping egress control is a userspace SOCKS5 proxy.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: self-hosted
+
+- name: sandcat
+  category: dev-environment
+  maintainer: VirtusLab
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/VirtusLab/sandcat
+  repo_url: https://github.com/VirtusLab/sandcat
+  description: Docker/devcontainer sandbox that routes all container traffic through a transparent WireGuard-to-mitmproxy for allow/deny egress filtering and injects secrets at the proxy so the container never sees real credential values.
+  isolation_type: [container]
+  capabilities:
+    - Devcontainer or standalone Docker sandbox
+    - Transparent WireGuard tunnel routing all HTTP/S, DNS, and TCP/UDP to mitmproxy
+    - Allow/deny list-based network egress engine
+    - Proxy-level secret substitution (real credentials never enter the container)
+    - Runs agents in bypass / auto-approve mode within the boundary
+    - VS Code / IDE integration
+    - CLI wrapper around docker-compose
+  requirements:
+    - Docker
+    - Linux or macOS
+  limitations:
+    - Container isolation only (shared kernel)
+    - Templates need per-project tuning for the development stack
+  notes: >-
+    Transparent full-traffic capture via WireGuard (not per-tool HTTP_PROXY)
+    combined with proxy-level secret substitution brings the credential-proxy
+    pattern — previously VM-tier only in this list (nono) — down to the
+    container tier. Part of VirtusLab's Visdom delivery infrastructure.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: local
+
+- name: warren
+  category: standalone
+  maintainer: jayminwest
+  open_source: true
+  license: MIT
+  url: https://github.com/jayminwest/warren
+  repo_url: https://github.com/jayminwest/warren
+  description: Self-hostable control plane and UI for ephemeral coding agents; each run executes in a native bubblewrap sandbox, validates, pushes a branch, and spins down, with live event streaming, mid-run steering, and human sign-off / PR-merge-gated dispatch.
+  isolation_type: [user-namespace]
+  capabilities:
+    - Native bubblewrap-isolated workspace per run (host unreachable)
+    - Control plane reaches the sandbox runtime over a unix socket with a bearer token
+    - Live NDJSON event streaming
+    - Mid-run steering (POST /steer)
+    - Human sign-off gates that arm dispatch
+    - Serial plan-run dispatch gated on prior-PR merges
+    - Built-in claude-code agent plus a steerable alternative harness
+    - Single container/volume/HTTP API/UI; optional Postgres backend
+  requirements:
+    - Docker (single container), or Fly.io / a cluster
+    - A GitHub repo URL and a prompt
+  limitations:
+    - Early (v0.6.2); org-readiness features (SSO, remote workers, MCP, audit, budgets) on the roadmap
+    - Process-level isolation (bubblewrap), shared kernel
+  notes: >-
+    Unlike control planes that delegate isolation to a cloud backend, warren
+    ships its own bubblewrap sandbox — the host is unreachable and the control
+    plane talks to the runtime over a unix socket. The differentiator is the
+    governance layer (mid-run steering, sign-off gates, PR-merge-gated serial
+    dispatch) on native isolation. 33 scenario-based acceptance tests; runs on
+    Fly.io.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: self-hosted
+
+- name: klangk
+  category: dev-environment
+  maintainer: mcdonc
+  open_source: true
+  license: MIT
+  url: https://mcdonc.github.io/klangk/
+  repo_url: https://github.com/mcdonc/klangk
+  description: Self-hosted multi-user collaborative coding platform that runs each user's agent workspace in its own rootless-podman container, with real-time collaboration (presence, terminal-sharing, ACLs) and bundled agents.
+  isolation_type: [container, seccomp]
+  capabilities:
+    - Rootless podman, one container per workspace (filesystem, process, network)
+    - pasta networking and seccomp profiles
+    - Per-workspace JWT and per-user bind-mounted homes
+    - Multi-user real-time collaboration (presence, terminal-sharing, ACLs)
+    - Bundled agents (OpenClaw, Hermes, Pi)
+    - Flutter web UI with a FastAPI backend
+  requirements:
+    - Podman (rootless)
+    - Linux
+    - Self-hosted
+  limitations:
+    - Commodity container isolation (rootless podman); no novel security primitive
+    - Broad platform scope beyond a sandbox primitive
+    - Early-stage (14 stars, created May 2026)
+  notes: >-
+    The only multi-user collaborative sandbox platform in this list — the
+    isolation axis is the per-user workspace (rootless podman), not multiple
+    parallel agents (see LINCE and warren for that). The differentiator is the
+    team-collaboration use case (presence, terminal-sharing, ACLs) on real
+    per-workspace container isolation, not the isolation mechanism itself.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: self-hosted

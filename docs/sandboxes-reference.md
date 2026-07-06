@@ -372,6 +372,20 @@ Hardened Incus container sandbox with real-time nftables threat detection (rever
 
 _Notes: Goes beyond isolation into active defense — the monitoring daemon uses kernel-level nftables packet inspection to detect reverse shells, C2 callbacks, DNS tunneling, and data exfiltration patterns, then auto-pauses or kills the container. Supply-chain hardening (read-only git hooks) is a detail most sandboxes miss._
 
+<a id="ref-containarium"></a>
+### Containarium
+
+**Maintainer:** FootprintAI · **License:** Apache-2.0 · [Home](https://containarium.dev) · [Repo](https://github.com/FootprintAI/Containarium)
+
+Self-hostable agent runtime that gives each agent a persistent, SSH-reachable LXC/Incus box with per-tenant network isolation and an in-box MCP server; Kubernetes and LXC backends with GPU passthrough.
+
+- **Isolation:** container
+- **Capabilities:** Persistent, SSH-reachable LXC/Incus box per agent; Per-tenant network isolation (agent holds an SSH key, not a kube-apiserver token); Userspace SOCKS5 egress proxy for network policy; MCP-native admin CLI plus a second MCP server running inside the box; Kubernetes and LXC/Incus backends; GPU passthrough; Port exposure to the public internet
+- **Requirements:** Linux with LXC/Incus, or Kubernetes; Go 1.25 to build; Self-hosted
+- **Limitations:** eBPF egress policy is experimental (under experimental/); the enforced egress path is the SOCKS5 proxy; In-box file-ops sandbox (AGENTBOX_ROOT) is opt-in, default-off; Container isolation (shared kernel)
+
+_Notes: SSH-native per-tenant LXC/Incus boxes; blast radius is bounded by an SSH key rather than a cluster token. Ships two MCP servers (host admin and an in-box shell_exec). The tagline advertises eBPF egress, but that code is experimental — the shipping egress control is a userspace SOCKS5 proxy._
+
 <a id="ref-cua"></a>
 ### cua
 
@@ -585,7 +599,7 @@ _Notes: Different approach from Pyodide — a custom Rust interpreter rather tha
 <a id="ref-nono"></a>
 ### nono
 
-**Maintainer:** always-further · **License:** OSS · [Home](https://nono.sh) · [Repo](https://github.com/always-further/nono)
+**Maintainer:** nolabs-ai · **License:** Apache-2.0 · [Home](https://nono.sh) · [Repo](https://github.com/nolabs-ai/nono)
 
 Kernel-enforced agent sandbox with credential proxy, atomic rollback, Sigstore attestation, and cryptographic audit chain.
 
@@ -613,14 +627,14 @@ _Notes: NVIDIA backing gives visibility. OPA/Rego policy support targets enterpr
 <a id="ref-opensandbox"></a>
 ### OpenSandbox
 
-**Maintainer:** Alibaba · **License:** OSS · [Home](https://github.com/alibaba/OpenSandbox)
+**Maintainer:** Alibaba · **License:** Apache-2.0 · [Home](https://github.com/opensandbox-group/OpenSandbox)
 
 Universal sandbox for AI apps with multi-language SDKs, Docker + K8s runtimes, covering coding agents, GUI agents, evaluation, and RL training.
 
 - **Isolation:** container
 - **Capabilities:** Multi-language SDKs (Python/Java/JS/C#/Go planned); Unified API; Dual runtime (Docker for dev, K8s for prod); Evaluation and RL training support
 - **Requirements:** Docker or Kubernetes; Self-hosted
-- **Limitations:** Very new (open-sourced March 2026)
+- **Limitations:** Very new (created December 2025)
 
 _Notes: Broadest scope of any sandbox — covers evaluation and RL training environments, not just agent sandboxing._
 
@@ -708,6 +722,20 @@ Rust single-binary agent engine with a built-in OS-native sandbox using macOS Se
 
 _Notes: The skilllite-sandbox component is independently usable — you don't have to use the agent engine to get the sandbox. Three-layer defense model (install scan + pre-exec auth + runtime sandbox) is more depth than most standalone tools offer._
 
+<a id="ref-warren"></a>
+### warren
+
+**Maintainer:** jayminwest · **License:** MIT · [Home](https://github.com/jayminwest/warren)
+
+Self-hostable control plane and UI for ephemeral coding agents; each run executes in a native bubblewrap sandbox, validates, pushes a branch, and spins down, with live event streaming, mid-run steering, and human sign-off / PR-merge-gated dispatch.
+
+- **Isolation:** user-namespace
+- **Capabilities:** Native bubblewrap-isolated workspace per run (host unreachable); Control plane reaches the sandbox runtime over a unix socket with a bearer token; Live NDJSON event streaming; Mid-run steering (POST /steer); Human sign-off gates that arm dispatch; Serial plan-run dispatch gated on prior-PR merges; Built-in claude-code agent plus a steerable alternative harness; Single container/volume/HTTP API/UI; optional Postgres backend
+- **Requirements:** Docker (single container), or Fly.io / a cluster; A GitHub repo URL and a prompt
+- **Limitations:** Early (v0.6.2); org-readiness features (SSO, remote workers, MCP, audit, budgets) on the roadmap; Process-level isolation (bubblewrap), shared kernel
+
+_Notes: Unlike control planes that delegate isolation to a cloud backend, warren ships its own bubblewrap sandbox — the host is unreachable and the control plane talks to the runtime over a unix socket. The differentiator is the governance layer (mid-run steering, sign-off gates, PR-merge-gated serial dispatch) on native isolation. 33 scenario-based acceptance tests; runs on Fly.io._
+
 ## Kubernetes-Native
 
 <a id="ref-agent-sandbox-kubernetes-sigs"></a>
@@ -737,6 +765,20 @@ Managed Kubernetes service for AI code isolation on GKE using gVisor and kuberne
 - **Limitations:** GKE-only; Vendor lock-in
 
 _Notes: Managed wrapper around the open-source agent-sandbox project. If you're already on GKE, this is the path of least resistance._
+
+<a id="ref-mitos"></a>
+### mitos
+
+**Maintainer:** mitos-run · **License:** Apache-2.0 · [Home](https://mitos.run) · [Repo](https://github.com/mitos-run/mitos)
+
+Kubernetes-native runtime that gives each agent a Firecracker microVM and live copy-on-write forks a running VM into N siblings in tens of milliseconds, with durable versioned workspaces and declarative CRDs.
+
+- **Isolation:** microvm, kvm
+- **Capabilities:** Firecracker microVM per agent (KVM hardware isolation); Live copy-on-write fork of a running VM into N siblings (tens of ms); Restore from memory snapshots in milliseconds; Durable, versioned workspaces; Declarative CRDs with a Kubernetes operator; KVM device-plugin for scheduling microVMs; Go SDK
+- **Requirements:** Kubernetes; Nodes with KVM (bare-metal or nested virtualization); Self-hosted
+- **Limitations:** Very new (created May 2026); prerelease tags; Alpha — features split across "husk" and "engine" paths mid-migration; Linux/KVM only
+
+_Notes: Distinct from raw Firecracker (already listed): a live copy-on-write fork of a warm, running microVM plus a Kubernetes operator, CRDs, and a KVM device-plugin. Fast memory-snapshot restore suits parallel agent exploration and RL-style environment resets._
 
 <a id="ref-openkruise-agents"></a>
 ### openkruise/agents
@@ -824,6 +866,20 @@ Cloud-hosted dev environments usable for isolating agent execution in a full Lin
 
 _Notes: Not purpose-built for agents, but accessible to anyone familiar with GitHub. A "good enough" isolation option for personal agent use without learning new tools._
 
+<a id="ref-klangk"></a>
+### klangk
+
+**Maintainer:** mcdonc · **License:** MIT · [Home](https://mcdonc.github.io/klangk/) · [Repo](https://github.com/mcdonc/klangk)
+
+Self-hosted multi-user collaborative coding platform that runs each user's agent workspace in its own rootless-podman container, with real-time collaboration (presence, terminal-sharing, ACLs) and bundled agents.
+
+- **Isolation:** container, seccomp
+- **Capabilities:** Rootless podman, one container per workspace (filesystem, process, network); pasta networking and seccomp profiles; Per-workspace JWT and per-user bind-mounted homes; Multi-user real-time collaboration (presence, terminal-sharing, ACLs); Bundled agents (OpenClaw, Hermes, Pi); Flutter web UI with a FastAPI backend
+- **Requirements:** Podman (rootless); Linux; Self-hosted
+- **Limitations:** Commodity container isolation (rootless podman); no novel security primitive; Broad platform scope beyond a sandbox primitive; Early-stage (14 stars, created May 2026)
+
+_Notes: The only multi-user collaborative sandbox platform in this list — the isolation axis is the per-user workspace (rootless podman), not multiple parallel agents (see LINCE and warren for that). The differentiator is the team-collaboration use case (presence, terminal-sharing, ACLs) on real per-workspace container isolation, not the isolation mechanism itself._
+
 <a id="ref-koyeb"></a>
 ### Koyeb
 
@@ -851,6 +907,20 @@ Pivoted from CDE to "mission control for AI agents" with sandboxed dev environme
 - **Limitations:** Rapid pivot — product still evolving; Less sandbox API focus than E2B/Daytona
 
 _Notes: Major pivot from Gitpod (rebranded Sept 2025). Demonstrated Claude Code sandbox escape (March 2026). Not agent-specific but increasingly agent-oriented._
+
+<a id="ref-sandcat"></a>
+### sandcat
+
+**Maintainer:** VirtusLab · **License:** Apache-2.0 · [Home](https://github.com/VirtusLab/sandcat)
+
+Docker/devcontainer sandbox that routes all container traffic through a transparent WireGuard-to-mitmproxy for allow/deny egress filtering and injects secrets at the proxy so the container never sees real credential values.
+
+- **Isolation:** container
+- **Capabilities:** Devcontainer or standalone Docker sandbox; Transparent WireGuard tunnel routing all HTTP/S, DNS, and TCP/UDP to mitmproxy; Allow/deny list-based network egress engine; Proxy-level secret substitution (real credentials never enter the container); Runs agents in bypass / auto-approve mode within the boundary; VS Code / IDE integration; CLI wrapper around docker-compose
+- **Requirements:** Docker; Linux or macOS
+- **Limitations:** Container isolation only (shared kernel); Templates need per-project tuning for the development stack
+
+_Notes: Transparent full-traffic capture via WireGuard (not per-tool HTTP_PROXY) combined with proxy-level secret substitution brings the credential-proxy pattern — previously VM-tier only in this list (nono) — down to the container tier. Part of VirtusLab's Visdom delivery infrastructure._
 
 ## Abstraction Layers
 

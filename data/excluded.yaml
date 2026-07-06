@@ -607,3 +607,170 @@
   reason: Discovery/index engine for AI coding tools (skills, plugins, MCP servers), not a sandbox
 - url: https://github.com/Aureliolo/synthorg
   reason: Framework for building synthetic organizations with autonomous AI agents, not a sandbox
+
+# --- Reviewed in issues #38-44 (2026-06-01 to 2026-07-06) ---
+
+- url: https://github.com/0thernes/cosmogonic-quantum-mechalogodrom
+  reason: Deterministic artificial-life simulation, not a sandbox
+- url: https://github.com/410979729/proofrail-hermes
+  reason: Runtime harness plugin for Hermes, not a sandbox
+- url: https://github.com/Armorpiescalator60/Claude-AI-Pro-2026
+  reason: Desktop toolkit with generic secure-sandbox marketing and SEO/spam signals, no substantiated isolation mechanism
+- url: https://github.com/Azure/kars
+  reason: Governance/reference stack for Kubernetes; defers pod isolation to kubernetes-sigs/agent-sandbox (already listed), governance over commodity isolation not an isolation primitive
+- url: https://github.com/Blockether/vis
+  reason: RLM-inspired coding agent, not a sandbox
+- url: https://github.com/Caprista/KarvyLoop
+  reason: Local-first loop-based agent, not a sandbox
+- url: https://github.com/Chat2AnyLLM/awesome-claude-skills
+  reason: Awesome-list, not a sandbox
+- url: https://github.com/Cloudgeni-ai/opengeni
+  reason: Managed agent service for infrastructure work (orchestrator/service); isolation is not the product, not a sandbox
+- url: https://github.com/Cocoanetics/Post
+  reason: Local mail daemon and MCP server, not a sandbox
+- url: https://github.com/Cumulocity-IoT/cumulocity-os-repo-overview
+  reason: IoT repository overview/list, not a sandbox
+- url: https://github.com/Dicklesworthstone/frankenfs
+  reason: Memory-safe FUSE filesystem reimplementation (ext4/btrfs), not agent isolation, not a sandbox
+- url: https://github.com/Dicklesworthstone/frankenlibc
+  reason: LD_PRELOAD memory-safety shim for a program's own libc calls; cooperative and bypassable, no containment boundary
+- url: https://github.com/Dicklesworthstone/frankenmermaid
+  reason: Mermaid diagram engine, not a sandbox
+- url: https://github.com/GenAI-Security-Project/GenAI-Red-Team-Lab
+  reason: OWASP AI red-teaming lab/initiative, not a sandbox
+- url: https://github.com/HexamindOrganisation/hexgate
+  reason: Authorization/policy layer; delegates execution isolation to Anthropic srt (already listed); signed WASM bundle is compiled policy, not code execution
+- url: https://github.com/Hyperyond/Hover
+  reason: Local web-testing tool for coding-agent CLIs, not a sandbox
+- url: https://github.com/NousResearch/hermes-agent
+  reason: AI agent, not a sandbox (anomalous star count)
+- url: https://github.com/Observal/Observal
+  reason: Local registry/analytics platform for AI components, not a sandbox
+- url: https://github.com/ParisNeo/lollms_client
+  reason: Client library for the lollms server, not a sandbox
+- url: https://github.com/Rodert/awesome-mcp
+  reason: Awesome-list of MCP servers, not a sandbox
+- url: https://github.com/Samuel974-hue/ME10-Android-Emulator-Patch-Pack
+  reason: Android emulator performance mod, not a sandbox
+- url: https://github.com/Sogni-AI/sogni-creative-agent-skill
+  reason: Agent skill, not a sandbox
+- url: https://github.com/Veyllo-Labs/VAF
+  reason: Agentic framework, not a sandbox
+- url: https://github.com/WillTaylor22/self-managing-codebase
+  reason: Self-managing-codebase experiment, not a sandbox
+- url: https://github.com/agent-of-empires/agent-of-empires
+  reason: Multi-agent management TUI/Web (orchestrator), not a sandbox
+- url: https://github.com/ajeetraina/awesome-docker-sbx
+  reason: Curated list of Docker Sandbox resources, not a sandbox itself
+- url: https://github.com/avivsinai/telclaude
+  reason: Telegram-Claude bridge, not a sandbox
+- url: https://github.com/bawbel/scanner
+  reason: CLI scanner for agentic AI components, not a sandbox
+- url: https://github.com/bgizdov/awesome-mcp-servers
+  reason: Awesome-list, not a sandbox
+- url: https://github.com/bingook/bingo
+  reason: AI red-team terminal, not a sandbox
+- url: https://github.com/btakita/agent-doc
+  reason: Interactive document sessions with agents, not a sandbox
+- url: https://github.com/buggyblues/shadow
+  reason: Vague AI-agent product ("Your AI Kingdom"), no isolation claim, not a sandbox
+- url: https://github.com/buiphucminhtam/forgewright
+  reason: Adaptive AI orchestrator, not a sandbox
+- url: https://github.com/chancetop-com/core-ai
+  reason: Base AI framework, not a sandbox
+- url: https://github.com/daintreehq/daintree
+  reason: Delegation environment orchestrating coding agents, not a sandbox
+- url: https://github.com/dancer/sandbox
+  reason: Real TS/Bun multi-provider sandbox abstraction (e2b/daytona/modal/cloudflare) but pre-adoption (7 stars, ~8wk alpha); deferred on maturity, revisit if adoption grows
+- url: https://github.com/erwins-enkel/shepherd
+  reason: Mission-control console for Claude Code (orchestrator), not a sandbox
+- url: https://github.com/esengine/DeepSeek-Reasonix
+  reason: AI coding agent, not a sandbox
+- url: https://github.com/fallow-rs/fallow
+  reason: TS/JS static-analysis / codebase-intelligence tool, not a sandbox
+- url: https://github.com/flagos-ai/KernelGenBench
+  reason: Kernel-generation benchmark, not a sandbox
+- url: https://github.com/frontman-ai/frontman
+  reason: In-framework/browser AI agent, not a sandbox
+- url: https://github.com/fynnfluegge/agtx
+  reason: Multi-session blackboard for coding agents (orchestrator), not a sandbox
+- url: https://github.com/geserdugarov/agent-orchestrator
+  reason: Agent orchestrator for GitHub projects, not a sandbox
+- url: https://github.com/getkimchi/kimchi
+  reason: Terminal coding agent, not a sandbox
+- url: https://github.com/githubnext/ado-aw
+  reason: Azure DevOps agentic workflows, not a sandbox
+- url: https://github.com/gtg7784/exposed-ai-api-keys
+  reason: API-key-hygiene awareness repo, not a sandbox
+- url: https://github.com/hecatehq/hecate
+  reason: Local agent operations console (orchestrator), not a sandbox
+- url: https://github.com/heiervang-technologies/unleash
+  reason: Vague agent product ("unleash your agent"), no isolation claim, not a sandbox
+- url: https://github.com/hesreallyhim/awesome-claude-code
+  reason: Awesome-list, not a sandbox
+- url: https://github.com/hexagon-codes/hexclaw
+  reason: Enterprise AI chat backend where a code sandbox is one sub-feature among RAG/tool-proxy/IM integrations, not a standalone sandbox
+- url: https://github.com/jeong-sik/masc
+  reason: Multi-agent streaming coordination library, not a sandbox
+- url: https://github.com/jigjoy-ai/baro
+  reason: Parallel coding-agent orchestrator (goal to PR), not a sandbox
+- url: https://github.com/junhoyeo/tokscale
+  reason: Token-usage tracking CLI, not a sandbox
+- url: https://github.com/kdcube/kdcube-ai-app
+  reason: Customer-facing AI app platform (isolation is one feature), not a sandbox
+- url: https://github.com/koppx/Evolva
+  reason: Local agent engineering framework, not a sandbox
+- url: https://github.com/langchain-ai/deepagents
+  reason: Agent harness, not a sandbox
+- url: https://github.com/libra-tools/libra
+  reason: AI-native version control tool, not a sandbox
+- url: https://github.com/mdbabumiamssm/AI-Agentic-Skills-by-Dr.-Mia
+  reason: Agent skills collection, not a sandbox
+- url: https://github.com/mdbabumiamssm/LLMs-Universal-Life-Science-and-Clinical-Skills-
+  reason: Agent skills collection, not a sandbox
+- url: https://github.com/mistlehq/mistle
+  reason: Background agents, not a sandbox
+- url: https://github.com/nano-step/nano-brain
+  reason: Persistent memory / code-intelligence server, not a sandbox
+- url: https://github.com/neutree-ai/agent-platform
+  reason: Agent platform, not a sandbox
+- url: https://github.com/nexu-io/looper
+  reason: Autonomous multi-repo coding-agent orchestrator, not a sandbox
+- url: https://github.com/oratelecom/tokenwar
+  reason: Token-saving tool stack for Claude Code, not a sandbox
+- url: https://github.com/pzfreo/build123d-mcp
+  reason: MCP server for build123d CAD, not a sandbox
+- url: https://github.com/raullenchai/Rapid-MLX
+  reason: Local inference engine for Apple Silicon, not a sandbox
+- url: https://github.com/ryantsai/KKTerm
+  reason: Windows AI-agent terminal / SSH / RDP tool, not a sandbox
+- url: https://github.com/sethirus/The-Thiele-Machine
+  reason: Computation-theory proof repo, not a sandbox
+- url: https://github.com/shrinedogg/biggs.dog
+  reason: Joke/placeholder repo, not a sandbox
+- url: https://github.com/sifted-network/sifted-awesome-ai-agents
+  reason: Auto-generated awesome-list, not a sandbox
+- url: https://github.com/sinameraji/kimiflare
+  reason: Terminal coding agent/harness on Cloudflare, not a sandbox
+- url: https://github.com/smrafiz/claude-supercharger
+  reason: Claude Code workflow/safety layer, not a sandbox
+- url: https://github.com/stefanoginella/aicontainer
+  reason: Commodity devcontainer; opt-in iptables egress and socket-proxy already covered by jailoc (blocks by default), no differentiator from existing container-tier entries
+- url: https://github.com/strukto-ai/mirage
+  reason: Virtual filesystem that expands agent reach across ~50 backends with real credentials (opposite of containment); no security boundary
+- url: https://github.com/tetsuo-ai/agenc-core
+  reason: Private agent core runtime (framework), not a sandbox
+- url: https://github.com/tizkovatereza/awesome-ai-sandboxes
+  reason: Curated list of cloud sandbox providers, not a sandbox itself
+- url: https://github.com/versperai/VersperClaw
+  reason: Agentic research workspace/agent, not a sandbox
+- url: https://github.com/vvedantb/eva
+  reason: Orchestrates sandboxed cloud agents; isolation delegated to backend (orchestrator), not a sandbox
+- url: https://github.com/web3infra-foundation/libra
+  reason: AI-native version control tool, not a sandbox
+- url: https://github.com/xorq-labs/xorq
+  reason: Executable memory system for tabular data, not a sandbox
+- url: https://github.com/yv1ing/Z3r0
+  reason: Multi-agent security-assessment workbench, not a sandbox
+- url: https://github.com/zaydiscold/robinhood-cli
+  reason: Robinhood API CLI/MCP, not a sandbox
