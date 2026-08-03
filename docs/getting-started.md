@@ -153,7 +153,7 @@ srt "your-command"
 
 #### microsandbox — local microVM isolation (macOS, Linux)
 
-[microsandbox](https://github.com/zerocore-ai/microsandbox) provides microVM isolation using libkrun, with no external server. Your credentials and data never leave your machine.
+[microsandbox](https://github.com/superradcompany/microsandbox) provides microVM isolation using libkrun, with no external server. Your credentials and data never leave your machine.
 
 **Protects against:** Full VM-level isolation. Data locality (nothing sent to cloud).
 
@@ -209,10 +209,20 @@ Do you already use an agent with built-in sandboxing?
     │
     ├── Credential safety (API keys, tokens)
     │   ├── nono — keys never enter the sandbox + rollback + audit
-    │   └── cleanroom — keys never enter the sandbox + microVM isolation
+    │   ├── cleanroom — keys never enter the sandbox + microVM isolation
+    │   └── CubeSandbox — credential vault + microVM, self-hosted at scale
     │
     ├── Undo mistakes (rollback)
-    │   └── nono — atomic rollback with integrity verification
+    │   ├── nono — atomic rollback with integrity verification
+    │   └── CubeSandbox — copy-on-write snapshot, clone, and rollback
+    │
+    ├── Supervised execution (watch and halt a running agent)
+    │   └── agent-glovebox — second-model monitor gates tool calls,
+    │       phone notifications, remote halt, external audit log
+    │
+    ├── Team-governed agent policy (committed, auditable rules)
+    │   └── cplt — version-controlled policy file; deny rules only
+    │       tighten, loosening requires explicit sign-off
     │
     ├── Strongest isolation boundary
     │   ├── Local → cleanroom, Docker Sandboxes, microsandbox, or sand (microVM)

@@ -158,3 +158,24 @@
 - date: "2026-07-06"
   entries:
     - mitos
+
+- date: "2026-07-13"
+  entries:
+    - bx-mac
+    - agent-glovebox
+
+- date: "2026-07-20"
+  entries:
+    - hull
+
+- date: "2026-07-27"
+  entries:
+    - temps
+    - Tencent Cloud Agent Sandbox (AGS)
+    - CubeSandbox
+
+- date: "2026-08-03"
+  entries:
+    - cplt
+    - gbash
+    - axern

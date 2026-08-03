@@ -31,3 +31,7 @@ Curated articles, papers, and discussions on sandboxing AI agents.
 ## Discussions
 
 - [Ask HN: Why are so many rolling out their own AI/LLM agent sandboxing solution?](https://news.ycombinator.com/item?id=46699324) — Community discussion on the proliferation of sandbox solutions
+
+## Related Lists
+
+- [awesome-ai-coding-sandboxes](https://github.com/fhiltscher/awesome-ai-coding-sandboxes) — Security-posture-first peer list: a 37-provider comparison matrix ranking on isolation tier, egress control (deny-default vs configurable vs open), and secrets brokering (credentials kept out via proxy vs injected). Complementary scope to this repo — it covers many hosted/proprietary providers with no GitHub presence — and a useful cross-check for coverage gaps.

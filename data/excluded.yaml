@@ -795,3 +795,128 @@
   reason: Persistent memory for coding agents, not a sandbox
 - url: https://github.com/usewhale/DeepSeek-Code-Whale
   reason: Terminal AI coding agent for DeepSeek, not a sandbox
+
+# --- Reviewed in issues #46/#47/#49/#51 (2026-08-03) ---
+
+- url: https://github.com/cloudflare/artifact-fs
+  reason: Filesystem driver for fast git repo mounts, not a sandbox
+- url: https://github.com/zeenie-ai/opencompany
+  reason: Self-improving AI company agent framework, not a sandbox
+- url: https://github.com/smithersai/smithers
+  reason: Agent workflow observability/time-travel orchestration, not a sandbox
+- url: https://github.com/biheto/DevAgent-Studio
+  reason: Multi-agent task workstation, not a sandbox
+- url: https://github.com/icoretech/codex-pooler
+  reason: Self-hosted Codex gateway, not a sandbox
+- url: https://github.com/hachej/boring-ui
+  reason: Agent-powered app shell/UI framework, not a sandbox
+- url: https://github.com/EvoMap/awesome-agent-swarm
+  reason: Awesome list, not a sandbox
+- url: https://github.com/AndrewCTF/osint-geospatial-console
+  reason: OSINT geospatial console, not a sandbox
+- url: https://github.com/DdogezD/claudium
+  reason: Coding agent build, not a sandbox
+- url: https://github.com/banyikun/agent_exploration
+  reason: AGI survey paper repo, not a sandbox
+- url: https://github.com/skvdhshuk-blip/hao-code
+  reason: PHP agent SDK, not a sandbox
+- url: https://github.com/digitaldrywood/detent
+  reason: Board-driven agentic work orchestration, not a sandbox
+- url: https://github.com/Eliyce/paqad-ai
+  reason: Spec-driven development framework, not a sandbox
+- url: https://github.com/linny006/llm-agents-radar
+  reason: Auto-updated index of agent frameworks, not a sandbox
+- url: https://github.com/Ark0N/Codeman
+  reason: Tmux/WebUI manager for coding agents, not a sandbox
+- url: https://github.com/verl-project/uni-agent
+  reason: Agent building/running/training framework, not a sandbox
+- url: https://github.com/decocms/studio
+  reason: Agent control plane, not a sandbox
+- url: https://github.com/FrontisAI/Awesome-Self-Improving-Agents
+  reason: Awesome list, not a sandbox
+- url: https://github.com/thalesgroup-cert/suspicious
+  reason: Phishing/threat-analysis platform, not an agent sandbox
+- url: https://github.com/gethuman-sh/human
+  reason: AI software factory pipeline, not a sandbox
+- url: https://github.com/AbyssCN/oh-my-dag
+  reason: DAG execution harness on a coding-agent runtime, not a sandbox
+- url: https://github.com/wangbinquan/agent-workflow
+  reason: Agent workflow framework, not a sandbox
+- url: https://github.com/redbus-labs/mkpro
+  reason: ADK-based CLI, not a sandbox
+- url: https://github.com/linny006/awesome-agent-skills
+  reason: Awesome list of agent skills, not a sandbox
+- url: https://github.com/AIGeniusInstitute/deepthink
+  reason: Desktop loop-engineering app with IM integrations, not a sandbox
+- url: https://github.com/martinholovsky/SOTA-skills
+  reason: AI/LLM engineering skills collection, not a sandbox
+- url: https://github.com/Zero0x00/Ai-Security-radar-
+  reason: Curated AI/ML security list, not a sandbox
+- url: https://github.com/kibertoad/cat-factory
+  reason: Agent management platform, not a sandbox
+- url: https://github.com/fhiltscher/awesome-ai-coding-sandboxes
+  reason: Awesome list (added to references/reading-list.md instead)
+- url: https://github.com/QwenLM/qwen-code
+  reason: Terminal coding agent, not a sandbox
+- url: https://github.com/open-metadata/OpenMetadata
+  reason: Data catalog/context platform, not a sandbox
+- url: https://github.com/openai/openai-agents-js
+  reason: Multi-agent framework SDK, not a sandbox
+- url: https://github.com/Abilityai/trinity
+  reason: Governance-orchestrator pattern (audit chain over delegated isolation) — same as bernstein/kukeon/egg/vnx; plain per-agent Docker with a sudo escape hatch
+- url: https://github.com/KlaatAI/klaatcode
+  reason: Terminal coding agent, not a sandbox
+- url: https://github.com/CharlesJ-ABu/FactorMiner
+  reason: Quant factor-mining workbench, not a sandbox
+- url: https://github.com/RooCodeInc/Roomote
+  reason: Cloud coding agent, not a sandbox
+- url: https://github.com/ebibibi/claude-code-discord-bridge
+  reason: Discord chat gateway for Claude Code, not a sandbox
+- url: https://github.com/ThinkEx-OSS/thinkex
+  reason: Research/study workspace, not a sandbox
+- url: https://github.com/AndrewCTF/velocity
+  reason: OSINT situation console, not a sandbox
+- url: https://github.com/quazardous/aiball
+  reason: Inter-agent ticket backlog coordination, not a sandbox
+- url: https://github.com/TencentCloudAgentRuntime/ags-cookbook
+  reason: Samples/cookbook for Tencent AGS (the underlying service was added as its own entry), not itself a sandbox
+- url: https://github.com/lianluo-esign/ferrogate
+  reason: AI gateway/reverse proxy for LLM traffic, not a sandbox
+- url: https://github.com/ReyJ94/SceneProof
+  reason: Visual inspection tool for coding agents, not a sandbox
+- url: https://github.com/talesofai/cohub
+  reason: Human/agent collaboration space, not a sandbox
+- url: https://github.com/opencurro-ai/opencurro-ai
+  reason: General-purpose AI agent, not a sandbox
+- url: https://github.com/penk/qmlagent
+  reason: QtQuick runtime introspection for agents, not a sandbox
+- url: https://github.com/yanyaoer/orch-cli
+  reason: Daemonless multi-agent orchestration, not a sandbox
+- url: https://github.com/czpython/druks
+  reason: Governance-orchestrator pattern (durable runs, human gates over commodity isolation) — same as bernstein/kukeon/egg/vnx
+- url: https://github.com/meedoomostafa/devdiag
+  reason: Diagnostic CLI/GitHub Action, not a sandbox
+- url: https://github.com/WasmAgent/wasmagent-js
+  reason: Agent framework whose WASM isolation is inherited from quickjs-emscripten/Pyodide (already listed); default node:vm path is documented as not a security boundary
+- url: https://github.com/iTwin/itwinjs-core
+  reason: Digital-twin JS library monorepo, not a sandbox
+- url: https://github.com/lthoangg/OpenAgentd
+  reason: Local-first coding agent alternative, not a sandbox
+- url: https://github.com/NeuroAIHub/BrainPilot
+  reason: Agentic brain-research tool, not a sandbox
+- url: https://github.com/spacedock-dev/spacedock
+  reason: Approval-gate agent workflows with no isolation mechanism, not a sandbox
+- url: https://github.com/openmake/openmake_llm
+  reason: Self-hosted AI workspace, not a sandbox
+- url: https://github.com/cheatcode-ai/cheatcode
+  reason: Generalist AI agent platform, not a sandbox
+- url: https://github.com/2witstudios/PageSpace
+  reason: Project chat workspace, not a sandbox
+- url: https://github.com/ShadowESC95/ELI_v2.0
+  reason: No description or sandbox claims, not a sandbox
+- url: https://github.com/a-mart/forge
+  reason: Local-first multi-agent orchestration platform, not a sandbox
+- url: https://github.com/OpenHands/OpenHands
+  reason: Coding agent platform (runs in Docker but is not itself a sandbox); listed in peer lists, excluded here so the cross-check doesn't resurface it
+- url: https://github.com/alibaba/OpenSandbox
+  reason: Stale alias — repo moved to opensandbox-group/OpenSandbox, which is already listed

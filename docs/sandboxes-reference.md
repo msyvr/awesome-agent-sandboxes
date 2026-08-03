@@ -144,10 +144,24 @@ Cloud sandbox platform using Firecracker microVMs with TypeScript and Python SDK
 
 _Notes: Firecracker-based like E2B. SDK is open source (Apache-2.0) but the sandbox backend infrastructure is in a separate private repo. Beta — evaluate maturity before committing to production use._
 
+<a id="ref-tencent-cloud-agent-sandbox-ags"></a>
+### Tencent Cloud Agent Sandbox (AGS)
+
+**Maintainer:** Tencent Cloud · **License:** Closed source · [Home](https://cloud.tencent.com/product/ags)
+
+Managed Tencent Cloud service running agent workloads in per-sandbox KVM microVMs with dedicated guest kernels, exposing E2B-compatible APIs across code-execution, browser, Android, Windows, and computer-use sandbox types.
+
+- **Isolation:** microvm, kvm
+- **Capabilities:** Per-sandbox microVM with a dedicated guest kernel (KVM hardware virtualization); eBPF network segmentation; E2B-compatible API, Python/Go/Node SDKs, and an agr CLI; Code-execution, browser, mobile (Android/Appium), Windows, and computer-use sandbox types; Custom container images; Vendor claims <60ms cold start, <5MB per-sandbox memory overhead, 2,000+ sandboxes per 96-vCPU host
+- **Requirements:** Tencent Cloud (mainland China) account
+- **Limitations:** Closed beta; one documented region (ap-guangzhou); no published pricing; Chinese-only product and docs pages (English exists only in the GitHub cookbook)
+
+_Notes: The only cloud-managed entry offering managed Android and Windows sandboxes. Press coverage indicates the engine is Tencent's open-source CubeSandbox (also listed) — inferred, not stated on the product page. Samples at github.com/TencentCloudAgentRuntime/ags-cookbook._
+
 <a id="ref-vercel-sandbox"></a>
 ### Vercel Sandbox
 
-**Maintainer:** Vercel · **License:** Closed source · [Home](https://vercel.com)
+**Maintainer:** Vercel · **License:** Closed source · [Home](https://vercel.com) · [Repo](https://github.com/vercel/sandbox)
 
 Firecracker microVM sandboxes for untrusted code, powering v0's code generation runtime.
 
@@ -231,6 +245,20 @@ macOS sandbox-exec profile system with deny-first policy, composable profiles, a
 - **Limitations:** macOS only (permanently — sandbox-exec is Apple-specific); sandbox-exec deprecation risk
 
 _Notes: More mature than it appears — has CI tests, docs site, and thoughtful profile composition. The most polished macOS-specific sandboxing option._
+
+<a id="ref-agent-glovebox"></a>
+### agent-glovebox
+
+**Maintainer:** AlexanderMattTurner · **License:** Apache-2.0 · [Home](https://github.com/AlexanderMattTurner/agent-glovebox)
+
+Security wrapper that runs Claude Code sessions inside a Docker sbx microVM with an egress allowlist, a second-model monitor gating tool calls, per-repo credential scoping, and a tamper-evident audit log.
+
+- **Isolation:** microvm
+- **Capabilities:** Hypervisor-isolated microVM via Docker's sbx runtime (Linux/KVM, Apple Silicon macOS, WSL2); Project-directory-only bind mount; read-only system filesystems; unprivileged user; ephemeral per-session volumes; Network egress restricted to an allowlist firewall; Second-model monitor gates flagged tool calls, sends phone push notifications, and can halt the agent remotely; Per-repository GitHub tokens generated outside the sandbox and never mounted into it; Tamper-evident audit log stored outside the sandbox; panic command captures a forensics snapshot; Edits returned on a glovebox/* branch for manual approval; Privacy modes routing inference to open-weights or TEE-hosted providers
+- **Requirements:** Docker with the sbx sandbox runtime; Claude Code
+- **Limitations:** Very new (created 2026-05-24; ~10 weeks at inclusion); Monitor and sanitization layers are best-effort filters on top of the hard boundaries
+
+_Notes: Clears the container-tier bar on three axes at once — per-repo credential scoping, second-model threat detection with human-in-the-loop halt, and an external tamper-evident audit trail — a combination none of the other Claude Code wrappers offer. Ships a written threat model and heavy security CI (gitleaks, grype, mutation testing), unusual at its size._
 
 <a id="ref-agent-infra-sandbox"></a>
 ### agent-infra/sandbox
@@ -330,6 +358,20 @@ Lightweight sandboxing for arbitrary processes using bubblewrap (Linux) and Seat
 
 _Notes: Designed to sandbox any process, not just Claude Code. Interactive network approval mode is useful for discovering what network access a tool actually needs._
 
+<a id="ref-axern"></a>
+### axern
+
+**Maintainer:** cofy-x (Chen Yingwei) · **License:** Apache-2.0 · [Home](https://github.com/cofy-x/axern)
+
+Self-hostable sandbox platform running untrusted agent code under gVisor and trusted long-lived services under runc, behind one PostgreSQL-backed control plane with Go/Python/TypeScript SDKs.
+
+- **Isolation:** gvisor, container
+- **Capabilities:** gVisor (runsc) user-space kernel as the untrusted-code boundary; Dual runtime — runc containers for trusted durable services under the same lifecycle APIs; Control plane owns placement, leases, replicas, health, storage, and rollouts across restarts; OCI and Nydus (lazy-loading rootfs) image paths; Docker Compose local mode and a cloud-neutral Helm chart; Axrun agent-task harness with verification, trajectories, and typed artifacts
+- **Requirements:** Docker Compose (local) or Kubernetes (Helm); Linux hosts for runsc
+- **Limitations:** Six days of public history at inclusion; single maintainer; pre-1.0; README disclaims multi-tenant production safety of default deployments
+
+_Notes: The only self-hostable platform entry using gVisor as its untrusted-code boundary — the peers are plain-container (OpenSandbox, EdgeBox, agent-infra) or microVM (microsandbox). Included with strong maturity caveats: the scaffolding (docs site, three SDKs, Helm chart, governance files) far exceeds its public age, implying prior private development; sustainability unproven._
+
 <a id="ref-brood-box"></a>
 ### brood-box
 
@@ -343,6 +385,20 @@ CLI that runs coding agents inside hardware-isolated microVMs with COW workspace
 - **Limitations:** Experimental
 
 _Notes: From Stacklok (founded by Luke Hinds of Sigstore). Hardware VM isolation like cleanroom, but adds TOCTOU-resistant diff review — the VM is stopped before the user reviews changes, preventing the agent from modifying files during review. DNS egress firewall and non-overridable secret exclusions are strong default posture._
+
+<a id="ref-bx-mac"></a>
+### bx-mac
+
+**Maintainer:** holtwick · **License:** MIT · [Home](https://github.com/holtwick/bx-mac)
+
+macOS CLI that launches GUI apps and agent CLIs under a generated Seatbelt profile denying access to everything in the home directory except the specified project directories.
+
+- **Isolation:** seatbelt
+- **Capabilities:** Kernel-enforced filesystem isolation via sandbox-exec with generated SBPL profiles; Sandboxes full GUI IDEs (VSCode, Cursor, Xcode, Zed), terminals, and arbitrary commands; Electron detection that disables Chromium's internal sandbox to avoid Seatbelt conflicts; Multi-directory sessions; gitignore-style .bxignore per-project secret blocking; Hardcoded denies for ~/.ssh, ~/.gnupg, ~/.docker, and sensitive ~/Library paths; Dry-run mode to preview the generated profile
+- **Requirements:** macOS; Node >= 22 (Homebrew tap or npm install bx-mac)
+- **Limitations:** Filesystem only — no network or process isolation; Allow-first blocklist model — $HOME is scanned at launch; files created after launch are not blocked, and paths outside $HOME are broadly allowed; Relies on deprecated sandbox-exec; single maintainer
+
+_Notes: The only Seatbelt wrapper here that targets whole GUI IDEs rather than CLI agent processes. Weaker guarantee than the deny-first wrappers (fence, hazmat, jailoc, sand): the profile is a launch-time snapshot of $HOME with deny rules, and the README states plainly that this is protection against accidental or misguided file access, not airtight isolation._
 
 <a id="ref-cleanroom"></a>
 ### cleanroom
@@ -386,6 +442,20 @@ Self-hostable agent runtime that gives each agent a persistent, SSH-reachable LX
 
 _Notes: SSH-native per-tenant LXC/Incus boxes; blast radius is bounded by an SSH key rather than a cluster token. Ships two MCP servers (host admin and an in-box shell_exec). The tagline advertises eBPF egress, but that code is experimental — the shipping egress control is a userspace SOCKS5 proxy._
 
+<a id="ref-cplt"></a>
+### cplt
+
+**Maintainer:** NAV (Norwegian Labour and Welfare Administration) · **License:** MIT · [Home](https://github.com/navikt/cplt)
+
+Single static Rust binary that runs AI coding agent CLIs under OS sandbox primitives — Seatbelt on macOS, Landlock plus seccomp-BPF on Linux — with default-deny credential paths, a domain-filtering egress proxy, and a version-controlled per-repo policy file.
+
+- **Isolation:** seatbelt, landlock, seccomp, user-namespace
+- **Capabilities:** Kernel-enforced filesystem, network, and syscall restrictions with no Docker or VM; Runs Copilot CLI, OpenCode, Gemini CLI, Antigravity, Pi, Claude Code, or a plain shell; Default-deny on ~/.ssh, ~/.gnupg, ~/.aws, ~/.kube, .env*, key files, and 15+ credential dirs; Kernel-blocked writes to .git/hooks, .git/config, and .gitmodules (persistence vectors); CONNECT proxy with domain allow/block lists and egress auditing; localhost outbound kernel-blocked; Committed .cplt.toml policy — deny rules auto-apply and only tighten; proposals require developer sign-off via cplt trust accept; Env-var allowlisting (blocks AWS_*, *_TOKEN, *_SECRET); npm postinstall scripts disabled by default; Optional bubblewrap namespace isolation on Linux
+- **Requirements:** macOS, or Linux kernel 5.13+ (full network filtering needs 6.7+)
+- **Limitations:** Linux enforcement self-described as weaker than macOS; gh/git guard wrappers are soft barriers, not kernel-enforced; Container isolation explicitly out of scope
+
+_Notes: Backed by NAV, Norway's national welfare agency — rare institutional provenance in this space. The differentiator is the governance model: the policy file lives in version control, deny rules can only tighten, and loosening requires an explicit trust-acceptance workflow, making agent policy team-auditable in a way no other wrapper here offers._
+
 <a id="ref-cua"></a>
 ### cua
 
@@ -399,6 +469,20 @@ Open-source infrastructure for computer-use agents providing OS-level VM sandbox
 - **Limitations:** Bundled "Cua Driver" component runs unsandboxed on host (use Sandbox/Lume/cuabot for isolation); Optional ML components include AGPL-3.0 (ultralytics) and CC-BY-4.0 (OmniParser)
 
 _Notes: Provisions full graphical desktops for macOS, Windows, Linux, and Android — distinct from container/microVM sandboxes that only give Linux shells. One of few options that legally and performantly virtualizes macOS for agent workloads, via Apple Virtualization.framework on Apple Silicon. Designed for visual/UI-driven agents rather than code-execution agents._
+
+<a id="ref-cubesandbox"></a>
+### CubeSandbox
+
+**Maintainer:** Tencent Cloud · **License:** Apache-2.0 · [Home](https://github.com/TencentCloud/CubeSandbox)
+
+Self-hostable microVM sandbox service built on RustVMM and KVM, E2B-SDK-compatible, creating hardware-isolated sandboxes in under 60ms with copy-on-write snapshot, clone, and rollback.
+
+- **Isolation:** microvm, kvm
+- **Capabilities:** RustVMM + KVM microVM per sandbox (hardware-level isolation); Sandbox creation <60ms with <5MB memory overhead (vendor benchmarks); E2B-compatible SDK (PyPI cubesandbox); CubeCoW copy-on-write engine — event-level snapshots, instant clone, rollback to any saved state; Credential vault — agents call external APIs while keys never enter the sandbox; Per-sandbox traffic tokens and policy-routing egress; AutoPause/AutoResume for idle sandboxes; Single-node, multi-node cluster, Kubernetes, and Terraform deployment; ARM64 support
+- **Requirements:** Linux hosts with KVM; Self-hosted
+- **Limitations:** v0.x (first open-source release April 2026); fast-moving surface; License is Tencent's Apache-2.0 variant with third-party carve-outs (SPDX NOASSERTION on GitHub)
+
+_Notes: Missed by keyword discovery despite ~10.9k stars — surfaced while investigating Tencent's managed AGS service, which press coverage says runs on this engine. Combines three properties usually found separately: hardware VM isolation, credential brokering, and sub-second CoW snapshot/rollback — the closest self-hosted analog to mitos's fork model, at much larger scale and with an E2B-compatible API._
 
 <a id="ref-docker-sandboxes"></a>
 ### Docker Sandboxes
@@ -456,6 +540,20 @@ Container-free CLI sandbox using OS-native primitives for network domain allowli
 
 _Notes: Lightest-weight option for wrapping agent processes with real isolation — no container runtime needed. Inspired by Anthropic's srt. Built-in agent templates mean zero config for common agents. Well-documented security model and architecture._
 
+<a id="ref-gbash"></a>
+### gbash
+
+**Maintainer:** ewhauser · **License:** Apache-2.0 · [Home](https://github.com/ewhauser/gbash)
+
+Pure-Go in-process bash interpreter that executes agent shell scripts against a virtual filesystem and ~90 built-in command implementations, with no fork/exec path to host binaries.
+
+- **Isolation:** process
+- **Capabilities:** Registry-backed command resolution — unknown commands exit 127 and never reach host binaries; Virtual in-memory filesystem; host mounts opt-in and read-only under a copy-on-write overlay; Network off by default; allowlist-based HTTP client with redirect revalidation and response-size caps; Execution budgets — command count, loop iterations, glob expansion, substitution depth, output caps; Go library, CLI, JSON-RPC server mode, persistent sessions, and a wasm build
+- **Requirements:** Go (library) or single binary
+- **Limitations:** Alpha; single maintainer; No kernel boundary — explicitly not hardened against interpreter bugs or DoS beyond the budgets; Host-directory and workspace modes expose real host paths; server mode is unauthenticated (loopback/Unix-socket defaults)
+
+_Notes: The interpreter-level sandbox class of monty, applied to bash — nothing else on the list sandboxes the shell itself. Ships a detailed THREAT_MODEL.md with per-boundary data-flow analysis and a published coreutils-compatibility report; the README is explicit that OS- or process-level isolation should wrap it when containment against interpreter bugs matters._
+
 <a id="ref-gocker"></a>
 ### gocker
 
@@ -511,6 +609,20 @@ CLI that runs AI agents inside ephemeral Docker/Podman containers with proxy-bas
 - **Limitations:** Container isolation only (shared kernel); Solo maintainer; Early project
 
 _Notes: The --dump-network-access flag is useful for discovering what network access an agent actually needs — similar to Anthropic srt's interactive approval mode but post-hoc. Docker-in-Docker support is unusual and needed for agents that themselves use containers._
+
+<a id="ref-hull"></a>
+### hull
+
+**Maintainer:** Artalis · **License:** AGPL-3.0 · [Home](https://github.com/artalis-io/hull)
+
+Single-binary application runtime executing Lua, QuickJS, and WASM code under manifest-declared capability allowlists enforced by a userspace capability layer plus kernel sandboxes (seccomp-bpf and Landlock, Seatbelt, or pledge/unveil).
+
+- **Isolation:** seccomp, landlock, seatbelt, wasm
+- **Capabilities:** Kernel enforcement per platform — seccomp-bpf + Landlock on Linux (violation SIGKILL), deny-default Seatbelt SBPL on macOS, pledge/unveil on OpenBSD and Cosmopolitan APE builds; Manifest-declared allowlists for filesystem paths, outbound hosts, env vars, and DB access; Two-phase sandbox lifecycle (before app load, after manifest resolution); WASM compute modules in WAMR — no WASI, single host call, gas metering, 2 MiB default heap; QuickJS instruction-count gas metering; W^X enforcement; Apps compile to Ed25519-signed static executables with hull verify and JSON audit logging; libhull.a lets native C/Rust/Zig programs link just the sandbox and capability layer
+- **Requirements:** Linux, macOS, or OpenBSD (single binary; Cosmopolitan builds run cross-platform)
+- **Limitations:** Sandboxes code written for its runtime, not arbitrary processes; Solo maintainer; ~5 months old at inclusion; pre-stable APIs; Security audits are self-authored; dual AGPL-3.0/commercial with copyright-assignment CLA
+
+_Notes: No other entry combines a multi-language app runtime with a process-level kernel sandbox: the wasm-runtime entries isolate only WASM, and the kernel-primitive wrappers (nono, cplt) wrap existing commands rather than providing the runtime. Aimed at running AI-generated application code where the signed manifest is the verifiable capability declaration._
 
 <a id="ref-jailoc"></a>
 ### jailoc
@@ -571,7 +683,7 @@ _Notes: One of the few sandboxes that layers VM (Lima/QEMU) plus container (Incu
 <a id="ref-microsandbox"></a>
 ### microsandbox
 
-**Maintainer:** zerocore-ai · **License:** OSS · [Home](https://github.com/zerocore-ai/microsandbox)
+**Maintainer:** zerocore-ai · **License:** OSS · [Home](https://github.com/superradcompany/microsandbox)
 
 Local-first programmable sandboxes using libkrun microVMs, designed for sensitive API keys with no external server.
 
@@ -722,6 +834,20 @@ Rust single-binary agent engine with a built-in OS-native sandbox using macOS Se
 
 _Notes: The skilllite-sandbox component is independently usable — you don't have to use the agent engine to get the sandbox. Three-layer defense model (install scan + pre-exec auth + runtime sandbox) is more depth than most standalone tools offer._
 
+<a id="ref-temps"></a>
+### temps
+
+**Maintainer:** gotempsh (David Viejo) · **License:** Apache-2.0 · [Home](https://github.com/gotempsh/temps)
+
+Self-hosted Rust PaaS whose sandbox subsystem exposes a Vercel-Sandbox-compatible API with hardened Docker containers by default and opt-in Firecracker microVMs.
+
+- **Isolation:** container, microvm, kvm
+- **Capabilities:** Vercel Sandbox SDK-compatible API with per-sandbox backend selection; Hardened Docker default (CapDrop=ALL, minimal capability adds); Opt-in Firecracker backend — pinned guest kernel, rootfs built from the OCI image, vsock guest agent, TAP/NAT networking with guest-to-host and cloud-metadata paths dropped; Requesting Firecracker on a non-KVM host fails with 422 rather than silently downgrading; Full PaaS around it — git-push deploys, observability, analytics, email, AI gateway
+- **Requirements:** Self-hosted (Rust binary); Linux with /dev/kvm for the Firecracker backend; Docker as the image toolchain
+- **Limitations:** Sandboxing is one subsystem of a much larger platform; Firecracker backend ~2 weeks old at inclusion; jailer deferred (VMM runs as the server's user); egress restriction deferred (restricted mode fails closed to no-network); Effectively single-maintainer
+
+_Notes: The only self-hostable entry offering drop-in Vercel Sandbox SDK compatibility on your own hardware. The Firecracker backend is real in-repo code (vsock agent, e2e test, design ADR), not a wrapper over an external sandbox API — but it is weeks old; the Docker path is the battle-tested default._
+
 <a id="ref-warren"></a>
 ### warren
 
@@ -783,7 +909,7 @@ _Notes: Managed wrapper around the open-source agent-sandbox project. If you're 
 <a id="ref-mitos"></a>
 ### mitos
 
-**Maintainer:** mitos-run · **License:** Apache-2.0 · [Home](https://mitos.run) · [Repo](https://github.com/mitos-run/mitos)
+**Maintainer:** mitos-run · **License:** Apache-2.0 · [Home](https://github.com/mitos-run/mitos)
 
 Kubernetes-native runtime that gives each agent a Firecracker microVM and live copy-on-write forks a running VM into N siblings in tens of milliseconds, with durable versioned workspaces and declarative CRDs.
 
