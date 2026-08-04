@@ -9,11 +9,14 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from discover import (
-    load_existing_repos,
-    load_excluded_repos,
+    extract_peer_links,
     filter_new_candidates,
     format_candidates_md,
     format_staleness_md,
+    load_all_entry_urls,
+    load_excluded_repos,
+    load_existing_repos,
+    normalize_url,
 )
 
 
@@ -224,6 +227,82 @@ class TestFormatCandidatesMd:
         candidates = [make_candidate(), make_candidate(name="b", url="https://github.com/org/b")]
         result = format_candidates_md(candidates)
         assert "Found 2 repo(s)" in result
+
+    def test_peer_links_section(self):
+        peer_links = [{"url": "https://leap0.dev", "source": "some-list"}]
+        result = format_candidates_md([], peer_links)
+        assert "Peer-list projects without a GitHub repo" in result
+        assert "https://leap0.dev" in result
+        assert "some-list" in result
+        assert "No new candidates found" not in result
+
+    def test_peer_sourced_candidate_tagged(self):
+        result = format_candidates_md([make_candidate(source="some-list")])
+        assert "[peer: some-list]" in result
+
+    def test_empty_both_says_no_candidates(self):
+        assert "No new candidates found" in format_candidates_md([], [])
+
+
+# ---------------------------------------------------------------------------
+# normalize_url / extract_peer_links / load_all_entry_urls
+# ---------------------------------------------------------------------------
+
+class TestNormalizeUrl:
+    def test_strips_scheme_www_slash_case(self):
+        assert normalize_url("HTTPS://WWW.GitHub.com/Org/Repo/") == "github.com/org/repo"
+
+    def test_strips_query_and_fragment(self):
+        assert normalize_url("https://a.dev/x?utm=1#top") == "a.dev/x"
+
+    def test_http_https_equal(self):
+        assert normalize_url("http://a.dev/x") == normalize_url("https://a.dev/x")
+
+
+class TestExtractPeerLinks:
+    def test_github_repo_link(self):
+        repos, other = extract_peer_links("[x](https://github.com/org/repo)")
+        assert repos == {"https://github.com/org/repo"}
+        assert other == set()
+
+    def test_deep_github_link_canonicalized(self):
+        repos, _ = extract_peer_links("[x](https://github.com/org/repo/blob/main/README.md)")
+        assert repos == {"https://github.com/org/repo"}
+
+    def test_non_repo_github_paths_skipped(self):
+        repos, _ = extract_peer_links(
+            "[a](https://github.com/topics/sandbox) [b](https://github.com/orgs/foo)"
+        )
+        assert repos == set()
+
+    def test_badge_domains_skipped(self):
+        repos, other = extract_peer_links(
+            "[a](https://img.shields.io/badge/x) [b](https://awesome.re/badge.svg)"
+        )
+        assert repos == set() and other == set()
+
+    def test_image_links_skipped(self):
+        repos, other = extract_peer_links("![logo](https://example.com/logo.png)")
+        assert repos == set() and other == set()
+
+    def test_product_site_captured(self):
+        _, other = extract_peer_links("[Leap0](https://leap0.dev)")
+        assert other == {"https://leap0.dev"}
+
+
+class TestLoadAllEntryUrls:
+    def test_collects_both_files_and_fields(self, tmp_path):
+        main = tmp_path / "sandboxes.yaml"
+        main.write_text(
+            "- name: a\n  url: https://a.dev/\n  repo_url: https://github.com/org/a\n"
+        )
+        excl = tmp_path / "excluded.yaml"
+        excl.write_text("- url: https://github.com/org/b\n  reason: x\n")
+        urls = load_all_entry_urls(main, excl)
+        assert urls == {"a.dev", "github.com/org/a", "github.com/org/b"}
+
+    def test_missing_files_return_empty(self, tmp_path):
+        assert load_all_entry_urls(tmp_path / "x.yaml", tmp_path / "y.yaml") == set()
 
 
 # ---------------------------------------------------------------------------

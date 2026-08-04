@@ -9,9 +9,11 @@ Usage:
 
 import argparse
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
 import requests
 import yaml
@@ -19,20 +21,51 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 YAML_PATH = ROOT / "data" / "sandboxes.yaml"
 EXCLUDED_PATH = ROOT / "data" / "excluded.yaml"
+PEER_LISTS_PATH = ROOT / "data" / "peer-lists.yaml"
 
 GITHUB_API = "https://api.github.com"
 
-# Search queries targeting agent sandbox repos
+# Search queries targeting agent sandbox repos.
+# Each runs twice: sorted by recent update AND by stars. The updated sort
+# catches new/active repos; the stars sort catches established repos that
+# match but weren't pushed recently (per_page=30 windows would otherwise
+# hide them behind whatever was pushed this week).
 SEARCH_QUERIES = [
     '"agent sandbox" in:name,description,readme',
     '"llm sandbox" in:name,description,readme',
     '"ai sandbox" isolation OR container OR microvm in:readme',
     '"coding agent" sandbox in:readme',
+    '"sandbox for ai agents" in:name,description,readme',
+    '"agent sandboxing" in:name,description,readme',
 ]
+SEARCH_SORTS = ("updated", "stars")
 
 # Minimum filters for candidates
 MIN_STARS = 5
 MAX_STALENESS_MONTHS = 12
+
+# Cap on per-run GitHub metadata lookups for peer-list repos, to bound API
+# usage. If the cap is hit, the run says so rather than silently truncating.
+PEER_METADATA_CAP = 50
+
+# github.com first path segments that are not repo owners
+GITHUB_NON_REPO_SEGMENTS = {
+    "about", "apps", "collections", "contact", "events", "features",
+    "join", "login", "marketplace", "notifications", "orgs", "pricing",
+    "search", "settings", "site", "sponsors", "topics", "trending",
+}
+
+# Non-GitHub domains that appear in awesome-list markdown but are never
+# product pages (badges, social, papers, licenses, community links).
+PEER_LINK_SKIP_DOMAINS = {
+    "arxiv.org", "awesome.re", "buymeacoffee.com", "creativecommons.org",
+    "dev.to", "discord.com", "discord.gg", "docs.google.com", "forms.gle",
+    "img.shields.io", "landscape.cncf.io", "medium.com",
+    "news.ycombinator.com", "opencollective.com", "opensource.org",
+    "reddit.com", "shields.io", "spdx.org", "star-history.com",
+    "substack.com", "t.me", "trendshift.io", "twitter.com", "wikipedia.org",
+    "x.com", "youtube.com",
+}
 
 # Hosts whose Cloudflare JS-challenge protection blocks all automated requests
 # regardless of User-Agent or headers. Only a real browser engine can pass.
@@ -86,43 +119,192 @@ def search_github(token: str | None) -> list[dict]:
     candidates = []
 
     for query in SEARCH_QUERIES:
-        params = {
-            "q": query,
-            "sort": "updated",
-            "order": "desc",
-            "per_page": 30,
-        }
-        resp = requests.get(
-            f"{GITHUB_API}/search/repositories",
-            headers=headers,
-            params=params,
-            timeout=30,
-        )
-        if resp.status_code == 403:
-            print(f"Rate limited on query: {query}", file=sys.stderr)
+        for sort in SEARCH_SORTS:
+            params = {
+                "q": query,
+                "sort": sort,
+                "order": "desc",
+                "per_page": 30,
+            }
+            resp = requests.get(
+                f"{GITHUB_API}/search/repositories",
+                headers=headers,
+                params=params,
+                timeout=30,
+            )
+            if resp.status_code == 403:
+                print(f"Rate limited on query: {query} (sort={sort})", file=sys.stderr)
+                continue
+            resp.raise_for_status()
+            data = resp.json()
+            for item in data.get("items", []):
+                if item["id"] in seen_ids:
+                    continue
+                seen_ids.add(item["id"])
+                if item.get("stargazers_count", 0) < MIN_STARS:
+                    continue
+                if not item.get("has_wiki") and not item.get("description"):
+                    continue
+                candidates.append({
+                    "name": item["name"],
+                    "full_name": item["full_name"],
+                    "description": item.get("description", ""),
+                    "url": item["html_url"],
+                    "stars": item.get("stargazers_count", 0),
+                    "last_push": item.get("pushed_at", ""),
+                    "license": (item.get("license") or {}).get("spdx_id", "Unknown"),
+                    "topics": item.get("topics", []),
+                })
+
+    return candidates
+
+
+def normalize_url(url: str) -> str:
+    """Normalize a URL for comparison: lowercase, no scheme/www/query/fragment,
+    no trailing slash."""
+    parsed = urlparse(url.strip().lower())
+    host = parsed.netloc.removeprefix("www.")
+    path = parsed.path.rstrip("/")
+    return f"{host}{path}"
+
+
+def load_all_entry_urls(yaml_path: Path, excluded_path: Path) -> set[str]:
+    """Normalized url + repo_url values from both YAML files, GitHub or not."""
+    urls = set()
+    for path, field_names in ((yaml_path, ("url", "repo_url")), (excluded_path, ("url",))):
+        if not path.exists():
             continue
-        resp.raise_for_status()
-        data = resp.json()
-        for item in data.get("items", []):
-            if item["id"] in seen_ids:
+        with open(path) as f:
+            entries = yaml.safe_load(f) or []
+        for entry in entries:
+            for field in field_names:
+                val = entry.get(field)
+                if val:
+                    urls.add(normalize_url(val))
+    return urls
+
+
+def extract_peer_links(markdown: str) -> tuple[set[str], set[str]]:
+    """Extract project links from peer-list markdown.
+
+    Returns (github_repo_urls, other_urls). GitHub links are canonicalized to
+    https://github.com/owner/repo; badge/social/paper domains are dropped.
+    """
+    github_repos = set()
+    other = set()
+    # Markdown links, excluding image links (![alt](src))
+    for match in re.finditer(r"(?<!\!)\[[^\]]*\]\((https?://[^)\s]+)\)", markdown):
+        url = match.group(1)
+        parsed = urlparse(url)
+        host = parsed.netloc.lower().removeprefix("www.")
+        if host in PEER_LINK_SKIP_DOMAINS:
+            continue
+        if host == "github.com":
+            segments = [s for s in parsed.path.split("/") if s]
+            if len(segments) < 2 or segments[0].lower() in GITHUB_NON_REPO_SEGMENTS:
                 continue
-            seen_ids.add(item["id"])
-            if item.get("stargazers_count", 0) < MIN_STARS:
+            owner, repo = segments[0], segments[1]
+            # Deep links (blob/issues/releases/...) still identify the repo
+            github_repos.add(f"https://github.com/{owner}/{repo}")
+        elif host.endswith(".github.com") or host == "gist.github.com":
+            continue
+        else:
+            other.add(f"{parsed.scheme}://{parsed.netloc}{parsed.path.rstrip('/')}")
+    return github_repos, other
+
+
+def load_peer_lists(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    with open(path) as f:
+        return yaml.safe_load(f) or []
+
+
+def crosscheck_peer_lists(token: str | None, known_urls: set[str]) -> tuple[list[dict], list[dict]]:
+    """Diff peer-list project links against known URLs.
+
+    Returns (github_candidates, other_links). GitHub candidates get repo
+    metadata fetched (no star filter — peer curation is signal enough) and a
+    "source" key naming the peer list. Other links are {url, source} dicts
+    for manual review, since non-GitHub products have no API to query.
+    """
+    headers = get_headers(token)
+    github_candidates: list[dict] = []
+    other_links: list[dict] = []
+    seen_repos: set[str] = set()
+    metadata_budget = PEER_METADATA_CAP
+
+    for peer in load_peer_lists(PEER_LISTS_PATH):
+        name, raw_url = peer.get("name", "?"), peer.get("raw_url")
+        if not raw_url:
+            continue
+        try:
+            resp = requests.get(raw_url, timeout=30)
+            resp.raise_for_status()
+        except requests.RequestException as e:
+            print(f"Peer list {name}: fetch failed ({e})", file=sys.stderr)
+            continue
+
+        repos, others = extract_peer_links(resp.text)
+
+        for url in sorted(others):
+            if normalize_url(url) not in known_urls:
+                other_links.append({"url": url, "source": name})
+
+        for repo_url in sorted(repos):
+            norm = normalize_url(repo_url)
+            if norm in known_urls or norm in seen_repos:
                 continue
-            if not item.get("has_wiki") and not item.get("description"):
+            seen_repos.add(norm)
+            if metadata_budget <= 0:
+                print(
+                    f"Peer metadata cap ({PEER_METADATA_CAP}) hit — "
+                    f"skipping metadata for {repo_url} and any further peer repos",
+                    file=sys.stderr,
+                )
+                github_candidates.append({
+                    "name": repo_url.split("/")[-1],
+                    "full_name": "/".join(repo_url.split("/")[-2:]),
+                    "description": "(metadata not fetched — peer cap hit)",
+                    "url": repo_url,
+                    "stars": 0,
+                    "last_push": "",
+                    "license": "Unknown",
+                    "topics": [],
+                    "source": name,
+                })
                 continue
-            candidates.append({
+            metadata_budget -= 1
+            owner_repo = "/".join(repo_url.split("/")[-2:])
+            r = requests.get(f"{GITHUB_API}/repos/{owner_repo}", headers=headers, timeout=30)
+            if r.status_code != 200:
+                # Dead or renamed link in the peer list — still worth a look
+                github_candidates.append({
+                    "name": repo_url.split("/")[-1],
+                    "full_name": owner_repo,
+                    "description": f"(GitHub API returned {r.status_code})",
+                    "url": repo_url,
+                    "stars": 0,
+                    "last_push": "",
+                    "license": "Unknown",
+                    "topics": [],
+                    "source": name,
+                })
+                continue
+            item = r.json()
+            github_candidates.append({
                 "name": item["name"],
                 "full_name": item["full_name"],
-                "description": item.get("description", ""),
+                "description": item.get("description") or "",
                 "url": item["html_url"],
                 "stars": item.get("stargazers_count", 0),
                 "last_push": item.get("pushed_at", ""),
                 "license": (item.get("license") or {}).get("spdx_id", "Unknown"),
                 "topics": item.get("topics", []),
+                "source": name,
             })
 
-    return candidates
+    return github_candidates, other_links
 
 
 def filter_new_candidates(candidates: list[dict], known_repos: set[str]) -> list[dict]:
@@ -241,23 +423,37 @@ def check_staleness(token: str | None, yaml_path: Path) -> list[dict]:
     return stale
 
 
-def format_candidates_md(candidates: list[dict]) -> str:
+def format_candidates_md(candidates: list[dict], peer_links: list[dict] | None = None) -> str:
     """Format new candidates as markdown for a PR body."""
-    if not candidates:
+    if not candidates and not peer_links:
         return "No new candidates found.\n"
 
     lines = ["## New Sandbox Candidates\n"]
-    lines.append(f"Found {len(candidates)} repo(s) not yet in `data/sandboxes.yaml`.\n")
-    lines.append("| Repository | Stars | Last Push | License | Description |")
-    lines.append("|------------|-------|-----------|---------|-------------|")
+    if candidates:
+        lines.append(f"Found {len(candidates)} repo(s) not yet in `data/sandboxes.yaml`.\n")
+        lines.append("| Repository | Stars | Last Push | License | Description |")
+        lines.append("|------------|-------|-----------|---------|-------------|")
 
-    for c in sorted(candidates, key=lambda x: x["stars"], reverse=True):
-        push_date = c["last_push"][:10] if c["last_push"] else "Unknown"
-        desc = (c["description"] or "")[:100]
+        for c in sorted(candidates, key=lambda x: x["stars"], reverse=True):
+            push_date = c["last_push"][:10] if c["last_push"] else "Unknown"
+            desc = (c["description"] or "")[:100]
+            if c.get("source"):
+                desc = f"[peer: {c['source']}] {desc}"[:130]
+            lines.append(
+                f"| [{c['full_name']}]({c['url']}) | {c['stars']} "
+                f"| {push_date} | {c['license']} | {desc} |"
+            )
+
+    if peer_links:
+        lines.append("\n### Peer-list projects without a GitHub repo\n")
         lines.append(
-            f"| [{c['full_name']}]({c['url']}) | {c['stars']} "
-            f"| {push_date} | {c['license']} | {desc} |"
+            f"{len(peer_links)} link(s) found in peer lists but not in our data — "
+            "likely hosted/proprietary products. Manual review needed.\n"
         )
+        lines.append("| URL | Peer list |")
+        lines.append("|-----|-----------|")
+        for link in peer_links:
+            lines.append(f"| {link['url']} | {link['source']} |")
 
     lines.append("\nReview each candidate and add to `data/sandboxes.yaml` if appropriate.")
     return "\n".join(lines)
@@ -297,7 +493,21 @@ def main():
         known = load_existing_repos(YAML_PATH)
         excluded = load_excluded_repos(EXCLUDED_PATH)
         new_candidates = filter_new_candidates(candidates, known | excluded)
-        candidates_md = format_candidates_md(new_candidates)
+
+        print("Cross-checking peer lists...")
+        all_known_urls = load_all_entry_urls(YAML_PATH, EXCLUDED_PATH)
+        peer_candidates, peer_links = crosscheck_peer_lists(token, all_known_urls)
+        # Merge peer repos not already surfaced by search
+        surfaced = {c["url"].rstrip("/").lower() for c in new_candidates}
+        for pc in peer_candidates:
+            if pc["url"].rstrip("/").lower() not in surfaced:
+                new_candidates.append(pc)
+        print(
+            f"Peer lists: {len(peer_candidates)} new GitHub repo(s), "
+            f"{len(peer_links)} non-GitHub link(s)."
+        )
+
+        candidates_md = format_candidates_md(new_candidates, peer_links)
         print(f"Found {len(new_candidates)} new candidate(s) from {len(candidates)} total results.")
 
         if args.dry_run:

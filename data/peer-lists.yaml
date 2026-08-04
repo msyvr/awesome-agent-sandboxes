@@ -1,0 +1,9 @@
+# Peer lists and comparison matrices tracking the agent-sandbox space.
+# The weekly discovery job fetches each list's markdown, extracts every
+# project link, diffs against sandboxes.yaml + excluded.yaml, and surfaces
+# novel ones in the discovery issue. This catches two classes the GitHub
+# keyword search structurally misses: proprietary/hosted products with no
+# GitHub repo, and repos whose descriptions avoid our search phrases.
+- name: awesome-ai-coding-sandboxes
+  url: https://github.com/fhiltscher/awesome-ai-coding-sandboxes
+  raw_url: https://raw.githubusercontent.com/fhiltscher/awesome-ai-coding-sandboxes/main/README.md
