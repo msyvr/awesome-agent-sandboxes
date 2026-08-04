@@ -48,19 +48,20 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 12px 32px; flex-wrap: wrap; margin-bottom: 16px;
+header { margin-bottom: 16px; }
+/* Only the title and the controls share this row; the intro paragraph
+   below it runs the full page width. Controls take the space right of
+   the title and wrap to their own full-width line when it's too narrow. */
+.title-row {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 8px 32px; flex-wrap: wrap; margin-bottom: 6px;
 }
-header h1 { margin: 0 0 4px; font-size: 1.5em; }
+header h1 { margin: 0; font-size: 1.5em; flex: 0 1 auto; }
 header h1 a { color: inherit; }
 header p { margin: 0; color: var(--fg-muted); }
-/* Both blocks grow; when the row is too narrow for both bases, the
-   controls wrap to their own full-width line below the title. */
-.title-block { flex: 1 1 400px; }
 .header-controls {
   display: flex; gap: 12px; align-items: center;
-  flex: 1 1 440px; margin-top: 4px;
+  flex: 1 1 440px;
 }
 .header-controls label { white-space: nowrap; font-size: 13px; color: var(--fg-muted); display: flex; gap: 6px; align-items: center; }
 .controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
@@ -144,22 +145,22 @@ noscript { display: block; padding: 16px; border: 1px solid var(--border); borde
 <body>
 <div class="wrap">
   <header>
-    <div class="title-block">
+    <div class="title-row">
       <h1><a href="https://github.com/msyvr/awesome-agent-sandboxes">awesome agent sandboxes</a></h1>
-      <p>Filterable, sortable view of
-        <a href="https://github.com/msyvr/awesome-agent-sandboxes">msyvr/awesome-agent-sandboxes</a>
-        — sandboxes for running AI agents and the code they write.<br>
-        Full annotations live in the
-        <a href="https://github.com/msyvr/awesome-agent-sandboxes/blob/main/docs/sandboxes-reference.md">reference doc</a>.
-      </p>
+      <div class="header-controls" id="header-controls" hidden>
+        <input id="search" type="search" placeholder="Search name, description, capabilities, notes…"
+               aria-label="Search entries">
+        <label>
+          <input type="checkbox" id="oss-only"> open-source only
+        </label>
+      </div>
     </div>
-    <div class="header-controls" id="header-controls" hidden>
-      <input id="search" type="search" placeholder="Search name, description, capabilities, notes…"
-             aria-label="Search entries">
-      <label>
-        <input type="checkbox" id="oss-only"> open-source only
-      </label>
-    </div>
+    <p>Filterable, sortable view of
+      <a href="https://github.com/msyvr/awesome-agent-sandboxes">msyvr/awesome-agent-sandboxes</a>
+      — sandboxes for running AI agents and the code they write.<br>
+      Full annotations live in the
+      <a href="https://github.com/msyvr/awesome-agent-sandboxes/blob/main/docs/sandboxes-reference.md">reference doc</a>.
+    </p>
   </header>
 
   <noscript>This table needs JavaScript. The same data is browsable as markdown in the
