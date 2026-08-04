@@ -15,9 +15,11 @@
   --detail-bg: #f7f9fb;
   --chip-bg: #eef1f4;
   --chip-fg: #3a4048;
-  --chip-on-bg: #1f6feb;
+  /* Anthropic-clay accent family. Light mode uses a deepened clay —
+     the brighter coral fails 4.5:1 text contrast on white. */
+  --chip-on-bg: #ae5630;
   --chip-on-fg: #ffffff;
-  --accent: #1f6feb;
+  --accent: #ae5630;
   --code-bg: #eef1f4;
 }
 @media (prefers-color-scheme: dark) {
@@ -30,9 +32,11 @@
     --detail-bg: #12161c;
     --chip-bg: #1c222b;
     --chip-fg: #c3cbd6;
-    --chip-on-bg: #316dca;
-    --chip-on-fg: #ffffff;
-    --accent: #539bf5;
+    /* Claude coral carries enough contrast on the dark background;
+       selected chips flip to dark text for the same reason. */
+    --chip-on-bg: #d97757;
+    --chip-on-fg: #0e1116;
+    --accent: #d97757;
     --code-bg: #1c222b;
   }
 }
