@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>awesome agent sandboxes — filterable table</title>
+<meta name="description" content="Filterable, sortable table of sandboxes for AI agents: isolation tier, adoption effort, deployment model, license.">
+<style>
+:root {
+  --bg: #ffffff;
+  --fg: #1a1d21;
+  --fg-muted: #5c6470;
+  --border: #d8dde3;
+  --row-hover: #f2f5f8;
+  --detail-bg: #f7f9fb;
+  --chip-bg: #eef1f4;
+  --chip-fg: #3a4048;
+  --chip-on-bg: #1f6feb;
+  --chip-on-fg: #ffffff;
+  --accent: #1f6feb;
+  --code-bg: #eef1f4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1116;
+    --fg: #e6e9ee;
+    --fg-muted: #9aa4b2;
+    --border: #2a313b;
+    --row-hover: #171c23;
+    --detail-bg: #12161c;
+    --chip-bg: #1c222b;
+    --chip-fg: #c3cbd6;
+    --chip-on-bg: #316dca;
+    --chip-on-fg: #ffffff;
+    --accent: #539bf5;
+    --code-bg: #1c222b;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fg);
+  background: var(--bg);
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
+header h1 { margin: 0 0 4px; font-size: 1.5em; }
+header p { margin: 0 0 20px; color: var(--fg-muted); }
+.controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
+.search-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+#search {
+  flex: 1 1 260px;
+  padding: 8px 12px;
+  font-size: 15px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+#search:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.facet { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.facet-label { color: var(--fg-muted); font-size: 13px; min-width: 118px; }
+.chip {
+  border: 1px solid var(--border);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  border-radius: 999px;
+  padding: 2px 11px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.chip[aria-pressed="true"] {
+  background: var(--chip-on-bg);
+  color: var(--chip-on-fg);
+  border-color: var(--chip-on-bg);
+}
+.chip .n { opacity: 0.65; font-size: 12px; }
+.meta-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 12px; flex-wrap: wrap; margin: 10px 0 6px;
+}
+#count { color: var(--fg-muted); font-size: 13px; }
+#clear {
+  border: none; background: none; color: var(--accent);
+  font-size: 13px; cursor: pointer; padding: 0;
+}
+#clear:hover { text-decoration: underline; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; min-width: 820px; }
+th, td { text-align: left; padding: 8px 12px; border-top: 1px solid var(--border); }
+thead th { border-top: none; font-size: 13px; color: var(--fg-muted); white-space: nowrap; }
+thead th button {
+  all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center;
+}
+thead th button:hover { color: var(--fg); }
+thead th .arrow { font-size: 11px; }
+tbody tr.data-row:hover { background: var(--row-hover); }
+td.name button {
+  all: unset; cursor: pointer; color: var(--accent); font-weight: 600;
+}
+td.name button:hover { text-decoration: underline; }
+td .tag {
+  display: inline-block; background: var(--chip-bg); color: var(--chip-fg);
+  border-radius: 4px; padding: 0 6px; font-size: 12.5px; white-space: nowrap;
+}
+td.muted, .muted { color: var(--fg-muted); }
+tr.detail-row > td {
+  background: var(--detail-bg);
+  padding: 14px 16px 16px;
+}
+.detail h3 { margin: 0 0 6px; font-size: 14px; }
+.detail p { margin: 0 0 10px; max-width: 75ch; }
+.detail ul { margin: 0 0 10px; padding-left: 20px; }
+.detail li { margin: 1px 0; }
+.detail .cols { display: flex; gap: 32px; flex-wrap: wrap; }
+.detail .col { flex: 1 1 260px; min-width: 220px; }
+.detail .links { margin-top: 4px; font-size: 14px; display: flex; gap: 16px; }
+code { background: var(--code-bg); border-radius: 4px; padding: 0 4px; font-size: 13px; }
+footer { margin-top: 28px; color: var(--fg-muted); font-size: 13px; }
+noscript { display: block; padding: 16px; border: 1px solid var(--border); border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>awesome agent sandboxes</h1>
+    <p>Filterable, sortable view of
+      <a href="https://github.com/msyvr/awesome-agent-sandboxes">msyvr/awesome-agent-sandboxes</a>
+      — sandboxes for running AI agents and the code they write.
+      Full annotations live in the
+      <a href="https://github.com/msyvr/awesome-agent-sandboxes/blob/main/docs/sandboxes-reference.md">reference doc</a>.
+    </p>
+  </header>
+
+  <noscript>This table needs JavaScript. The same data is browsable as markdown in the
+    <a href="https://github.com/msyvr/awesome-agent-sandboxes">repository README</a>.</noscript>
+
+  <div class="controls" id="controls" hidden>
+    <div class="search-row">
+      <input id="search" type="search" placeholder="Search name, description, capabilities, notes…"
+             aria-label="Search entries">
+      <label style="font-size:13px; color:var(--fg-muted); display:flex; gap:6px; align-items:center;">
+        <input type="checkbox" id="oss-only"> open-source only
+      </label>
+    </div>
+    <div id="facets"></div>
+  </div>
+
+  <div class="meta-row">
+    <span id="count">Loading…</span>
+    <button id="clear" hidden>Clear all filters</button>
+  </div>
+
+  <div class="table-scroll">
+    <table aria-label="Agent sandboxes">
+      <thead><tr id="head-row"></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    Generated from
+    <a href="https://github.com/msyvr/awesome-agent-sandboxes/blob/main/data/sandboxes.yaml"><code>data/sandboxes.yaml</code></a>;
+    this page reads the committed <a href="sandboxes.json"><code>sandboxes.json</code></a> and updates whenever the list does.
+    Click a name for details. Filters combine across groups (AND) and within a group (OR).
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* Facet groups and display order. Tier/effort use semantic order, not alphabetical.
+   Values missing from these lists (future vocab additions) are appended alphabetically,
+   so new YAML vocabulary appears here with no page edit. */
+const FACETS = [
+  { key: "category", label: "Category", order: [] },
+  { key: "isolation_tier", label: "Isolation tier",
+    order: ["hardware-vm", "microvm", "container", "process", "wasm"] },
+  { key: "adoption_effort", label: "Adoption effort",
+    order: ["zero-config", "sign-up", "install", "compose"] },
+  { key: "deployment_model", label: "Deployment",
+    order: ["local", "self-hosted", "kubernetes", "cloud", "built-in"] },
+];
+
+const COLUMNS = [
+  { key: "name", label: "Name" },
+  { key: "category", label: "Category" },
+  { key: "isolation_tier", label: "Isolation tier" },
+  { key: "adoption_effort", label: "Adoption effort" },
+  { key: "deployment_model", label: "Deployment" },
+  { key: "license", label: "License" },
+];
+
+const state = { q: "", oss: false, sel: {}, sort: { key: "name", dir: 1 }, open: new Set() };
+FACETS.forEach(f => state.sel[f.key] = new Set());
+
+let ENTRIES = [];
+
+fetch("sandboxes.json")
+  .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+  .then(data => {
+    ENTRIES = data.entries || [];
+    document.getElementById("controls").hidden = false;
+    buildFacets();
+    buildHead();
+    readHash();
+    render();
+  })
+  .catch(err => {
+    document.getElementById("count").textContent =
+      "Failed to load sandboxes.json (" + err.message + ") — see the repository README instead.";
+  });
+
+function orderedValues(key, order) {
+  const present = [...new Set(ENTRIES.map(e => e[key]).filter(Boolean))];
+  const known = order.filter(v => present.includes(v));
+  const rest = present.filter(v => !order.includes(v)).sort();
+  return known.concat(rest);
+}
+
+function buildFacets() {
+  const host = document.getElementById("facets");
+  FACETS.forEach(f => {
+    const row = document.createElement("div");
+    row.className = "facet";
+    const lab = document.createElement("span");
+    lab.className = "facet-label";
+    lab.textContent = f.label;
+    row.appendChild(lab);
+    orderedValues(f.key, f.order).forEach(v => {
+      const n = ENTRIES.filter(e => e[f.key] === v).length;
+      const b = document.createElement("button");
+      b.className = "chip";
+      b.setAttribute("aria-pressed", "false");
+      b.dataset.facet = f.key;
+      b.dataset.value = v;
+      b.innerHTML = escapeHtml(v) + ' <span class="n">' + n + "</span>";
+      b.addEventListener("click", () => {
+        const sel = state.sel[f.key];
+        sel.has(v) ? sel.delete(v) : sel.add(v);
+        render();
+      });
+      row.appendChild(b);
+    });
+    host.appendChild(row);
+  });
+
+  document.getElementById("search").addEventListener("input", e => {
+    state.q = e.target.value.trim().toLowerCase();
+    render();
+  });
+  document.getElementById("oss-only").addEventListener("change", e => {
+    state.oss = e.target.checked;
+    render();
+  });
+  document.getElementById("clear").addEventListener("click", () => {
+    state.q = ""; state.oss = false;
+    FACETS.forEach(f => state.sel[f.key].clear());
+    document.getElementById("search").value = "";
+    document.getElementById("oss-only").checked = false;
+    render();
+  });
+}
+
+function buildHead() {
+  const tr = document.getElementById("head-row");
+  COLUMNS.forEach(c => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    const b = document.createElement("button");
+    b.innerHTML = escapeHtml(c.label) + ' <span class="arrow"></span>';
+    b.addEventListener("click", () => {
+      if (state.sort.key === c.key) state.sort.dir *= -1;
+      else state.sort = { key: c.key, dir: 1 };
+      render();
+    });
+    th.appendChild(b);
+    tr.appendChild(th);
+  });
+}
+
+function haystack(e) {
+  return [
+    e.name, e.description, e.maintainer, e.notes, e.license,
+    (e.isolation_type || []).join(" "),
+    (e.capabilities || []).join(" "),
+    (e.limitations || []).join(" "),
+  ].join(" ").toLowerCase();
+}
+
+function visible() {
+  return ENTRIES.filter(e => {
+    if (state.q && !haystack(e).includes(state.q)) return false;
+    if (state.oss && !e.open_source) return false;
+    for (const f of FACETS) {
+      const sel = state.sel[f.key];
+      if (sel.size && !sel.has(e[f.key])) return false;
+    }
+    return true;
+  });
+}
+
+function sortRank(e, key) {
+  const facet = FACETS.find(f => f.key === key);
+  const v = e[key];
+  if (facet && facet.order.length) {
+    const i = facet.order.indexOf(v);
+    if (i !== -1) return String(i).padStart(3, "0");
+    return "9" + (v || "~");
+  }
+  return (v || "~").toString().toLowerCase();
+}
+
+function render() {
+  const rows = visible().sort((a, b) => {
+    const ra = sortRank(a, state.sort.key), rb = sortRank(b, state.sort.key);
+    const cmp = ra < rb ? -1 : ra > rb ? 1 : a.name.localeCompare(b.name);
+    return cmp * state.sort.dir;
+  });
+
+  const tbody = document.getElementById("rows");
+  tbody.textContent = "";
+  rows.forEach(e => {
+    const tr = document.createElement("tr");
+    tr.className = "data-row";
+    const nameTd = document.createElement("td");
+    nameTd.className = "name";
+    const nb = document.createElement("button");
+    nb.textContent = e.name;
+    nb.setAttribute("aria-expanded", state.open.has(e.name) ? "true" : "false");
+    nb.addEventListener("click", () => {
+      state.open.has(e.name) ? state.open.delete(e.name) : state.open.add(e.name);
+      render();
+    });
+    nameTd.appendChild(nb);
+    tr.appendChild(nameTd);
+
+    ["category", "isolation_tier", "adoption_effort", "deployment_model"].forEach(k => {
+      const td = document.createElement("td");
+      td.innerHTML = '<span class="tag">' + escapeHtml(e[k] || "—") + "</span>";
+      tr.appendChild(td);
+    });
+
+    const lic = document.createElement("td");
+    lic.className = "muted";
+    lic.textContent = e.license || (e.open_source ? "unknown" : "proprietary");
+    tr.appendChild(lic);
+    tbody.appendChild(tr);
+
+    if (state.open.has(e.name)) tbody.appendChild(detailRow(e));
+  });
+
+  const n = rows.length, total = ENTRIES.length;
+  document.getElementById("count").textContent =
+    n === total ? total + " entries" : n + " of " + total + " entries";
+
+  const filtered = state.q || state.oss || FACETS.some(f => state.sel[f.key].size);
+  document.getElementById("clear").hidden = !filtered;
+
+  document.querySelectorAll(".chip").forEach(b => {
+    b.setAttribute("aria-pressed", state.sel[b.dataset.facet].has(b.dataset.value) ? "true" : "false");
+  });
+  document.querySelectorAll("#head-row th").forEach((th, i) => {
+    const on = COLUMNS[i].key === state.sort.key;
+    th.querySelector(".arrow").textContent = on ? (state.sort.dir === 1 ? "▲" : "▼") : "";
+    th.setAttribute("aria-sort", on ? (state.sort.dir === 1 ? "ascending" : "descending") : "none");
+  });
+
+  writeHash();
+}
+
+function detailRow(e) {
+  const tr = document.createElement("tr");
+  tr.className = "detail-row";
+  const td = document.createElement("td");
+  td.colSpan = COLUMNS.length;
+  const d = document.createElement("div");
+  d.className = "detail";
+
+  let html = "<p>" + escapeHtml(e.description || "") + "</p>";
+  if (e.isolation_type && e.isolation_type.length) {
+    html += '<p class="muted">isolation: ' +
+      e.isolation_type.map(t => "<code>" + escapeHtml(t) + "</code>").join(" ") +
+      " · maintainer: " + escapeHtml(e.maintainer || "unknown") + "</p>";
+  }
+  html += '<div class="cols">';
+  html += listCol("Capabilities", e.capabilities);
+  html += listCol("Requirements", e.requirements);
+  html += listCol("Limitations", e.limitations);
+  html += "</div>";
+  if (e.notes) html += "<h3>Notes</h3><p>" + escapeHtml(e.notes) + "</p>";
+  d.innerHTML = html;
+
+  const links = document.createElement("div");
+  links.className = "links";
+  if (e.url) links.appendChild(link(e.url, "website"));
+  if (e.repo_url && e.repo_url !== e.url) links.appendChild(link(e.repo_url, "repository"));
+  d.appendChild(links);
+
+  td.appendChild(d);
+  tr.appendChild(td);
+  return tr;
+}
+
+function listCol(title, items) {
+  if (!items || !items.length) return "";
+  return '<div class="col"><h3>' + title + "</h3><ul>" +
+    items.map(i => "<li>" + escapeHtml(String(i)) + "</li>").join("") + "</ul></div>";
+}
+
+function link(href, text) {
+  const a = document.createElement("a");
+  a.href = href; a.textContent = text; a.rel = "noopener";
+  return a;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+/* Shareable state: #q=...&category=a,b&isolation_tier=... */
+function writeHash() {
+  const parts = [];
+  if (state.q) parts.push("q=" + encodeURIComponent(state.q));
+  if (state.oss) parts.push("oss=1");
+  FACETS.forEach(f => {
+    if (state.sel[f.key].size)
+      parts.push(f.key + "=" + [...state.sel[f.key]].map(encodeURIComponent).join(","));
+  });
+  history.replaceState(null, "", parts.length ? "#" + parts.join("&") : location.pathname);
+}
+
+function readHash() {
+  const h = location.hash.replace(/^#/, "");
+  if (!h) return;
+  h.split("&").forEach(kv => {
+    const [k, v] = kv.split("=");
+    if (!v) return;
+    if (k === "q") {
+      state.q = decodeURIComponent(v).toLowerCase();
+      document.getElementById("search").value = decodeURIComponent(v);
+    } else if (k === "oss") {
+      state.oss = true;
+      document.getElementById("oss-only").checked = true;
+    } else if (state.sel[k]) {
+      v.split(",").forEach(x => state.sel[k].add(decodeURIComponent(x)));
+    }
+  });
+}
+</script>
+</body>
+</html>

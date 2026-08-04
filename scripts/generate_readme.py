@@ -6,6 +6,7 @@ generates lens tables and category sections, and concatenates everything
 into the final README.
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -20,6 +21,10 @@ README_PATH = ROOT / "README.md"
 REFERENCE_PATH = ROOT / "docs" / "sandboxes-reference.md"
 # Relative path used in markdown links from README to the reference doc
 REFERENCE_REL_PATH = "docs/sandboxes-reference.md"
+# JSON artifact consumed by the GitHub Pages filterable table (docs/index.html).
+# The page reads this committed file and holds no copy of the data, so
+# regenerating + pushing is the whole deploy.
+JSON_PATH = ROOT / "docs" / "sandboxes.json"
 
 # ---------------------------------------------------------------------------
 # Schema: controlled vocabularies
@@ -726,6 +731,20 @@ def generate_toc(entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def build_site_payload(entries: list[dict]) -> dict:
+    """Payload for docs/sandboxes.json, consumed by the Pages table site.
+
+    Entries pass through verbatim (they are already schema-validated); the
+    wrapper carries the source path and count so the page can sanity-check
+    what it loaded. No timestamp — output stays deterministic for clean diffs.
+    """
+    return {
+        "generated_from": "data/sandboxes.yaml",
+        "count": len(entries),
+        "entries": entries,
+    }
+
+
 def main():
     # Load YAML
     if not YAML_PATH.exists():
@@ -809,6 +828,11 @@ def main():
     REFERENCE_PATH.parent.mkdir(parents=True, exist_ok=True)
     REFERENCE_PATH.write_text(reference_doc)
     print(f"Generated {REFERENCE_PATH} ({len(reference_doc)} chars)")
+
+    # Write the JSON artifact for the Pages filterable table
+    payload = build_site_payload(entries)
+    JSON_PATH.write_text(json.dumps(payload, indent=1, ensure_ascii=False) + "\n")
+    print(f"Generated {JSON_PATH} ({payload['count']} entries)")
 
 
 if __name__ == "__main__":

@@ -26,6 +26,9 @@ from generate_readme import (
     generate_definition_entry,
     generate_reference_doc,
     generate_toc,
+    build_site_payload,
+    JSON_PATH,
+    YAML_PATH,
 )
 
 
@@ -620,3 +623,34 @@ class TestGenerateToc:
         result = generate_toc([make_entry()])
         assert "(#sec-references)" in result
         assert "(#sec-contributing)" in result
+
+
+# ---------------------------------------------------------------------------
+# build_site_payload / committed sandboxes.json (Pages table site)
+# ---------------------------------------------------------------------------
+
+class TestSitePayload:
+    def test_shape(self):
+        entries = [make_entry(), make_entry(name="B")]
+        payload = build_site_payload(entries)
+        assert payload["count"] == 2
+        assert payload["generated_from"] == "data/sandboxes.yaml"
+        assert payload["entries"] == entries
+
+    def test_entries_pass_through_verbatim(self):
+        entry = make_entry(notes="unchanged", isolation_type=["seccomp"])
+        assert build_site_payload([entry])["entries"][0] is entry
+
+    def test_committed_json_in_sync_with_yaml(self):
+        """docs/sandboxes.json is what the Pages site serves — it must match
+        data/sandboxes.yaml. Fails when the YAML changed without regenerating."""
+        import json
+
+        import yaml
+
+        assert JSON_PATH.exists(), "docs/sandboxes.json missing — run generate_readme.py"
+        payload = json.loads(JSON_PATH.read_text())
+        with open(YAML_PATH) as f:
+            entries = yaml.safe_load(f)
+        assert payload["count"] == len(entries)
+        assert [e["name"] for e in payload["entries"]] == [e["name"] for e in entries]
