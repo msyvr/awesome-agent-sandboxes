@@ -55,10 +55,12 @@ header {
 header h1 { margin: 0 0 4px; font-size: 1.5em; }
 header h1 a { color: inherit; }
 header p { margin: 0; color: var(--fg-muted); }
-.title-block { flex: 1 1 420px; }
+/* Both blocks grow; when the row is too narrow for both bases, the
+   controls wrap to their own full-width line below the title. */
+.title-block { flex: 1 1 400px; }
 .header-controls {
   display: flex; gap: 12px; align-items: center;
-  flex: 0 1 360px; min-width: 250px; margin-top: 4px;
+  flex: 1 1 440px; margin-top: 4px;
 }
 .header-controls label { white-space: nowrap; font-size: 13px; color: var(--fg-muted); display: flex; gap: 6px; align-items: center; }
 .controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
