@@ -25,6 +25,9 @@ REFERENCE_REL_PATH = "docs/sandboxes-reference.md"
 # The page reads this committed file and holds no copy of the data, so
 # regenerating + pushing is the whole deploy.
 JSON_PATH = ROOT / "docs" / "sandboxes.json"
+# Curated use-case presets rendered as filter chips on the table site,
+# mirroring the docs/safety-research.md tables.
+PRESETS_PATH = ROOT / "data" / "presets.yaml"
 
 # ---------------------------------------------------------------------------
 # Schema: controlled vocabularies
@@ -731,7 +734,7 @@ def generate_toc(entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def build_site_payload(entries: list[dict]) -> dict:
+def build_site_payload(entries: list[dict], presets: list[dict] | None = None) -> dict:
     """Payload for docs/sandboxes.json, consumed by the Pages table site.
 
     Entries pass through verbatim (they are already schema-validated); the
@@ -741,8 +744,23 @@ def build_site_payload(entries: list[dict]) -> dict:
     return {
         "generated_from": "data/sandboxes.yaml",
         "count": len(entries),
+        "presets": presets or [],
         "entries": entries,
     }
+
+
+def validate_presets(presets: list[dict], entries: list[dict]) -> list[str]:
+    """Every preset entry name must match a real entry, so a rename or
+    removal in sandboxes.yaml can't leave the site pointing at nothing."""
+    names = {e["name"] for e in entries}
+    errors = []
+    for p in presets:
+        if not p.get("name"):
+            errors.append("preset missing 'name'")
+        for n in p.get("entries", []):
+            if n not in names:
+                errors.append(f"preset '{p.get('name', '?')}': unknown entry '{n}'")
+    return errors
 
 
 def main():
@@ -830,9 +848,20 @@ def main():
     print(f"Generated {REFERENCE_PATH} ({len(reference_doc)} chars)")
 
     # Write the JSON artifact for the Pages filterable table
-    payload = build_site_payload(entries)
+    presets = []
+    if PRESETS_PATH.exists():
+        with open(PRESETS_PATH) as f:
+            presets = yaml.safe_load(f) or []
+        preset_errors = validate_presets(presets, entries)
+        if preset_errors:
+            print(f"Preset validation failed with {len(preset_errors)} error(s):", file=sys.stderr)
+            for err in preset_errors:
+                print(f"  - {err}", file=sys.stderr)
+            sys.exit(1)
+        print(f"Loaded {len(presets)} presets from {PRESETS_PATH}.")
+    payload = build_site_payload(entries, presets)
     JSON_PATH.write_text(json.dumps(payload, indent=1, ensure_ascii=False) + "\n")
-    print(f"Generated {JSON_PATH} ({payload['count']} entries)")
+    print(f"Generated {JSON_PATH} ({payload['count']} entries, {len(presets)} presets)")
 
 
 if __name__ == "__main__":

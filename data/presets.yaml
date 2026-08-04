@@ -1,0 +1,50 @@
+# Curated use-case presets for the Pages table site (docs/index.html).
+# Each preset filters the table to the tools named in the corresponding
+# docs/safety-research.md table; that doc stays canonical for the trade-off
+# commentary, and these are entry points into it. Keep the two in sync when
+# review sessions update the safety-research tables (review-candidates
+# skill, step 7). Every name here must match an entry in sandboxes.yaml —
+# the generator refuses to build on a mismatch, and tests guard the
+# committed JSON.
+- name: RL training
+  description: Fast resets, GPU + parallel scale, self-hosted orchestration, HPC/Slurm
+  entries:
+    - Firecracker
+    - Zeroboot
+    - mitos
+    - CubeSandbox
+    - Modal
+    - openkruise/agents
+    - OpenSandbox
+    - agent_sandbox
+
+- name: Capability evaluation
+  description: Syscall observability, credential isolation, audit trails, intervention, reproducibility
+  entries:
+    - gVisor
+    - nono
+    - cleanroom
+    - sandcat
+    - CubeSandbox
+    - sevorix-lite
+    - loop
+    - agent-glovebox
+    - Firecracker
+    - Fly Sprites
+    - gondolin
+
+- name: Adversarial red-teaming
+  description: Hardware VM containment, escape detection, network monitoring
+  entries:
+    - Firecracker
+    - Kata Containers
+    - cleanroom
+    - brood-box
+    - CubeSandbox
+    - gVisor
+    - sevorix-lite
+    - nono
+    - code-on-incus
+    - agent-glovebox
+    - sandcat
+    - Anthropic sandbox-runtime (srt)

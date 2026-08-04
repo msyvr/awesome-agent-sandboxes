@@ -27,6 +27,7 @@ from generate_readme import (
     generate_reference_doc,
     generate_toc,
     build_site_payload,
+    validate_presets,
     JSON_PATH,
     YAML_PATH,
 )
@@ -636,10 +637,38 @@ class TestSitePayload:
         assert payload["count"] == 2
         assert payload["generated_from"] == "data/sandboxes.yaml"
         assert payload["entries"] == entries
+        assert payload["presets"] == []
 
     def test_entries_pass_through_verbatim(self):
         entry = make_entry(notes="unchanged", isolation_type=["seccomp"])
         assert build_site_payload([entry])["entries"][0] is entry
+
+    def test_presets_included(self):
+        presets = [{"name": "P", "description": "d", "entries": ["test-entry"]}]
+        assert build_site_payload([make_entry()], presets)["presets"] == presets
+
+    def test_validate_presets_flags_unknown_entry(self):
+        errors = validate_presets(
+            [{"name": "P", "entries": ["nope"]}], [make_entry(name="real")]
+        )
+        assert errors and "unknown entry 'nope'" in errors[0]
+
+    def test_validate_presets_ok(self):
+        assert validate_presets(
+            [{"name": "P", "entries": ["real"]}], [make_entry(name="real")]
+        ) == []
+
+    def test_real_presets_yaml_names_all_exist(self):
+        """Every entry named in data/presets.yaml must exist in sandboxes.yaml."""
+        import yaml
+
+        presets_path = YAML_PATH.parent / "presets.yaml"
+        assert presets_path.exists()
+        with open(presets_path) as f:
+            presets = yaml.safe_load(f)
+        with open(YAML_PATH) as f:
+            entries = yaml.safe_load(f)
+        assert validate_presets(presets, entries) == []
 
     def test_committed_json_in_sync_with_yaml(self):
         """docs/sandboxes.json is what the Pages site serves — it must match

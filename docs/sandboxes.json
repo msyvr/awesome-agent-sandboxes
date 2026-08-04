@@ -1,6 +1,57 @@
 {
  "generated_from": "data/sandboxes.yaml",
  "count": 97,
+ "presets": [
+  {
+   "name": "RL training",
+   "description": "Fast resets, GPU + parallel scale, self-hosted orchestration, HPC/Slurm",
+   "entries": [
+    "Firecracker",
+    "Zeroboot",
+    "mitos",
+    "CubeSandbox",
+    "Modal",
+    "openkruise/agents",
+    "OpenSandbox",
+    "agent_sandbox"
+   ]
+  },
+  {
+   "name": "Capability evaluation",
+   "description": "Syscall observability, credential isolation, audit trails, intervention, reproducibility",
+   "entries": [
+    "gVisor",
+    "nono",
+    "cleanroom",
+    "sandcat",
+    "CubeSandbox",
+    "sevorix-lite",
+    "loop",
+    "agent-glovebox",
+    "Firecracker",
+    "Fly Sprites",
+    "gondolin"
+   ]
+  },
+  {
+   "name": "Adversarial red-teaming",
+   "description": "Hardware VM containment, escape detection, network monitoring",
+   "entries": [
+    "Firecracker",
+    "Kata Containers",
+    "cleanroom",
+    "brood-box",
+    "CubeSandbox",
+    "gVisor",
+    "sevorix-lite",
+    "nono",
+    "code-on-incus",
+    "agent-glovebox",
+    "sandcat",
+    "Anthropic sandbox-runtime (srt)"
+   ]
+  }
+ ],
  "entries": [
   {
    "name": "E2B",

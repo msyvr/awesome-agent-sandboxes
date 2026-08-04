@@ -62,8 +62,12 @@ header p { margin: 0 0 20px; color: var(--fg-muted); }
   border-radius: 6px;
 }
 #search:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
-.facet { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.facet-label { color: var(--fg-muted); font-size: 13px; min-width: 118px; }
+/* Label is a fixed column; chips wrap inside their own container so
+   overflow lines align with the first chip, not the label. */
+.facet { display: flex; align-items: flex-start; gap: 8px; }
+.facet-label { flex: 0 0 118px; color: var(--fg-muted); font-size: 13px; padding-top: 3px; }
+.facet-chips { flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.facet-chips .doc-link { font-size: 12.5px; margin-left: 4px; white-space: nowrap; }
 .chip {
   border: 1px solid var(--border);
   background: var(--chip-bg);
@@ -166,7 +170,9 @@ noscript { display: block; padding: 16px; border: 1px solid var(--border); borde
     Generated from
     <a href="https://github.com/msyvr/awesome-agent-sandboxes/blob/main/data/sandboxes.yaml"><code>data/sandboxes.yaml</code></a>;
     this page reads the committed <a href="sandboxes.json"><code>sandboxes.json</code></a> and updates whenever the list does.
-    Click a name for details. Filters combine across groups (AND) and within a group (OR).
+    Click a name for details. Filters combine across groups (AND) and within a group (OR); a safety-research
+    preset restricts the table to the tools named in the matching
+    <a href="https://github.com/msyvr/awesome-agent-sandboxes/blob/main/docs/safety-research.md">safety-research</a> table.
   </footer>
 </div>
 
@@ -195,16 +201,21 @@ const COLUMNS = [
   { key: "license", label: "License" },
 ];
 
-const state = { q: "", oss: false, sel: {}, sort: { key: "name", dir: 1 }, open: new Set() };
+const state = { q: "", oss: false, preset: null, sel: {}, sort: { key: "name", dir: 1 }, open: new Set() };
 FACETS.forEach(f => state.sel[f.key] = new Set());
 
 let ENTRIES = [];
+let PRESETS = [];           // [{name, description, entries}]
+const PRESET_SETS = {};     // name -> Set of entry names
 
 fetch("sandboxes.json")
   .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
   .then(data => {
     ENTRIES = data.entries || [];
+    PRESETS = data.presets || [];
+    PRESETS.forEach(p => PRESET_SETS[p.name] = new Set(p.entries || []));
     document.getElementById("controls").hidden = false;
+    buildPresets();
     buildFacets();
     buildHead();
     readHash();
@@ -222,15 +233,50 @@ function orderedValues(key, order) {
   return known.concat(rest);
 }
 
+function facetRow(label) {
+  const row = document.createElement("div");
+  row.className = "facet";
+  const lab = document.createElement("span");
+  lab.className = "facet-label";
+  lab.textContent = label;
+  row.appendChild(lab);
+  const chips = document.createElement("div");
+  chips.className = "facet-chips";
+  row.appendChild(chips);
+  return { row, chips };
+}
+
+function buildPresets() {
+  if (!PRESETS.length) return;
+  const host = document.getElementById("facets");
+  const { row, chips } = facetRow("Safety research");
+  PRESETS.forEach(p => {
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.setAttribute("aria-pressed", "false");
+    b.dataset.preset = p.name;
+    if (p.description) b.title = p.description;
+    b.innerHTML = escapeHtml(p.name) +
+      ' <span class="n">' + (p.entries || []).length + "</span>";
+    b.addEventListener("click", () => {
+      state.preset = state.preset === p.name ? null : p.name;
+      render();
+    });
+    chips.appendChild(b);
+  });
+  const doc = document.createElement("a");
+  doc.className = "doc-link";
+  doc.href = "https://github.com/msyvr/awesome-agent-sandboxes/blob/main/docs/safety-research.md";
+  doc.textContent = "why these? →";
+  doc.title = "Per-need trade-off tables in docs/safety-research.md";
+  chips.appendChild(doc);
+  host.appendChild(row);
+}
+
 function buildFacets() {
   const host = document.getElementById("facets");
   FACETS.forEach(f => {
-    const row = document.createElement("div");
-    row.className = "facet";
-    const lab = document.createElement("span");
-    lab.className = "facet-label";
-    lab.textContent = f.label;
-    row.appendChild(lab);
+    const { row, chips } = facetRow(f.label);
     orderedValues(f.key, f.order).forEach(v => {
       const n = ENTRIES.filter(e => e[f.key] === v).length;
       const b = document.createElement("button");
@@ -244,7 +290,7 @@ function buildFacets() {
         sel.has(v) ? sel.delete(v) : sel.add(v);
         render();
       });
-      row.appendChild(b);
+      chips.appendChild(b);
     });
     host.appendChild(row);
   });
@@ -258,7 +304,7 @@ function buildFacets() {
     render();
   });
   document.getElementById("clear").addEventListener("click", () => {
-    state.q = ""; state.oss = false;
+    state.q = ""; state.oss = false; state.preset = null;
     FACETS.forEach(f => state.sel[f.key].clear());
     document.getElementById("search").value = "";
     document.getElementById("oss-only").checked = false;
@@ -293,7 +339,9 @@ function haystack(e) {
 }
 
 function visible() {
+  const presetSet = state.preset ? PRESET_SETS[state.preset] : null;
   return ENTRIES.filter(e => {
+    if (presetSet && !presetSet.has(e.name)) return false;
     if (state.q && !haystack(e).includes(state.q)) return false;
     if (state.oss && !e.open_source) return false;
     for (const f of FACETS) {
@@ -358,11 +406,14 @@ function render() {
   document.getElementById("count").textContent =
     n === total ? total + " entries" : n + " of " + total + " entries";
 
-  const filtered = state.q || state.oss || FACETS.some(f => state.sel[f.key].size);
+  const filtered = state.q || state.oss || state.preset || FACETS.some(f => state.sel[f.key].size);
   document.getElementById("clear").hidden = !filtered;
 
   document.querySelectorAll(".chip").forEach(b => {
-    b.setAttribute("aria-pressed", state.sel[b.dataset.facet].has(b.dataset.value) ? "true" : "false");
+    const on = b.dataset.preset
+      ? state.preset === b.dataset.preset
+      : state.sel[b.dataset.facet].has(b.dataset.value);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
   });
   document.querySelectorAll("#head-row th").forEach((th, i) => {
     const on = COLUMNS[i].key === state.sort.key;
@@ -423,11 +474,12 @@ function escapeHtml(s) {
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-/* Shareable state: #q=...&category=a,b&isolation_tier=... */
+/* Shareable state: #q=...&preset=...&category=a,b&isolation_tier=... */
 function writeHash() {
   const parts = [];
   if (state.q) parts.push("q=" + encodeURIComponent(state.q));
   if (state.oss) parts.push("oss=1");
+  if (state.preset) parts.push("preset=" + encodeURIComponent(state.preset));
   FACETS.forEach(f => {
     if (state.sel[f.key].size)
       parts.push(f.key + "=" + [...state.sel[f.key]].map(encodeURIComponent).join(","));
@@ -447,6 +499,9 @@ function readHash() {
     } else if (k === "oss") {
       state.oss = true;
       document.getElementById("oss-only").checked = true;
+    } else if (k === "preset") {
+      const name = decodeURIComponent(v);
+      if (PRESET_SETS[name]) state.preset = name;
     } else if (state.sel[k]) {
       v.split(",").forEach(x => state.sel[k].add(decodeURIComponent(x)));
     }
