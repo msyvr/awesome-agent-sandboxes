@@ -201,13 +201,13 @@ noscript { display: block; padding: 16px; border: 1px solid var(--border); borde
    Values missing from these lists (future vocab additions) are appended alphabetically,
    so new YAML vocabulary appears here with no page edit. */
 const FACETS = [
-  { key: "category", label: "Category", order: [] },
   { key: "isolation_tier", label: "Isolation tier",
     order: ["hardware-vm", "microvm", "container", "process", "wasm"] },
   { key: "adoption_effort", label: "Adoption effort",
     order: ["zero-config", "sign-up", "install", "compose"] },
   { key: "deployment_model", label: "Deployment",
     order: ["local", "self-hosted", "kubernetes", "cloud", "built-in"] },
+  { key: "category", label: "Category", order: [] },
 ];
 
 const COLUMNS = [
