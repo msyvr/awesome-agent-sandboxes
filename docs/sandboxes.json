@@ -1,6 +1,6 @@
 {
  "generated_from": "data/sandboxes.yaml",
- "count": 97,
+ "count": 98,
  "presets": [
   {
    "name": "RL training",
@@ -610,6 +610,38 @@
    "isolation_tier": "microvm",
    "adoption_effort": "install",
    "deployment_model": "local"
+  },
+  {
+   "name": "SandBase Harness",
+   "category": "standalone",
+   "maintainer": "SandBase AI",
+   "open_source": true,
+   "license": "Apache-2.0",
+   "url": "https://github.com/sandbaseai/sandbase-harness",
+   "repo_url": "https://github.com/sandbaseai/sandbase-harness",
+   "description": "Local-first TypeScript agent runtime and MCP bridge with persistent sessions, governed tool access, approvals, audit/replay, and selectable Local, Docker, Kubernetes, and self-hosted worker backends.",
+   "isolation_type": [
+    "container"
+   ],
+   "capabilities": [
+    "Persistent agent sessions and resumable runtime state",
+    "MCP tool bridge with explicit approvals and credential scoping",
+    "Local, Docker, Kubernetes, and self-hosted worker execution providers",
+    "Audit and replay records for sessions and tool calls"
+   ],
+   "requirements": [
+    "Node.js 20+",
+    "Local mode for a developer-machine quickstart; Docker, Kubernetes, or worker setup for those backends"
+   ],
+   "limitations": [
+    "Local path isolation is not a universal OS security boundary",
+    "Isolation properties vary by selected backend and deployment configuration",
+    "Kubernetes and self-hosted worker modes require operator-managed infrastructure"
+   ],
+   "notes": "A self-hosted runtime layer rather than a standalone microVM engine. The project exposes sandbox providers behind a common session/tool-governance model, so the selected backend must be evaluated on its own isolation properties.",
+   "isolation_tier": "container",
+   "adoption_effort": "install",
+   "deployment_model": "self-hosted"
   },
   {
    "name": "nono",

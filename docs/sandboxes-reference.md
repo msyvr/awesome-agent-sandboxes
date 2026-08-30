@@ -778,6 +778,20 @@ macOS CLI that spawns disposable Apple Containerization VMs with APFS copy-on-wr
 
 _Notes: Apple Containerization gives hardware-isolated micro-VMs (Kata-based) on Apple Silicon. APFS clonefile makes workspace clones instant without copying files. eBPF egress filtering is a notable hardening choice for a solo project._
 
+<a id="ref-sandbase-harness"></a>
+### SandBase Harness
+
+**Maintainer:** SandBase AI · **License:** Apache-2.0 · [Home](https://github.com/sandbaseai/sandbase-harness)
+
+Local-first TypeScript agent runtime and MCP bridge with persistent sessions, governed tool access, approvals, audit/replay, and selectable Local, Docker, Kubernetes, and self-hosted worker backends.
+
+- **Isolation:** container
+- **Capabilities:** Persistent agent sessions and resumable runtime state; MCP tool bridge with explicit approvals and credential scoping; Local, Docker, Kubernetes, and self-hosted worker execution providers; Audit and replay records for sessions and tool calls
+- **Requirements:** Node.js 20+; Local mode for a developer-machine quickstart; Docker, Kubernetes, or worker setup for those backends
+- **Limitations:** Local path isolation is not a universal OS security boundary; Isolation properties vary by selected backend and deployment configuration; Kubernetes and self-hosted worker modes require operator-managed infrastructure
+
+_Notes: A self-hosted runtime layer rather than a standalone microVM engine. The project exposes sandbox providers behind a common session/tool-governance model, so the selected backend must be evaluated on its own isolation properties._
+
 <a id="ref-sandcastle"></a>
 ### sandcastle
 
