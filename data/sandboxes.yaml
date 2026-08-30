@@ -1978,6 +1978,36 @@
   adoption_effort: install
   deployment_model: cloud
 
+- name: SandBase Harness
+  category: abstraction
+  maintainer: SandBase AI
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/sandbaseai/sandbase-harness
+  repo_url: https://github.com/sandbaseai/sandbase-harness
+  description: Local-first TypeScript agent runtime with sandboxed sessions, MCP tools, credentials, approval policies, audit logs, and replay.
+  isolation_type: [container, process]
+  capabilities:
+    - Local process and Docker sandbox backends
+    - Kubernetes and self-hosted worker backends
+    - MCP tool integration and permission policies
+    - Credential vault and approval workflows
+    - Persistent sessions with audit and replay
+  requirements:
+    - Node.js
+    - Docker for container sandboxes (optional)
+    - Kubernetes or self-hosted workers for those backends (optional)
+  limitations:
+    - Isolation strength depends on the selected backend and host configuration
+    - Kubernetes and worker backends require additional infrastructure
+  notes: >-
+    A runtime and sandbox orchestration layer rather than a single isolation
+    primitive; useful when agents need persistent sessions, governed tool use,
+    and inspectable execution across local or self-hosted deployments.
+  isolation_tier: container
+  adoption_effort: install
+  deployment_model: self-hosted
+
 - name: agentbox-sdk
   category: abstraction
   maintainer: TwillAI

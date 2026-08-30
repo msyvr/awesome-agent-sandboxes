@@ -1134,6 +1134,20 @@ Lightweight containerized agent orchestration wrapping Claude Code with messagin
 
 _Notes: More of an agent orchestration framework with sandbox support than a sandbox itself. High adoption. Sandbox capability comes from Docker or Docker Sandboxes underneath._
 
+<a id="ref-sandbase-harness"></a>
+### SandBase Harness
+
+**Maintainer:** SandBase AI · **License:** Apache-2.0 · [Home](https://github.com/sandbaseai/sandbase-harness)
+
+Local-first TypeScript agent runtime with sandboxed sessions, MCP tools, credentials, approval policies, audit logs, and replay.
+
+- **Isolation:** container, process
+- **Capabilities:** Local process and Docker sandbox backends; Kubernetes and self-hosted worker backends; MCP tool integration and permission policies; Credential vault and approval workflows; Persistent sessions with audit and replay
+- **Requirements:** Node.js; Docker for container sandboxes (optional); Kubernetes or self-hosted workers for those backends (optional)
+- **Limitations:** Isolation strength depends on the selected backend and host configuration; Kubernetes and worker backends require additional infrastructure
+
+_Notes: A runtime and sandbox orchestration layer rather than a single isolation primitive; useful when agents need persistent sessions, governed tool use, and inspectable execution across local or self-hosted deployments._
+
 ## Building Blocks
 
 ### VM & Container Runtimes
