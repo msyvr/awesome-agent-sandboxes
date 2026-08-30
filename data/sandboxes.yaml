@@ -570,6 +570,37 @@
   adoption_effort: install
   deployment_model: local
 
+- name: vetto
+  category: standalone
+  maintainer: shleder
+  open_source: true
+  license: MIT
+  url: https://github.com/shleder/vetto
+  repo_url: https://github.com/shleder/vetto
+  description: Daemon-less, container-free sandbox that wraps any AI coding agent CLI in Landlock + namespaces + seccomp-BPF (Linux) or Seatbelt (macOS), driven by a TOML policy.
+  isolation_type: [landlock, seccomp, user-namespace, seatbelt]
+  capabilities:
+    - Landlock ABI 1–6 read/write path rules (read isolation on Linux)
+    - user/mount/PID/net/IPC namespaces + hand-built seccomp-BPF
+    - Network off / per-domain allowlist with host-side DNS-validating broker (one pinned address per rule)
+    - Secret deny-paths, rlimits, hard timeout with process-tree kill
+    - "`vetto doctor` tier detection and `vetto verify` in-sandbox leak battery"
+    - Session reports (HTML/MD/JSON/SARIF + JSONL)
+  requirements:
+    - Linux (full enforcement) or macOS; unprivileged user namespaces on Linux
+    - npm i -g @shledery/vetto or cargo install; single static Rust binary
+  limitations:
+    - macOS read isolation is currently blocked by an Apple SBPL regression (write isolation + network control are enforced); documented in the README
+    - Windows backend is experimental (AppContainer)
+  notes: >-
+    No Docker, no bwrap, no root; fail-closed setup aborts the launch when a
+    primitive is missing instead of degrading silently. Built for wrapping
+    codex / claude / gemini / aider or any command with a per-project policy
+    file. ~200ms session overhead.
+  isolation_tier: process
+  adoption_effort: install
+  deployment_model: local
+
 - name: NVIDIA OpenShell
   category: standalone
   maintainer: NVIDIA
