@@ -126,6 +126,7 @@ After adding entries, check whether the new additions affect claims made in `doc
 - **Adversarial red-teaming table**: Does any new entry offer hardware VM containment, escape detection, or network monitoring?
 - **Maturity table**: Should any new entry be added with maturity caveats?
 - **"What's missing" section**: Do any new entries change what's missing from the landscape?
+- **Site presets**: If tools were added to or removed from the safety-research tables, mirror the change in `data/presets.yaml` (the Pages table site's safety-research filter chips). The generator fails on names that don't match entries, and tests guard the committed JSON.
 
 Present findings to the user and update if approved.
 

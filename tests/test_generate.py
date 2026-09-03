@@ -517,7 +517,12 @@ class TestGenerateReferenceDoc:
         ]
         result = generate_reference_doc(entries)
         assert "## Cloud Managed Sandboxes" in result
-        assert "## Standalone / Self-Hosted Tools" in result
+        assert "## Standalone / Local Tools" in result
+
+    def test_self_hosted_platform_section(self):
+        entries = [make_entry(name="Platform A", category="self-hosted-platform")]
+        result = generate_reference_doc(entries)
+        assert "## Self-Hosted Sandbox Platforms" in result
 
     def test_building_blocks_at_h2(self):
         entries = [make_entry(name="Tool", category="vm-runtime")]

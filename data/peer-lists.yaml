@@ -7,3 +7,9 @@
 - name: awesome-ai-coding-sandboxes
   url: https://github.com/fhiltscher/awesome-ai-coding-sandboxes
   raw_url: https://raw.githubusercontent.com/fhiltscher/awesome-ai-coding-sandboxes/main/README.md
+- name: awesome-sandbox
+  url: https://github.com/restyler/awesome-sandbox
+  raw_url: https://raw.githubusercontent.com/restyler/awesome-sandbox/main/README.md
+- name: awesome-agent-sandboxes (dloss)
+  url: https://github.com/dloss/awesome-agent-sandboxes
+  raw_url: https://raw.githubusercontent.com/dloss/awesome-agent-sandboxes/main/README.md

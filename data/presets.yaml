@@ -17,6 +17,11 @@
     - openkruise/agents
     - OpenSandbox
     - agent_sandbox
+    - forkd
+    - smolvm
+    - Beam
+    - AgentENV
+    - k7
 
 - name: Capability evaluation
   description: Syscall observability, credential isolation, audit trails, intervention, reproducibility
@@ -32,6 +37,14 @@
     - Firecracker
     - Fly Sprites
     - gondolin
+    - matchlock
+    - shuru
+    - clampdown
+    - Declaw
+    - InstaVM
+    - Islo
+    - Leash
+    - Morph Cloud
 
 - name: Adversarial red-teaming
   description: Hardware VM containment, escape detection, network monitoring
@@ -48,3 +61,7 @@
     - agent-glovebox
     - sandcat
     - Anthropic sandbox-runtime (srt)
+    - cocoon sandbox
+    - matchlock
+    - clawker
+    - sandlock

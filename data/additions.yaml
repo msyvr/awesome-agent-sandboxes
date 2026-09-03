@@ -179,3 +179,61 @@
     - cplt
     - gbash
     - axern
+
+- date: "2026-08-10"
+  entries:
+    - smolvm
+    - SmolVM (Celesto)
+    - boxlite
+    - shuru
+    - arcbox
+    - vibe
+    - matchlock
+    - chamber
+    - Cloud Hypervisor
+    - landrun
+    - sandlock
+    - ai-jail
+    - Leash
+    - agent-sandbox.nix
+    - agentbox
+    - mcp-runner
+    - Kilntainers
+    - forkd
+    - AgentENV
+    - k7
+    - Arrakis
+    - Judge0
+    - netclode
+    - k8e
+    - Capsule
+    - Eryx
+    - Amla Sandbox
+    - Alibaba Cloud AgentBay
+
+- date: "2026-08-17"
+  entries:
+    - clampdown
+    - cocoon sandbox
+    - clawker
+
+- date: "2026-08-24"
+  entries:
+    - OneCLI
+
+- date: "2026-08-31"
+  entries:
+    - Dormice
+    - vetto
+    - Beam
+    - Blaxel
+    - Box (ascii.dev)
+    - Declaw
+    - Freestyle
+    - InstaVM
+    - Islo
+    - Leap0
+    - Morph Cloud
+    - Novita Sandbox
+    - OmniRun
+    - Tensorlake

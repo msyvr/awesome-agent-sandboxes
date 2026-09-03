@@ -212,11 +212,18 @@ Do you already use an agent with built-in sandboxing?
     ├── Credential safety (API keys, tokens)
     │   ├── nono — keys never enter the sandbox + rollback + audit
     │   ├── cleanroom — keys never enter the sandbox + microVM isolation
+    │   ├── matchlock — proxy-injected secrets + microVM, on your laptop
+    │   ├── clampdown — agent holds a dummy key; container tier
     │   └── CubeSandbox — credential vault + microVM, self-hosted at scale
     │
     ├── Undo mistakes (rollback)
     │   ├── nono — atomic rollback with integrity verification
     │   └── CubeSandbox — copy-on-write snapshot, clone, and rollback
+    │
+    ├── Parallel runs (fork a *running* sandbox for tree search / RL)
+    │   ├── forkd — Firecracker fork server, CoW children from a warm parent
+    │   ├── smolvm — CoW fork of a live libkrun machine, single binary
+    │   └── Morph Cloud — hosted memory+disk branching of a running VM
     │
     ├── Supervised execution (watch and halt a running agent)
     │   └── agent-glovebox — second-model monitor gates tool calls,
@@ -240,6 +247,11 @@ Do you already use an agent with built-in sandboxing?
     │   ├── Need GPU? → Modal
     │   ├── Need persistence? → Fly Sprites or Daytona
     │   └── General purpose → E2B (most mature, free tier)
+    │
+    ├── Serve sandboxes to your own users (API + control plane you run)
+    │   ├── E2B-compatible API → CubeSandbox, Dormice, AgentENV, k8e
+    │   ├── Bare metal, no Kubernetes → cocoon sandbox, k7, forkd
+    │   └── Code execution for many languages → Judge0
     │
     └── Kubernetes
         ├── On GKE? → GKE Agent Sandbox

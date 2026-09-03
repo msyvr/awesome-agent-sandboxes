@@ -26,6 +26,7 @@ Curated articles, papers, and discussions on sandboxing AI agents.
 ## Research
 
 - [Fault-Tolerant Sandboxing for AI Coding Agents: A Transactional Approach to Safe Autonomous Execution](https://arxiv.org/abs/2512.12806) — Academic paper on transactional safety for agent sandboxes
+- [Computer Environments Elicit General Agentic Intelligence in LLMs](https://arxiv.org/abs/2601.16206) — Cheng et al. 2026. Trains LLM agents by RL inside a Docker computer environment and reports that sandbox access lifts performance on non-coding tasks, with RL amplifying the effect. Code at [llm-in-sandbox](https://github.com/llm-in-sandbox/llm-in-sandbox); the runtime is a plain Docker wrapper, so the paper rather than the repo is what belongs here
 - [LLM Agent Harness Survey](https://github.com/Gloriaameng/LLM-Agent-Harness-Survey) — Survey of 110+ papers across 23 agent harness systems with a taxonomy. Different scope from this repo (harnesses, not sandboxes), but the "Security & Sandboxing" section cites sandbox-relevant papers (SandboxEscapeBench, AEGIS, PRISM)
 
 ## Discussions

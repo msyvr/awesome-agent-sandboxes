@@ -37,6 +37,7 @@ VALID_CATEGORIES = {
     "cloud-managed",
     "agent-integrated",
     "standalone",
+    "self-hosted-platform",
     "kubernetes",
     "dev-environment",
     "abstraction",
@@ -88,7 +89,8 @@ CATEGORY_ORDER = [
     # Products & services
     ("cloud-managed", "Cloud Managed Sandboxes"),
     ("agent-integrated", "Agent-Integrated Sandboxes"),
-    ("standalone", "Standalone / Self-Hosted Tools"),
+    ("standalone", "Standalone / Local Tools"),
+    ("self-hosted-platform", "Self-Hosted Sandbox Platforms"),
     ("kubernetes", "Kubernetes-Native"),
     ("dev-environment", "Development Environments"),
     ("abstraction", "Abstraction Layers"),
@@ -103,7 +105,8 @@ BUILDING_BLOCK_CATEGORIES = {"vm-runtime", "os-primitive", "wasm-runtime"}
 CATEGORY_INTROS = {
     "cloud-managed": "Managed cloud services that provide sandbox environments via API/SDK. You sign up and get isolated environments on demand.",
     "agent-integrated": "Sandboxing built directly into AI agent products. These activate automatically or with minimal configuration.",
-    "standalone": "Tools you install and run yourself to sandbox any agent or process on your own machine.",
+    "standalone": "Tools you install and run on your own machine to sandbox an agent or process: host-native kernel wrappers, local microVM launchers, and container wrappers.",
+    "self-hosted-platform": "Control planes you run on your own infrastructure to serve many sandboxes over an API or SDK — the open-source counterparts of the cloud-managed tier. Distinct from the Kubernetes section: these bring their own scheduler or run on bare metal.",
     "kubernetes": "Sandbox solutions designed for Kubernetes clusters.",
     "dev-environment": "Development environment platforms that can be repurposed for agent isolation. These aren't agent-specific but provide usable isolation out of the box.",
     "abstraction": "SDKs and frameworks that abstract across multiple sandbox providers.",

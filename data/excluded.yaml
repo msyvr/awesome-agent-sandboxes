@@ -920,3 +920,347 @@
   reason: Coding agent platform (runs in Docker but is not itself a sandbox); listed in peer lists, excluded here so the cross-check doesn't resurface it
 - url: https://github.com/alibaba/OpenSandbox
   reason: Stale alias — repo moved to opensandbox-group/OpenSandbox, which is already listed
+
+# 2026-09-03 review (issues #53, #54, #55, #60; PRs #58, #59)
+- url: https://github.com/affaan-m/ECC
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/avelino/awesome-go
+  reason: "Awesome-list; not a sandbox"
+- url: https://github.com/msitarzewski/agency-agents
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/Shubhamsaboo/awesome-llm-apps
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/punkpeye/awesome-mcp-servers
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/earendil-works/pi
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/paperclipai/paperclip
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/shareAI-lab/learn-claude-code
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/openinterpreter/openinterpreter
+  reason: "Coding agent; not a sandbox"
+- url: https://github.com/headroomlabs-ai/headroom
+  reason: "Unrelated (token compression)"
+- url: https://github.com/colbymchenry/codegraph
+  reason: "Unrelated (code knowledge graph)"
+- url: https://github.com/VoltAgent/awesome-openclaw-skills
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/usestrix/strix
+  reason: "AI penetration-testing agent; not a sandbox"
+- url: https://github.com/GitHubDaily/GitHubDaily
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/Hmbown/CodeWhale
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/vercel-labs/agent-browser
+  reason: "Browser automation CLI; not a sandbox"
+- url: https://github.com/phaserjs/phaser
+  reason: "Unrelated (HTML5 game framework)"
+- url: https://github.com/bytedance/UI-TARS-desktop
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/tinyhumansai/openhuman
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/microsoft/playwright-mcp
+  reason: "Browser automation MCP server; not a sandbox"
+- url: https://github.com/HKUDS/DeepTutor
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/K-Dense-AI/scientific-agent-skills
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/NVIDIA/NemoClaw
+  reason: "Reference agent stack over listed NVIDIA OpenShell; noted in the OpenShell entry"
+- url: https://github.com/teableio/teable
+  reason: "Unrelated (AI spreadsheet app)"
+- url: https://github.com/RightNow-AI/openfang
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/WangRongsheng/awesome-LLM-resources
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/YaoApp/yao
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/anthropics/defending-code-reference-harness
+  reason: "Security scanning harness and skills; not a sandbox"
+- url: https://github.com/aymericdamien/TopDeepLearning
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/nix-community/awesome-nix
+  reason: "Awesome-list; not a sandbox"
+- url: https://github.com/github/gh-aw
+  reason: "GitHub Agentic Workflows — CI/automation engine, not a sandbox"
+- url: https://github.com/FareedKhan-dev/all-agentic-architectures
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/walkinglabs/hands-on-modern-rl
+  reason: "RL curriculum, not a sandbox"
+- url: https://github.com/memodb-io/Acontext
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/kirodotdev/KiroCrew
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/taishi-i/awesome-ChatGPT-repositories
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/TanStack/ai
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/NVIDIA/skills
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/open-webui/open-terminal
+  reason: "REST shell API running with the host user permissions; no isolation of its own"
+- url: https://github.com/oceanbase/seekdb
+  reason: "Unrelated (search database)"
+- url: https://github.com/rafska/awesome-local-llm
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/liquidmetal-dev/flintlock
+  reason: "MicroVM lifecycle service for Kubernetes nodes; no agent or untrusted-code framing"
+- url: https://github.com/getopenscreen/openscreen
+  reason: "Unrelated (demo recording tool)"
+- url: https://github.com/daymade/claude-code-skills
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/ottosulin/awesome-ai-security
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/RongleCat/grok-app
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/scadastrangelove/awesome-ai-security-tools
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/lennney/stop-that-shit
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/fencesandbox/fence
+  reason: "Stale alias — Use-Tusk/fence moved to this org; the listed fence entry now points here"
+- url: https://github.com/cuga-project/cuga-agent
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/viktorbezdek/awesome-github-projects
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/helixml/helix
+  reason: "Agent-fleet orchestrator with GPU desktops under Docker-in-Docker; custom non-OSI license; governance-orchestrator pattern"
+- url: https://github.com/andrew-waters/orchard
+  reason: "GUI for Apple Containers and MLX; no isolation of its own"
+- url: https://github.com/conor-is-my-name/n8n-autoscaling
+  reason: "Unrelated (n8n deployment)"
+- url: https://github.com/daytona/ai-enablement-stack
+  reason: "Landscape map, not a sandbox"
+- url: https://github.com/jdidion/biotools
+  reason: "Unrelated (bioinformatics list)"
+- url: https://github.com/finbarr/yolobox
+  reason: "Docker wrapper for agent CLIs; no differentiator from existing container-tier entries"
+- url: https://github.com/debarshibasak/awesome-paas
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/restyler/awesome-sandbox
+  reason: "Peer awesome-list; added to data/peer-lists.yaml as a cross-check source"
+- url: https://github.com/zricethezav/h1domains
+  reason: "Unrelated (HackerOne scope list)"
+- url: https://github.com/BennyKok/omg.dev
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/whit3rabbit/manus-open
+  reason: "Extracted agent source dump; not a sandbox"
+- url: https://github.com/diggerhq/opencomputer
+  reason: "Pivoted to \"serverless agents as code\"; the KVM VM runtime survives only as an operator self-hosting path — revisit if sandbox positioning returns"
+- url: https://github.com/Playa-0v0/Cyrene-Agent
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/cacheplane/dawnai
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/hopx-ai/hopx
+  reason: "Hosted VM sandbox whose isolation technology is undisclosed; SDK-only repo — hold until the mechanism is documented"
+- url: https://github.com/PetroIvaniuk/llms-tools
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/lineofflight/peddler
+  reason: "Unrelated (Amazon SP-API client)"
+- url: https://github.com/BinSquare/ERA
+  reason: "Archived; successor is smol-machines/smolvm (listed)"
+- url: https://github.com/rossoctl/rossoctl
+  reason: "Unrelated (installer/UI)"
+- url: https://github.com/ARUNAGIRINATHAN-K/awesome-ai-agents-2026
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/JSONbored/awesome-claude
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/GreyhavenHQ/greywall
+  reason: "Fork of listed fence adding observe/learning modes over the same enforcement core; noted under fence"
+- url: https://github.com/bex-co/beancount-io
+  reason: "Unrelated (accounting app)"
+- url: https://github.com/theaiautomators/claude-code-agentic-rag-series
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/fazxes/Claude-code
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/Zijian-Ni/awesome-ai-agents-2026
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/lobu-ai/lobu
+  reason: "Agent control plane; delegates isolation to Vercel Sandbox"
+- url: https://github.com/aneasystone/github-trending
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/philschmid/code-sandbox-mcp
+  reason: "MCP front end over listed llm-sandbox; stale"
+- url: https://github.com/PwnFunction/sandbox
+  reason: "Self-hosted Firecracker platform (Concave) — 3 squashed commits, idle since 2025-12; revisit if development resumes"
+- url: https://github.com/JiaranI/start-claude-code
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/agent-sandbox/agent-sandbox
+  reason: "REST/UI wrapper over kubernetes-sigs Agent Sandbox and agent-infra/sandbox (both listed)"
+- url: https://github.com/infracloudio/awesome-microvm
+  reason: "Awesome-list (microVMs); not a sandbox"
+- url: https://github.com/hostinger/fireactions
+  reason: "GitHub Actions runners in Firecracker; CI runner, not an agent sandbox"
+- url: https://github.com/obra/packnplay
+  reason: "Docker/Podman launcher with worktrees; README defers to Leash; no LICENSE file; no differentiator"
+- url: https://github.com/isboyjc/claude-code
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/coplane/localsandbox
+  reason: "Pyodide plus a simulated bash over a SQLite virtual filesystem; README says not audited and not for untrusted code; no LICENSE file"
+- url: https://github.com/Arman-Kudaibergenov/1c-ai-development-kit
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/abdallah-ali-abdallah/pydantic-ai-agents-tutorial
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/substratusai/sandboxai
+  reason: "Plain Docker runtime; no license; stale 19 months"
+- url: https://github.com/PACHAKUTlQ/ClaudeCage
+  reason: "Claude Code repackaged as a single-file executable inside bwrap; redistributes the Claude binary; bwrap wrapping is covered by existing entries; idle since 2026-04"
+- url: https://github.com/Untru/1c-mcp
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/IIIIQIIII/claude-code
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/AI-sandbox/gnomix
+  reason: "Unrelated (genomics; org name matched the keyword)"
+- url: https://github.com/mannychen0225/Agent-Hive-Workbench
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/lightbearco/tupper
+  reason: "Apple Container / Firecracker TS SDK with MCP — 8 commits, idle since 2026-06; revisit if it matures"
+- url: https://github.com/borenstein/yolo-cage
+  reason: "Archived. Vagrant/MicroK8s VM with egress credential scanning and git dispatcher — would have qualified; repo is read-only"
+- url: https://github.com/uhub/awesome-rust
+  reason: "Awesome-list; not a sandbox"
+- url: https://github.com/Kentucky-ai/opentakeoff
+  reason: "Unrelated (construction PDF takeoff)"
+- url: https://github.com/jgbrwn/vibebin
+  reason: "Incus VPS dev boxes; Incus isolation covered by code-on-incus; self-described not production-ready"
+- url: https://github.com/gavischneider/awesome-llm-wiki
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/uw-syfi/vibesys
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/Arnon-hs/open-source
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/deepclause/agentvm
+  reason: "container2wasm Alpine in node:wasi; README states highly experimental with node:wasi security gaps; idle since 2026-02"
+- url: https://github.com/TetiAI/hivebox
+  reason: "Kernel-native multi-sandbox platform with embedded agent; README says experimental and not production-ready, idle since 2026-06 — revisit if development resumes"
+- url: https://github.com/vstorm-co/pydantic-ai-rlm
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/johnxie/awesome-code-docs
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/EstebanForge/construct-cli
+  reason: "Container launcher whose feature set is developer experience (clipboard, PATH shims); microVM backend experimental; no security differentiator"
+- url: https://github.com/mosonlab/anneal
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/RYOITABASHI/Shelly
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/LyoSU/capka
+  reason: "AI coworker web app that runs tasks in Docker; agent product, not a sandbox"
+- url: https://github.com/xlabs-club/awesome-x-ops
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/gregce/tortie
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/korchasa/awesome-ai-agents
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/0xchasercat/volant
+  reason: "General multi-tenant microVM orchestration engine (BUSL); no agent framing"
+- url: https://github.com/aloth/awesome-ai-agents
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/AgentX-lab/SandboxFleet
+  reason: "Kubernetes slot scheduler with gVisor/Kata runtimes and running-sandbox fork — no LICENSE file, 33 stars, README-level claims; revisit"
+- url: https://github.com/linny006/trending-claude-skills
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/fendouai/awesome-deepseek-harness
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/ic-star-tech/ccfoundry-agent-kit
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/hyeonsangjeon/gdpval-realworks
+  reason: "Benchmark, not a sandbox"
+- url: https://github.com/lensapp/openshell-k8s-operator
+  reason: "Kubernetes operator front end for listed NVIDIA OpenShell; noted in the OpenShell entry"
+- url: https://github.com/ntk148v/awesome-stars
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/missuo/awesome-stars
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/getolive/olive-cli
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/Timeflys2018/zeyi
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/ammmir/sandboxer
+  reason: "Podman code-exec server with CRIU checkpoint — stale 16 months"
+- url: https://github.com/SynnoDB/SynnoDB
+  reason: "Unrelated (database engine)"
+- url: https://github.com/Ericwong5021/deepseek-plugin-store
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/Ngineer101/turbodiff
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/alex000kim/skypilot-code-sandbox
+  reason: "SkyPilot deployment recipe for listed llm-sandbox"
+- url: https://github.com/kherrick/hacker-news
+  reason: "Unrelated (HN client)"
+- url: https://github.com/AnEntrypoint/awesome-github
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/EffiBench/EffiBench-X
+  reason: "Benchmark, not a sandbox"
+- url: https://github.com/rainer85ah/mcp-server
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/LilithGames/a2wave
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/hamanpaul/paulsha-cortex
+  reason: "Governance-orchestrator pattern (agent governance plane over delegated isolation) — same as bernstein/kukeon/egg/vnx"
+- url: https://github.com/laude-institute/shellm
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/aws-solutions-library-samples/guidance-for-media-extraction-and-dynamic-content-policy-framework-on-aws
+  reason: "Unrelated (AWS media guidance)"
+- url: https://github.com/we-are-singular/aml
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/skymecode/deepseek-harness-for-vscode
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/llm-in-sandbox/llm-in-sandbox-rl
+  reason: "Training code for arXiv:2601.16206; the paper is in references/reading-list.md, the runtime is a plain Docker wrapper"
+- url: https://github.com/jx-codes/mcp-rpc
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/nickaggarwal/sandbox-test
+  reason: "Empty test repository"
+- url: https://github.com/dloss/awesome-agent-sandboxes
+  reason: "Peer awesome-list; added to data/peer-lists.yaml as a cross-check source"
+- url: https://github.com/MCKRUZ/microsoft-agentic-harness
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/zaydiscold/robinhood-cli-mcp-api
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/ya-luotao/microsandbox-rb
+  reason: "Community Ruby bindings for listed microsandbox"
+- url: https://github.com/genesiscosmos/downcity
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/xianyu110/awesome-deepseek-harness
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/NoWint/Oh-My-DSH
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/protoLabsAI/protoAgent
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/OpenDCAI/DataFlow-Agent
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/yyqqCoding/MDToWord
+  reason: "Unrelated (document converter)"
+- url: https://github.com/liuzhen9320/zstar
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/shelken/awesome-stars
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/openshift-online/hypershell
+  reason: "Multi-cloud gateway management for listed NVIDIA OpenShell; noted in the OpenShell entry"
+- url: https://github.com/Ismail-2001/The-Kubernetes-of-AI-Agents
+  reason: "Multi-tenant agent orchestration; governance-orchestrator pattern, isolation delegated"
+- url: https://github.com/VIDAKHOSHPEY22/news-daily-bot
+  reason: "Unrelated (news bot)"
+- url: https://github.com/tphakala/agy-mcp
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/rushteam/beauty
+  reason: "Unrelated (microservice kit)"
+- url: https://github.com/Alessandro-Pang/harnessmith
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/ljodea/ggsvelte
+  reason: "Unrelated (plotting library)"
+- url: https://github.com/Erriccc/osborn
+  reason: "Agent framework, harness, skill pack, or MCP tooling; not a sandbox"
+- url: https://github.com/s3131212/PythonSafeEval
+  reason: "Docker+nsjail Python eval, abandoned 2021, README disclaims safety"
+- url: https://github.com/eschizoid/stride
+  reason: "Unrelated (training-data app)"
+- url: https://github.com/zrk222/code-factory
+  reason: "Unrelated to agent sandboxing (matched discovery keywords only)"
+- url: https://github.com/saltbo/awesome-stars
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/losebird/dsh-plugin-market
+  reason: "Awesome-list / curated collection, not a sandbox"
+- url: https://github.com/sandbaseai/sandbase-harness
+  reason: "Agent runtime / governance orchestrator (PRs #58, #59): local backend is TypeScript path-prefix checks with isolatedExecution false; Docker backend is unhardened docker run; same pattern as bernstein/kukeon/egg/vnx"
