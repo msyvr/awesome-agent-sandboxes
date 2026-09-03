@@ -45,7 +45,21 @@ For each candidate, determine from the description alone whether it could plausi
 
 ### 3. Investigate candidates
 
-For each candidate that passed quick triage, use an Agent to fetch the README and evaluate. The agent prompt should:
+**Get the cheap facts from the API first, before spawning anything.** License, last push, stars, archived status and homepage all come from one batched shell loop that costs no model tokens:
+
+```bash
+for r in owner/repo owner/repo2 ...; do
+  gh api repos/$r --jq '"\(.full_name)|\(.license.spdx_id // "NONE")|\(.pushed_at[0:10])|\(.stargazers_count)|\(.archived)"'
+done
+```
+
+Agents are for reading prose an API cannot answer: what the tool actually does, which mechanism enforces isolation, whether the README's claims match its own caveats. Never spend an agent fetch on a field `gh api` returns. A backlog review that fans out agents for metadata *and* again for entry-writing can exhaust a session limit — that happened on 2026-09-03 with ~110 fetches across twelve agents.
+
+Two caveats on the API data:
+- `license.spdx_id` reports a single id and returns `NOASSERTION` for anything it cannot classify. It was wrong or incomplete on six of 2026-09-03's entries (dual `MIT OR Apache-2.0`, `AGPL-3.0-or-later`, `Apache-2.0 AND BSD-3-Clause` via REUSE, and a GPL stated only in `COPYING.md`). When an agent reads the actual LICENSE file, prefer the agent's compound expression over the API's single id.
+- `pushed_at` moves on any branch push. Cross-check against the default branch's last commit before writing a staleness limitation.
+
+For each candidate that survives, use an Agent to fetch the README and evaluate. The agent prompt should:
 
 - State the inclusion test clearly
 - Ask for: (a) one-sentence summary, (b) is it a sandbox by our criteria? (c) category, (d) isolation mechanism, (e) maturity flags, (f) one differentiator
@@ -100,7 +114,19 @@ For each approved entry, add to `data/sandboxes.yaml` with the full schema:
 **YAML quoting rules** (common pitfalls):
 - Strings starting with `"` need single-quote wrapping: `'"Lite" edition'`
 - Strings with `<` should be quoted: `"Claims <20ms latency"`
+- A list item containing `: ` silently parses as a **dict**, not a string. `- Free tier: 300 credits` becomes `{'Free tier': '300 credits'}`, passes `yaml.safe_load` without complaint, and only fails later inside the generator's `'; '.join(items)` with `TypeError: expected str instance, dict found`. Quote any item with a colon.
 - Use `>-` for multi-line notes (folds lines, strips trailing newline)
+
+Both failure modes above survive a parse of the fragment in isolation, so validate the shape rather than just the syntax before regenerating:
+
+```bash
+uv run python -c "
+import yaml
+for e in yaml.safe_load(open('data/sandboxes.yaml')):
+    for f in ('capabilities','requirements','limitations','isolation_type'):
+        for it in e.get(f) or []:
+            if not isinstance(it, str): print(e['name'], f, repr(it))"
+```
 
 If any candidate would fit in the reading list instead of the YAML (e.g., survey papers with a relevant security section), add to `references/reading-list.md` under the appropriate heading.
 
