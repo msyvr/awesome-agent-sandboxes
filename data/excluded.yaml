@@ -1264,3 +1264,37 @@
   reason: "Awesome-list / curated collection, not a sandbox"
 - url: https://github.com/sandbaseai/sandbase-harness
   reason: "Agent runtime / governance orchestrator (PRs #58, #59): local backend is TypeScript path-prefix checks with isolatedExecution false; Docker backend is unhardened docker run; same pattern as bernstein/kukeon/egg/vnx"
+
+# 2026-09-03 — peer-list product links: aliases of listed entries, plus
+# hosted products reviewed and rejected. Added so the weekly peer-list
+# cross-check stops resurfacing them.
+- url: https://coder.com
+  reason: "Product site for listed Coder (stored as its GitHub repo URL)"
+- url: https://superserve.ai
+  reason: "Product site for listed Superserve (stored as its GitHub repo URL)"
+- url: https://fly.io/sprites
+  reason: "Alias of listed Fly Sprites (sprites.dev)"
+- url: https://morph.so
+  reason: "Near-empty landing page for listed Morph Cloud (cloud.morph.so)"
+- url: https://baponi.ai
+  reason: "Hosted sandbox API whose isolation mechanism is undisclosed; docs.baponi.ai does not resolve. Revisit if the mechanism is documented"
+- url: https://hopx.ai
+  reason: "Hosted lightweight-VM sandbox whose VM technology is undisclosed; SDK-only repo. Revisit if the mechanism is documented"
+- url: https://qbox.sh
+  reason: "Self-hosted Firecracker orchestrator behind an email-gated alpha; no source, no pricing. Revisit when it ships"
+- url: https://docs.turso.tech/agentfs
+  reason: "SQLite-backed filesystem, KV, and audit layer for agents; no OS-level isolation and its own docs call it complementary to containers/VMs"
+- url: https://docs.vibekit.sh
+  reason: "SDK for embedding coding agents; delegates isolation to E2B, Dagger, Daytona, Northflank, Cloudflare, and Modal"
+- url: https://opencomputer.dev
+  reason: "Repositioned as serverless agents as code; the QEMU/KVM runtime survives only as an operator self-hosting path. Revisit if sandbox positioning returns"
+- url: https://replit.com
+  reason: "Cloud IDE and app builder; no programmatic sandbox or compute API product"
+- url: https://steel.dev
+  reason: "Headless browser API for agents; positioned on web access, not containment"
+- url: https://www.clusy.io
+  reason: "AI notebook IDE whose cells run on managed sandboxes; agent product with no developer-facing sandbox API"
+- url: https://www.giantswarm.io/agent-platform
+  reason: "Self-hosted Kubernetes agent platform with governance features; isolation is restricted pod security only, no gVisor/Kata/microVM"
+- url: https://www.linkedin.com/in/franz-hiltscher
+  reason: "Peer-list maintainer's profile link, not a project"

@@ -14,6 +14,7 @@ from discover import (
     format_candidates_md,
     format_staleness_md,
     load_all_entry_urls,
+    is_known_url,
     load_excluded_repos,
     load_existing_repos,
     normalize_url,
@@ -299,10 +300,53 @@ class TestLoadAllEntryUrls:
         excl = tmp_path / "excluded.yaml"
         excl.write_text("- url: https://github.com/org/b\n  reason: x\n")
         urls = load_all_entry_urls(main, excl)
-        assert urls == {"a.dev", "github.com/org/a", "github.com/org/b"}
+        assert urls == {"a.dev", "host:a.dev", "github.com/org/a", "github.com/org/b"}
 
     def test_missing_files_return_empty(self, tmp_path):
         assert load_all_entry_urls(tmp_path / "x.yaml", tmp_path / "y.yaml") == set()
+
+    def test_product_path_also_indexes_bare_host(self, tmp_path):
+        main = tmp_path / "sandboxes.yaml"
+        main.write_text("- name: m\n  url: https://modal.com/products/sandboxes\n")
+        excl = tmp_path / "excluded.yaml"
+        excl.write_text("[]\n")
+        urls = load_all_entry_urls(main, excl)
+        assert "modal.com/products/sandboxes" in urls
+        assert "host:modal.com" in urls
+
+    def test_github_repo_url_does_not_index_host(self, tmp_path):
+        main = tmp_path / "sandboxes.yaml"
+        main.write_text("- name: g\n  repo_url: https://github.com/org/a\n")
+        excl = tmp_path / "excluded.yaml"
+        excl.write_text("[]\n")
+        assert "host:github.com" not in load_all_entry_urls(main, excl)
+
+
+class TestIsKnownUrl:
+    known = {"modal.com/products/sandboxes", "host:modal.com", "github.com/org/a"}
+
+    def test_exact_match(self):
+        assert is_known_url("https://modal.com/products/sandboxes", self.known)
+
+    def test_bare_home_page_matches_listed_product_path(self):
+        assert is_known_url("https://modal.com", self.known)
+        assert is_known_url("https://www.modal.com/", self.known)
+
+    def test_other_product_under_known_host_still_surfaces(self):
+        assert not is_known_url("https://modal.com/products/something-else", self.known)
+
+    def test_unknown_host(self):
+        assert not is_known_url("https://brand-new-vendor.dev", self.known)
+
+    def test_deep_link_under_known_path(self):
+        known = {"kvcache-ai.github.io/agentenv/latest"}
+        assert is_known_url(
+            "https://kvcache-ai.github.io/AgentENV/latest/concepts/sandboxes.html", known
+        )
+
+    def test_sibling_path_is_not_a_prefix_match(self):
+        known = {"a.dev/product/sandbox"}
+        assert not is_known_url("https://a.dev/product/sandbox-v2", known)
 
 
 # ---------------------------------------------------------------------------

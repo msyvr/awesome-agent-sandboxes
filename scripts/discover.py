@@ -169,7 +169,12 @@ def normalize_url(url: str) -> str:
 
 
 def load_all_entry_urls(yaml_path: Path, excluded_path: Path) -> set[str]:
-    """Normalized url + repo_url values from both YAML files, GitHub or not."""
+    """Normalized url + repo_url values from both YAML files, GitHub or not.
+
+    Non-GitHub entries also contribute their bare host, because peer lists
+    link a vendor's home page ("modal.com") where we store the product page
+    ("modal.com/products/sandboxes"). is_known_url() consumes both forms.
+    """
     urls = set()
     for path, field_names in ((yaml_path, ("url", "repo_url")), (excluded_path, ("url",))):
         if not path.exists():
@@ -179,9 +184,41 @@ def load_all_entry_urls(yaml_path: Path, excluded_path: Path) -> set[str]:
         for entry in entries:
             for field in field_names:
                 val = entry.get(field)
-                if val:
-                    urls.add(normalize_url(val))
+                if not val:
+                    continue
+                norm = normalize_url(val)
+                urls.add(norm)
+                host = norm.split("/", 1)[0]
+                if host != "github.com":
+                    urls.add(f"host:{host}")
     return urls
+
+
+def is_known_url(url: str, known_urls: set[str]) -> bool:
+    """True if a peer-list link points at something already tracked.
+
+    Three ways to match, in order of strictness:
+
+    1. Exact normalized match.
+    2. The link sits under a known URL's path — docs sites generate many deep
+       links ("…/AgentENV/latest/concepts/sandboxes.html") for one project.
+    3. The link is a bare home page with no path and its host is known, since
+       peer lists cite "modal.com" where we store "modal.com/products/sandboxes".
+
+    A link that carries a path unrelated to any known one is still surfaced,
+    so a second product under a listed vendor's domain (say
+    alibabacloud.com/product/something-else) remains a candidate.
+    """
+    norm = normalize_url(url)
+    if norm in known_urls:
+        return True
+    for known in known_urls:
+        if known.startswith("host:"):
+            continue
+        if norm.startswith(known + "/"):
+            return True
+    host, _, path = norm.partition("/")
+    return not path and f"host:{host}" in known_urls
 
 
 def extract_peer_links(markdown: str) -> tuple[set[str], set[str]]:
@@ -248,7 +285,7 @@ def crosscheck_peer_lists(token: str | None, known_urls: set[str]) -> tuple[list
         repos, others = extract_peer_links(resp.text)
 
         for url in sorted(others):
-            if normalize_url(url) not in known_urls:
+            if not is_known_url(url, known_urls):
                 other_links.append({"url": url, "source": name})
 
         for repo_url in sorted(repos):
