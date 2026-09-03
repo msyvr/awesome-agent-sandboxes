@@ -444,14 +444,14 @@ Three views of the same landscape to help you find what fits.
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | locki, brood-box, cleanroom, gondolin, cua, +4 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +14 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Koyeb, OpenAI Codex Sandbox, agent-infra/sandbox, llm-sandbox, +27 more | Shared kernel means a kernel exploit can bypass isolation. |
-| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +24 more | Weakest containment boundary; not for adversarial workloads. |
+| **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +25 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, Wasmtime, WasmEdge, wasmCloud, +3 more | Limited to specific runtimes; can't run arbitrary binaries. |
 
 #### How do I get started?
 
 | Effort | What it means | Examples |
 |--------|---------------|----------|
-| **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
+| **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox, Vetto |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +12 more |
 | **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), +56 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | Firecracker, gVisor, Kata Containers, libkrun, Zeroboot, +12 more |
@@ -462,7 +462,7 @@ Three views of the same landscape to help you find what fits.
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
 | **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +14 more |
-| **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +49 more |
+| **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +50 more |
 | **Self-hosted** | You host and manage the infrastructure. | Coder, OpenSandbox, Firecracker, gVisor, Kata Containers, +9 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0, +2 more |
 
@@ -551,6 +551,7 @@ Tools you install and run yourself to sandbox any agent or process on your own m
 | [sevorix-lite](https://github.com/sevorix/sevorix-lite) | Yes (AGPL-3.0) | seccomp, user-namespace | Multi-layered runtime containment rather than VM/container isolation. The "Yellow Lane" human-in-the-loop model with countdown timer is unusual — the agent pauses pending human approval via dashboard. Claude Code support is built in, not bolted on. |
 | [skilllite](https://github.com/EXboys/skilllite) | Yes (MIT) | seatbelt, user-namespace, seccomp | The skilllite-sandbox component is independently usable — you don't have to use the agent engine to get the sandbox. Three-layer defense model (install scan + pre-exec auth + runtime sandbox) is more depth than most standalone tools offer. |
 | [temps](https://github.com/gotempsh/temps) | Yes (Apache-2.0) | container, microvm, kvm | The only self-hostable entry offering drop-in Vercel Sandbox SDK compatibility on your own hardware. The Firecracker backend is real in-repo code (vsock agent, e2e test, design ADR), not a wrapper over an external sandbox API — but it is weeks old; the Docker path is the battle-tested default. |
+| [Vetto](https://github.com/shleder/vetto) | Yes (Apache-2.0) | landlock, seccomp, user-namespace, seatbelt | A daemon-less, container-free alternative to Docker for running Claude Code, Codex CLI, and Cursor unattended. Uses modern unprivileged Linux Landlock LSM and transparent PATH shims to isolate agent file and network access at native speeds. |
 | [warren](https://github.com/jayminwest/warren) | Yes (MIT) | user-namespace | Unlike control planes that delegate isolation to a cloud backend, warren ships its own bubblewrap sandbox — the host is unreachable and the control plane talks to the runtime over a unix socket. The differentiator is the governance layer (mid-run steering, sign-off gates, PR-merge-gated serial dispatch) on native isolation. 33 scenario-based acceptance tests; runs on Fly.io. |
 
 <a id="sec-kubernetes"></a>

@@ -848,6 +848,20 @@ Self-hosted Rust PaaS whose sandbox subsystem exposes a Vercel-Sandbox-compatibl
 
 _Notes: The only self-hostable entry offering drop-in Vercel Sandbox SDK compatibility on your own hardware. The Firecracker backend is real in-repo code (vsock agent, e2e test, design ADR), not a wrapper over an external sandbox API — but it is weeks old; the Docker path is the battle-tested default._
 
+<a id="ref-vetto"></a>
+### Vetto
+
+**Maintainer:** shleder · **License:** Apache-2.0 · [Home](https://github.com/shleder/vetto)
+
+Daemon-less, zero-overhead kernel sandbox for AI coding agents using Linux Landlock LSM, namespaces, seccomp-BPF, and macOS Seatbelt.
+
+- **Isolation:** landlock, seccomp, user-namespace, seatbelt
+- **Capabilities:** Linux Landlock LSM (ABI v1-v6) path-based access control without root; macOS Seatbelt integration; Daemon-less architecture with ~2ms startup overhead; Transparent PATH shimming (vetto enable claude|codex|cursor); Ephemeral disposable execution with automatic rollback (vetto ephemeral); Git Guard exec interception (git reset --hard, git push --force); Third-party MCP server sandboxing (vetto mcp wrap); Autonomous execution loop & token burn watchdog; Real-time secret stream redactor (vetto mask); Shadow session snapshots, diff review, and replay bundles (vetto undo, diff, pack)
+- **Requirements:** Linux (kernel 5.13+ for Landlock) or macOS; Single self-contained binary (no Docker or background daemon required)
+- **Limitations:** macOS read isolation affected by Apple SBPL regression (write and network enforced); Windows backend uses experimental process restrictions
+
+_Notes: A daemon-less, container-free alternative to Docker for running Claude Code, Codex CLI, and Cursor unattended. Uses modern unprivileged Linux Landlock LSM and transparent PATH shims to isolate agent file and network access at native speeds._
+
 <a id="ref-warren"></a>
 ### warren
 

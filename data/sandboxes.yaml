@@ -2999,3 +2999,37 @@
   isolation_tier: container
   adoption_effort: compose
   deployment_model: self-hosted
+
+- name: Vetto
+  category: standalone
+  maintainer: shleder
+  open_source: true
+  license: Apache-2.0
+  url: https://github.com/shleder/vetto
+  repo_url: https://github.com/shleder/vetto
+  description: Daemon-less, zero-overhead kernel sandbox for AI coding agents using Linux Landlock LSM, namespaces, seccomp-BPF, and macOS Seatbelt.
+  isolation_type: [landlock, seccomp, user-namespace, seatbelt]
+  capabilities:
+    - Linux Landlock LSM (ABI v1-v6) path-based access control without root
+    - macOS Seatbelt integration
+    - Daemon-less architecture with ~2ms startup overhead
+    - Transparent PATH shimming (vetto enable claude|codex|cursor)
+    - Ephemeral disposable execution with automatic rollback (vetto ephemeral)
+    - Git Guard exec interception (git reset --hard, git push --force)
+    - Third-party MCP server sandboxing (vetto mcp wrap)
+    - Autonomous execution loop & token burn watchdog
+    - Real-time secret stream redactor (vetto mask)
+    - Shadow session snapshots, diff review, and replay bundles (vetto undo, diff, pack)
+  requirements:
+    - Linux (kernel 5.13+ for Landlock) or macOS
+    - Single self-contained binary (no Docker or background daemon required)
+  limitations:
+    - macOS read isolation affected by Apple SBPL regression (write and network enforced)
+    - Windows backend uses experimental process restrictions
+  notes: >-
+    A daemon-less, container-free alternative to Docker for running Claude Code,
+    Codex CLI, and Cursor unattended. Uses modern unprivileged Linux Landlock LSM
+    and transparent PATH shims to isolate agent file and network access at native speeds.
+  isolation_tier: process
+  adoption_effort: zero-config
+  deployment_model: local
