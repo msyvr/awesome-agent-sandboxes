@@ -54,7 +54,9 @@ For each candidate that passed quick triage, use an Agent to fetch the README an
 
 **Evaluation criteria** (from the critique checklist):
 - **Is it actually a sandbox?** Not an agent that runs in a container, not an orchestration tool that calls a sandbox API, not a policy layer without kernel enforcement.
-- **Does it fit a category definition?** Test against the definition, not the category name. Valid categories: `cloud-managed`, `agent-integrated`, `standalone`, `kubernetes`, `dev-environment`, `abstraction`, `vm-runtime`, `os-primitive`, `wasm-runtime`.
+- **Does it fit a category definition?** Test against the definition, not the category name. Valid categories: `cloud-managed`, `agent-integrated`, `standalone`, `self-hosted-platform`, `kubernetes`, `dev-environment`, `abstraction`, `vm-runtime`, `os-primitive`, `wasm-runtime`.
+  - `standalone` vs `self-hosted-platform`: a tool you install to wrap one agent on one machine is standalone; a control plane you run to serve many sandboxes over an API or SDK is a self-hosted platform. If it ships a daemon, an API, SDKs, and warm pools, it is the latter. `kubernetes` is for anything requiring a cluster; self-hosted platforms bring their own scheduler or run on bare metal.
+- **Categories are not fixed.** When a batch shows several entries that share a shape no existing category names, add one rather than forcing them into the nearest fit. `self-hosted-platform` was added on 2026-09-03 for this reason. Adding one means: extend `VALID_CATEGORIES`, `CATEGORY_ORDER` and `CATEGORY_INTROS` in `scripts/generate_readme.py`, add a section banner in the YAML, add a `generate_reference_doc` test, and note it in a strategy update.
 - **Is it distinct from existing entries?** Check `data/sandboxes.yaml` for duplicates, forks, or thin wrappers of tools already listed.
 - **Avoid brand-recognition bias.** Low star count or solo maintainer is NOT a reason to reject. In an early field, adoption reflects marketing, not quality.
 - **No LICENSE file is a flag, not a rejection.** Note it in limitations and notes.
@@ -210,6 +212,21 @@ The standalone sandbox space is maturing. "Runs agents in Docker" is now a commo
 A new tool that wraps Docker without adding something beyond what the existing ~20 container-tier entries already cover should be rejected with a note like "no differentiator from existing container-tier entries."
 
 See [docs/strategy-update-2026-04-25.md](docs/strategy-update-2026-04-25.md) for the full analysis behind this guidance.
+
+### Author-submitted PRs: read the source before listing (as of 2026-09-03)
+
+Self-submission is now a regular inbound channel, and it is adversarially selected — the submitter wants in, and writes the YAML themselves. Neither vetto nor SandBase Harness was surfaced by keyword discovery; both arrived as issue comments and PRs.
+
+Before accepting an author-submitted entry, read the code that is supposed to enforce isolation and name the files in the review. Both 2026-09-03 submissions claimed a sandbox; one held up and one did not:
+
+- **vetto** — `landlock.rs`, `seccomp_netblock.rs`, `namespaces.rs`, `net_relay.rs` implement what the README describes. Listed, with the submitted YAML corrected (`adoption_effort` install not zero-config, performance adjectives dropped, maturity caveats added).
+- **SandBase Harness** — `local-provider.ts` does path-prefix checks and sets `isolatedExecution: false`; `docker-provider.ts` is `docker run` with no hardening flags; the `docs/sandbox.md` cited in the PR does not exist in the repo. Rejected.
+
+Signals that warrant a closer read: the same project arriving through more than one account, a promotion or outreach doc in the repo logging mass list submissions, a README that opens with star requests, and the submitting org forking this list and its peers.
+
+### Credential brokering is table stakes for container tier (as of 2026-09-03)
+
+Keeping secrets out of the sandbox by substituting them at a proxy was a differentiator in April 2026. By August it was in roughly a dozen entries, hosted and local alike. A container-tier candidate whose only distinguishing property is a credential proxy no longer clears the bar; it needs that plus something else — nested-container enforcement (clampdown), request-path egress rules (clawker), or per-push human approval (agentbox). See [docs/strategy-update-2026-09-03.md](docs/strategy-update-2026-09-03.md).
 
 ### Reject governance-orchestrator pattern without investigation (as of 2026-05-05)
 
