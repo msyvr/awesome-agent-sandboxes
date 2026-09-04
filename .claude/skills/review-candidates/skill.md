@@ -12,6 +12,27 @@ Review open discovery issues, investigate candidates, add approved entries to th
 - `/review-candidates` — Review all open discovery issues
 - `/review-candidates 8` — Review a specific issue number
 
+## Known gaps — raise these before starting
+
+Two improvements were identified on 2026-09-03 and deliberately deferred. Both affect this workflow. **Mention them to the user at the start of a review and ask whether to fold them in**, rather than silently working around them a second time. Neither is urgent; both get cheaper to do than to keep working around.
+
+**1. Discovery does not follow GitHub repo renames** (small, ~30 min). A listed entry whose repo moves org resurfaces as a fresh candidate, because `load_all_entry_urls()` compares the stored URL string and never learns the repo moved. That is how `fencesandbox/fence` appeared as new in the August batch when `Use-Tusk/fence` was already listed. `gh api repos/OWNER/REPO` follows the redirect and returns the new `full_name`, so resolving each listed GitHub URL once per run would both suppress the false candidate and flag the entry as needing a URL update. Fix belongs in `scripts/discover.py` next to `is_known_url()`, with a test alongside `TestIsKnownUrl`.
+
+*Workaround until then:* when a candidate's name closely matches a listed entry, check `gh api repos/OWNER/REPO --jq .full_name` before treating it as new.
+
+**2. No structured field for security properties** (larger, ~a session). What now distinguishes entries is which security properties they have, and that information exists only as free text in `capabilities` and `notes`. Nothing can filter or count it. Consequences visible in the 2026-09-03 review: verifying nono's "only sandbox combining kernel enforcement + credential isolation + atomic rollback + cryptographic audit chain" claim required grepping prose across 143 entries; the `docs/safety-research.md` tables and `data/presets.yaml` are hand-maintained name lists that drift each time entries are added; and the credential-proxy property went from 4 entries to 16 in one month without anything surfacing that shift.
+
+Proposed shape, mirroring `isolation_type`:
+
+```yaml
+security_properties: [credential-proxy, egress-allowlist, fork-snapshot, audit-log,
+                      syscall-observability, human-approval, threat-detection, rollback]
+```
+
+Doing it means: a `VALID_SECURITY_PROPERTIES` set plus validation in `scripts/generate_readme.py`, a classification pass over all entries (read `capabilities`/`notes` already in the file — **do not re-fetch the projects**, the text was written from source), site filter chips in `docs/index.html`, and ideally generating the safety-research tables from the data instead of maintaining them by hand.
+
+Full reasoning: [docs/strategy-update-2026-09-03.md](docs/strategy-update-2026-09-03.md).
+
 ## Process
 
 ### 1. Gather open issues
