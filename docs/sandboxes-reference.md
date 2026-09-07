@@ -102,6 +102,20 @@ SDK for giving agents sandboxed MicroVM environments with parallel execution sup
 
 _Notes: Well-established brand from the browser IDE space, expanding to agent use._
 
+<a id="ref-createos-sandbox"></a>
+### CreateOS Sandbox
+
+**Maintainer:** NodeOps · **License:** Closed source · [Home](https://createos.sh/products/sandbox) · [Repo](https://github.com/NodeOps-app/createos-sandbox-sdk)
+
+Firecracker microVM sandboxes with pause/resume/fork of full VM state, private sandbox-to-sandbox networks, and in-kernel egress allowlists.
+
+- **Isolation:** microvm
+- **Capabilities:** Firecracker microVM isolation (own kernel per sandbox); ~210ms median time-to-interactive; Pause, resume and fork of full VM state; Private overlay networks between sandboxes; Egress allowlist enforced in-kernel outside the VM; no ingress by default; Custom images from a Dockerfile; S3-compatible disk mounts; TypeScript SDK, CLI, MCP server, REST API; Self-hostable control plane and storage; EU and US regions
+- **Requirements:** Cloud-hosted managed service (self-host option); Usage-based, per-second pricing; no egress fees; 500 free credits
+- **Limitations:** Closed source (SDK and CLI are MIT); No Python SDK (REST from Python); No GPU support; Alpha status; no SLA yet
+
+_Notes: Fork of a paused sandbox into independent copies and private sandbox-to-sandbox networks are the two primitives E2B and Daytona do not expose; egress is an in-kernel allowlist enforced on the host rather than in the guest. Self-host of the control plane is supported._
+
 <a id="ref-daytona"></a>
 ### Daytona
 

@@ -510,7 +510,7 @@ Three views of the same landscape to help you find what fits.
 | Tier | Mechanism | Examples | Trade-off |
 |------|-----------|----------|-----------|
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | Box (ascii.dev), Freestyle, Morph Cloud, Alibaba Cloud AgentBay, locki, +12 more | Higher overhead and resource use; requires KVM/hypervisor. |
-| **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +33 more | Slightly weaker than full VMs; Linux-only for most options. |
+| **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, CreateOS Sandbox, Modal, Runloop, Northflank, +34 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Beam, OpenAI Codex Sandbox, OneCLI, agent-infra/sandbox, +38 more | Shared kernel means a kernel exploit can bypass isolation. |
 | **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +29 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, gbash, Wasmtime, WasmEdge, +6 more | Limited to specific runtimes; can't run arbitrary binaries. |
@@ -520,7 +520,7 @@ Three views of the same landscape to help you find what fits.
 | Effort | What it means | Examples |
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
-| **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +25 more |
+| **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, CreateOS Sandbox, Daytona, Modal, Runloop, +26 more |
 | **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, OneCLI, Docker Sandboxes, nono, +84 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | axern, mcp-runner, k7, cocoon sandbox, netclode, +17 more |
 
@@ -529,7 +529,7 @@ Three views of the same landscape to help you find what fits.
 | Model | What it means | Examples |
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
-| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +27 more |
+| **Cloud managed** | Runs on someone else's infrastructure. | E2B, CreateOS Sandbox, Daytona, Modal, Runloop, +28 more |
 | **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +70 more |
 | **Self-hosted** | You host and manage the infrastructure. | OneCLI, temps, axern, mcp-runner, OpenSandbox, +19 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0, +4 more |
@@ -550,6 +550,7 @@ Managed cloud services that provide sandbox environments via API/SDK. You sign u
 | [Bunnyshell AI Sandboxes](https://www.bunnyshell.com/ai-sandbox-environments/) | No | microvm | MCP server integration is notable — direct plugin for Claude Code, Cursor, and Windsurf. |
 | [Cloudflare Dynamic Workers](https://developers.cloudflare.com/sandbox/) | No | v8-isolate | Unique edge-first approach using V8 isolates instead of containers/VMs. Credential injection without agent visibility is a strong security feature. Open beta early 2026. |
 | [CodeSandbox SDK](https://codesandbox.io/sdk) | No | microvm | Well-established brand from the browser IDE space, expanding to agent use. |
+| [CreateOS Sandbox](https://createos.sh/products/sandbox) | No | microvm | Fork of a paused sandbox into independent copies and private sandbox-to-sandbox networks are the two primitives E2B and Daytona do not expose; egress is an in-kernel allowlist enforced on the host rather than in the guest. Self-host of the control plane is supported. |
 | [Daytona](https://www.daytona.io) | Yes (Apache-2.0) | container | Pivoted from CDE space (Feb 2025). $31M Series A (Feb 2026). State management (pause/resume) is a key differentiator vs. ephemeral-only platforms. |
 | [Declaw](https://declaw.ai) | No | microvm | The proxy-side secret injection resembles sandcat (Docker tier) and the credential proxy in nono, but Declaw pairs it with Firecracker isolation and moves the proxy off the guest entirely, adding TLS interception, PII redaction and a queryable audit trail. cagecheck, a static binary that reports escape vectors from inside any sandbox, is usable independently of the platform. All GitHub org repositories date from 2026; young vendor. |
 | [E2B](https://e2b.dev) | Yes (Apache-2.0) | microvm | One of the earliest and most widely adopted agent sandbox platforms. Docker MCP Catalog partnership. |
