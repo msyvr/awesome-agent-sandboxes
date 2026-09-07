@@ -1,6 +1,6 @@
 {
  "generated_from": "data/sandboxes.yaml",
- "count": 143,
+ "count": 144,
  "presets": [
   {
    "name": "RL training",
@@ -101,6 +101,43 @@
     "No GPU support"
    ],
    "notes": "One of the earliest and most widely adopted agent sandbox platforms. Docker MCP Catalog partnership.",
+   "isolation_tier": "microvm",
+   "adoption_effort": "sign-up",
+   "deployment_model": "cloud"
+  },
+  {
+   "name": "CreateOS Sandbox",
+   "category": "cloud-managed",
+   "maintainer": "NodeOps",
+   "open_source": false,
+   "license": null,
+   "url": "https://createos.sh/products/sandbox",
+   "repo_url": "https://github.com/NodeOps-app/createos-sandbox-sdk",
+   "description": "Firecracker microVM sandboxes with pause/resume/fork of full VM state, private sandbox-to-sandbox networks, and in-kernel egress allowlists.",
+   "isolation_type": [
+    "microvm"
+   ],
+   "capabilities": [
+    "Firecracker microVM isolation (own kernel per sandbox)",
+    "~210ms median time-to-interactive",
+    "Pause, resume and fork of full VM state",
+    "Private overlay networks between sandboxes",
+    "Egress allowlist enforced in-kernel outside the VM; no ingress by default",
+    "Custom images from a Dockerfile; S3-compatible disk mounts",
+    "TypeScript SDK, CLI, MCP server, REST API",
+    "Self-hostable control plane and storage; EU and US regions"
+   ],
+   "requirements": [
+    "Cloud-hosted managed service (self-host option)",
+    "Usage-based, per-second pricing; no egress fees; 500 free credits"
+   ],
+   "limitations": [
+    "Closed source (SDK and CLI are MIT)",
+    "No Python SDK (REST from Python)",
+    "No GPU support",
+    "Alpha status; no SLA yet"
+   ],
+   "notes": "Fork of a paused sandbox into independent copies and private sandbox-to-sandbox networks are the two primitives E2B and Daytona do not expose; egress is an in-kernel allowlist enforced on the host rather than in the guest. Self-host of the control plane is supported.",
    "isolation_tier": "microvm",
    "adoption_effort": "sign-up",
    "deployment_model": "cloud"
