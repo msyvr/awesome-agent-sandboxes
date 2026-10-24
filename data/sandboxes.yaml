@@ -2925,6 +2925,42 @@
   adoption_effort: install
   deployment_model: local
 
+- name: Nido
+  category: standalone
+  maintainer: Josepavese
+  open_source: true
+  license: MIT
+  url: https://github.com/Josepavese/nido
+  repo_url: https://github.com/Josepavese/nido
+  description: Local VM manager for AI agents that boots QEMU/KVM virtual machines with linked clones, cloud images, and MCP/CLI control.
+  isolation_type: [kvm]
+  capabilities:
+    - QEMU/KVM hardware-virtualized Linux guests
+    - Built-in stdio MCP server exposing VM lifecycle tools, resources and event subscriptions
+    - QCOW2 linked clones from one shared base image
+    - Cloud-image catalog plus templates and blueprints
+    - SSH access and port forwarding into each VM
+    - CLI with JSON output and an interactive terminal dashboard
+  requirements:
+    - QEMU and QEMU utilities on the host
+    - Linux with KVM, macOS with HVF, or Windows with WHPX
+    - An MCP client for the agent-driven path
+  limitations:
+    - Single-host manager, no multi-tenant API or scheduler
+    - Guests come from cloud images and blueprints rather than arbitrary OCI images
+    - QEMU is an external host dependency
+  notes: >-
+    MCP-native rather than a library or SDK: an agent spawns, inspects and
+    removes VMs through MCP tools over stdio, while the same binary serves CLI
+    and TUI users. Closest peers in isolation tier are cleanroom (Firecracker)
+    and boxlite (libkrun), but Nido targets full cloud-image Linux guests with
+    linked clones instead of OCI workloads. It ships no credential proxy or
+    in-guest network policy layer, so pair it with host firewall rules and
+    per-VM secret handling.
+  isolation_tier: hardware-vm
+  adoption_effort: install
+  deployment_model: local
+
 # =============================================================================
 # Self-Hosted Sandbox Platforms
 # =============================================================================

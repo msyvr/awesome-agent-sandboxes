@@ -509,7 +509,7 @@ Three views of the same landscape to help you find what fits.
 
 | Tier | Mechanism | Examples | Trade-off |
 |------|-----------|----------|-----------|
-| **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | Box (ascii.dev), Freestyle, Morph Cloud, Alibaba Cloud AgentBay, locki, +12 more | Higher overhead and resource use; requires KVM/hypervisor. |
+| **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | Box (ascii.dev), Freestyle, Morph Cloud, Alibaba Cloud AgentBay, locki, +13 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +33 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Beam, OpenAI Codex Sandbox, OneCLI, agent-infra/sandbox, +38 more | Shared kernel means a kernel exploit can bypass isolation. |
 | **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +29 more | Weakest containment boundary; not for adversarial workloads. |
@@ -521,7 +521,7 @@ Three views of the same landscape to help you find what fits.
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
 | **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +25 more |
-| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, OneCLI, Docker Sandboxes, nono, +84 more |
+| **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, OneCLI, Docker Sandboxes, nono, +85 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | axern, mcp-runner, k7, cocoon sandbox, netclode, +17 more |
 
 #### Where does it run?
@@ -530,7 +530,7 @@ Three views of the same landscape to help you find what fits.
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
 | **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +27 more |
-| **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +70 more |
+| **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +71 more |
 | **Self-hosted** | You host and manage the infrastructure. | OneCLI, temps, axern, mcp-runner, OpenSandbox, +19 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0, +4 more |
 
@@ -632,6 +632,7 @@ Tools you install and run on your own machine to sandbox an agent or process: ho
 | [mcp-runner](https://github.com/abir-taheer/mcp-runner) | Yes (Apache-2.0) | container, gvisor | Sandboxes MCP servers rather than the agent, the same target as Kilntainers but with the opposite direction of trust, since here untrusted third-party MCP servers are the workload and the agent connects to them remotely. Nearest listed isolation primitive is gVisor; nearest products are E2B and Modal style hosted runners, which this replaces with a single self-managed VM. The privileged control container and host /etc mount mean the runner host itself is a trusted single-tenant machine. |
 | [microsandbox](https://github.com/superradcompany/microsandbox) | Yes | microvm | Local-first is the key differentiator — no credentials leave your machine. Good for privacy-conscious users handling sensitive API keys. |
 | [monty](https://github.com/pydantic/monty) | Yes (MIT) | process | Different approach from Pyodide — a custom Rust interpreter rather than CPython compiled to Wasm. Will power Pydantic AI's codemode feature. Backed by Pydantic, but explicitly experimental. Categorized in the wasm tier because language-runtime sandboxing fits the same isolation strength characterization (fastest/lightest, limited to specific runtimes), even though it's not actually Wasm. |
+| [Nido](https://github.com/Josepavese/nido) | Yes (MIT) | kvm | MCP-native rather than a library or SDK: an agent spawns, inspects and removes VMs through MCP tools over stdio, while the same binary serves CLI and TUI users. Closest peers in isolation tier are cleanroom (Firecracker) and boxlite (libkrun), but Nido targets full cloud-image Linux guests with linked clones instead of OCI workloads. It ships no credential proxy or in-guest network policy layer, so pair it with host firewall rules and per-VM secret handling. |
 | [nono](https://nono.sh) | Yes (Apache-2.0) | landlock, seatbelt | Unique combination of properties no other tool offers: credential proxy (API keys never enter the sandbox), attestation, and atomic rollback. Easy setup (brew install, then nono run -- claude). Very active development. |
 | [NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell) | Yes (Apache-2.0) | landlock, seccomp | NVIDIA backing gives visibility. OPA/Rego policy support targets enterprise governance workflows. Announced at GTC 2026. An ecosystem has formed on top of it rather than beside it: NVIDIA/NemoClaw (22k stars) is the agent-facing reference stack that runs OpenClaw, Hermes, and LangChain Deep Agents inside OpenShell sandboxes; lensapp/openshell-k8s-operator exposes OpenShell sandboxes as Kubernetes CRDs over the kubernetes-sigs Agent Sandbox controller; openshift-online/hypershell manages OpenShell gateway fleets across clouds. None adds isolation of its own, so they are noted here rather than listed. |
 | [pixels](https://github.com/deevus/pixels) | Yes (MIT) | container | Second Incus-based entry alongside code-on-incus, but distinct differentiators: ZFS snapshot fan-out makes spinning up N task containers from a "ready" base a first-class primitive, and the built-in MCP server fits the "MCP server sandboxing" specialized use case called out in the raised-bar criteria. Has a SECURITY.md with documented threat model. |

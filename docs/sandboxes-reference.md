@@ -1030,6 +1030,20 @@ Minimal, secure Python interpreter written in Rust providing language-runtime sa
 
 _Notes: Different approach from Pyodide — a custom Rust interpreter rather than CPython compiled to Wasm. Will power Pydantic AI's codemode feature. Backed by Pydantic, but explicitly experimental. Categorized in the wasm tier because language-runtime sandboxing fits the same isolation strength characterization (fastest/lightest, limited to specific runtimes), even though it's not actually Wasm._
 
+<a id="ref-nido"></a>
+### Nido
+
+**Maintainer:** Josepavese · **License:** MIT · [Home](https://github.com/Josepavese/nido)
+
+Local VM manager for AI agents that boots QEMU/KVM virtual machines with linked clones, cloud images, and MCP/CLI control.
+
+- **Isolation:** kvm
+- **Capabilities:** QEMU/KVM hardware-virtualized Linux guests; Built-in stdio MCP server exposing VM lifecycle tools, resources and event subscriptions; QCOW2 linked clones from one shared base image; Cloud-image catalog plus templates and blueprints; SSH access and port forwarding into each VM; CLI with JSON output and an interactive terminal dashboard
+- **Requirements:** QEMU and QEMU utilities on the host; Linux with KVM, macOS with HVF, or Windows with WHPX; An MCP client for the agent-driven path
+- **Limitations:** Single-host manager, no multi-tenant API or scheduler; Guests come from cloud images and blueprints rather than arbitrary OCI images; QEMU is an external host dependency
+
+_Notes: MCP-native rather than a library or SDK: an agent spawns, inspects and removes VMs through MCP tools over stdio, while the same binary serves CLI and TUI users. Closest peers in isolation tier are cleanroom (Firecracker) and boxlite (libkrun), but Nido targets full cloud-image Linux guests with linked clones instead of OCI workloads. It ships no credential proxy or in-guest network policy layer, so pair it with host firewall rules and per-VM secret handling._
+
 <a id="ref-nono"></a>
 ### nono
 
