@@ -1,6 +1,6 @@
 {
  "generated_from": "data/sandboxes.yaml",
- "count": 143,
+ "count": 144,
  "presets": [
   {
    "name": "RL training",
@@ -918,6 +918,42 @@
     "Region list not published on the pages checked (\"globally deployed Alibaba Cloud Workspace resource pools\")"
    ],
    "notes": "Direct peer of Tencent Cloud Agent Sandbox (AGS), the only other managed offering with Android and Windows sandbox types; AgentBay's isolation is a full VM derived from Wuying cloud desktops rather than AGS's microVM engine. Unlike cua and pixels, the desktop VMs are hosted and billed per concurrent session license. SDK open-source (Apache-2.0, 1,147 stars, last push 2026-06); platform proprietary. Not to be confused with Alibaba Cloud's separate Kubernetes-based Agent Sandbox in Container Compute Service (ACS).",
+   "isolation_tier": "hardware-vm",
+   "adoption_effort": "sign-up",
+   "deployment_model": "cloud"
+  },
+  {
+   "name": "Agent37",
+   "category": "cloud-managed",
+   "maintainer": "Agent37",
+   "open_source": false,
+   "license": null,
+   "url": "https://www.agent37.com",
+   "repo_url": null,
+   "description": "Persistent Linux sandboxes and full VMs for AI agents over a REST API, with auto-sleep and an HTTPS URL for every port.",
+   "isolation_type": [
+    "gvisor",
+    "kvm"
+   ],
+   "capabilities": [
+    "gVisor sandboxes by default; full VMs with their own kernel (Docker, Compose, nested KVM) with `type: vm`",
+    "Persistent instances that live until deleted; auto-sleep bills disk alone while idle and wakes on the next request",
+    "HTTPS URL for every port, plus unauthenticated public ports for webhooks",
+    "Exec API, SSH, daily and on-demand backups with restore, fork",
+    "Custom Docker images and cloud template builds; agent templates for Hermes, OpenClaw, Claude Code and Codex",
+    "Regions in the US, EU (France) and India (Mumbai)"
+   ],
+   "requirements": [
+    "Agent37 account (one-time $5 credit when a card is added)",
+    "Metered per minute, from $4.76/mo for 2 vCPU / 4 GB running around the clock"
+   ],
+   "limitations": [
+    "Default instances use gVisor; VM isolation needs `type: vm`, a funded workspace, and 2.5x the default compute rate",
+    "Up to 4 vCPU per instance",
+    "No GPU",
+    "EU and India regions run VM and Performance instances only"
+   ],
+   "notes": "Docs at https://www.agent37.com/docs, with llms.txt, a docs MCP server and an agent skill for coding agents. The API is plain HTTPS and JSON with no SDK to install; the `agent37` npm CLI covers template builds and SSH.",
    "isolation_tier": "hardware-vm",
    "adoption_effort": "sign-up",
    "deployment_model": "cloud"
