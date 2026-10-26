@@ -509,7 +509,7 @@ Three views of the same landscape to help you find what fits.
 
 | Tier | Mechanism | Examples | Trade-off |
 |------|-----------|----------|-----------|
-| **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | Box (ascii.dev), Freestyle, Morph Cloud, Alibaba Cloud AgentBay, locki, +12 more | Higher overhead and resource use; requires KVM/hypervisor. |
+| **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | Box (ascii.dev), Freestyle, Morph Cloud, Alibaba Cloud AgentBay, Agent37, +13 more | Higher overhead and resource use; requires KVM/hypervisor. |
 | **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +33 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Beam, OpenAI Codex Sandbox, OneCLI, agent-infra/sandbox, +38 more | Shared kernel means a kernel exploit can bypass isolation. |
 | **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +29 more | Weakest containment boundary; not for adversarial workloads. |
@@ -520,7 +520,7 @@ Three views of the same landscape to help you find what fits.
 | Effort | What it means | Examples |
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
-| **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +25 more |
+| **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +26 more |
 | **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, OneCLI, Docker Sandboxes, nono, +84 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | axern, mcp-runner, k7, cocoon sandbox, netclode, +17 more |
 
@@ -529,7 +529,7 @@ Three views of the same landscape to help you find what fits.
 | Model | What it means | Examples |
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
-| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +27 more |
+| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +28 more |
 | **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +70 more |
 | **Self-hosted** | You host and manage the infrastructure. | OneCLI, temps, axern, mcp-runner, OpenSandbox, +19 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0, +4 more |
@@ -543,6 +543,7 @@ Managed cloud services that provide sandbox environments via API/SDK. You sign u
 
 | Name | OSS? | Isolation | Notes |
 |------|------|-----------|-------|
+| [Agent37](https://www.agent37.com) | No | gvisor, kvm | Docs at https://www.agent37.com/docs, with llms.txt, a docs MCP server and an agent skill for coding agents. The API is plain HTTPS and JSON with no SDK to install; the `agent37` npm CLI covers template builds and SSH. |
 | [Alibaba Cloud AgentBay](https://www.alibabacloud.com/product/agentbay) | No | kvm | Direct peer of Tencent Cloud Agent Sandbox (AGS), the only other managed offering with Android and Windows sandbox types; AgentBay's isolation is a full VM derived from Wuying cloud desktops rather than AGS's microVM engine. Unlike cua and pixels, the desktop VMs are hosted and billed per concurrent session license. SDK open-source (Apache-2.0, 1,147 stars, last push 2026-06); platform proprietary. Not to be confused with Alibaba Cloud's separate Kubernetes-based Agent Sandbox in Container Compute Service (ACS). |
 | [Beam](https://www.beam.cloud/sandbox) | Yes (AGPL-3.0) | gvisor, container | Nearest to Modal (serverless functions plus sandboxes) but with an open-source, AGPL runtime you can run yourself, which Modal lacks; unlike E2B and Daytona the isolation is gVisor/runc containers rather than Firecracker microVMs. SOC 2 Type II is shown in the site footer; YC-backed; $30 free credit refreshed monthly. Blog posts state the gVisor+runc choice was made for lighter operation than microVMs. |
 | [Blaxel](https://blaxel.ai) | No | microvm | Competes directly with E2B and Daytona; the differences are the memory-preserving standby (idle sandboxes cost storage only and resume with process state) and the multi-sandbox Agent Drive. Compliance claims on the homepage: SOC 2 Type II, HIPAA, ISO 27001. Named customers include Webflow, Strapi and Shortwave. YC-backed, San Francisco, founded 2024. SDK repositories were not checked; repo_url left null. |

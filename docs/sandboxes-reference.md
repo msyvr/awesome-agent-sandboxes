@@ -4,6 +4,20 @@ Full information for every sandbox tracked in [awesome-agent-sandboxes](../READM
 
 ## Cloud Managed Sandboxes
 
+<a id="ref-agent37"></a>
+### Agent37
+
+**Maintainer:** Agent37 · **License:** Closed source · [Home](https://www.agent37.com)
+
+Persistent Linux sandboxes and full VMs for AI agents over a REST API, with auto-sleep and an HTTPS URL for every port.
+
+- **Isolation:** gvisor, kvm
+- **Capabilities:** gVisor sandboxes by default; full VMs with their own kernel (Docker, Compose, nested KVM) with `type: vm`; Persistent instances that live until deleted; auto-sleep bills disk alone while idle and wakes on the next request; HTTPS URL for every port, plus unauthenticated public ports for webhooks; Exec API, SSH, daily and on-demand backups with restore, fork; Custom Docker images and cloud template builds; agent templates for Hermes, OpenClaw, Claude Code and Codex; Regions in the US, EU (France) and India (Mumbai)
+- **Requirements:** Agent37 account (one-time $5 credit when a card is added); Metered per minute, from $4.76/mo for 2 vCPU / 4 GB running around the clock
+- **Limitations:** Default instances use gVisor; VM isolation needs `type: vm`, a funded workspace, and 2.5x the default compute rate; Up to 4 vCPU per instance; No GPU; EU and India regions run VM and Performance instances only
+
+_Notes: Docs at https://www.agent37.com/docs, with llms.txt, a docs MCP server and an agent skill for coding agents. The API is plain HTTPS and JSON with no SDK to install; the `agent37` npm CLI covers template builds and SSH._
+
 <a id="ref-alibaba-cloud-agentbay"></a>
 ### Alibaba Cloud AgentBay
 
