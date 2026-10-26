@@ -298,6 +298,20 @@ Enterprise-grade sandbox infrastructure (Devboxes) with SOC 2 compliance and 10k
 
 _Notes: Enterprise compliance focus (SOC 2) differentiates from developer-oriented alternatives. GA May 2025._
 
+<a id="ref-runtime-cloud"></a>
+### Runtime Cloud
+
+**Maintainer:** Runtime · **License:** Closed source · [Home](https://withruntime.com) · [Repo](https://github.com/withruntime/runtime)
+
+Hosted Firecracker microVM sandboxes for AI agents, each with its own kernel, billed on active CPU with no plan fee, with pause and wake that keeps memory and SDKs compatible with E2B and Daytona.
+
+- **Isolation:** microvm
+- **Capabilities:** Each sandbox is a Firecracker microVM with its own kernel; First Python command 221 ms after the create request (vendor, server-side median; method at https://withruntime.com/docs/speed); Pause and wake with memory kept; wake from pause in 76 ms (vendor); E2B and Daytona SDK-compatible; JavaScript, Python, Go, Ruby and Java SDKs, a CLI and an MCP server
+- **Requirements:** Runtime account (100 free hours of a 1 GB machine in the first 30 days, no card)
+- **Limitations:** Platform proprietary; the withruntime/runtime repo (Apache-2.0) holds the SDKs, CLI and MCP server, not the service; Startup and wake figures are vendor statements, not measured
+
+_Notes: Closest to E2B in isolation (Firecracker microVMs) and API shape; the SDKs accept code written for E2B and Daytona. Billing is on active CPU ($0.025 per vCPU-hour) with no plan fee. Author-submitted by the Runtime team._
+
 <a id="ref-superserve"></a>
 ### Superserve
 

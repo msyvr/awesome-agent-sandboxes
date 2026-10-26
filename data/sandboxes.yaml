@@ -750,6 +750,35 @@
   adoption_effort: sign-up
   deployment_model: cloud
 
+- name: Runtime Cloud
+  category: cloud-managed
+  maintainer: Runtime
+  open_source: false
+  license: null
+  url: https://withruntime.com
+  repo_url: https://github.com/withruntime/runtime
+  description: Hosted Firecracker microVM sandboxes for AI agents, each with its own kernel, billed on active CPU with no plan fee, with pause and wake that keeps memory and SDKs compatible with E2B and Daytona.
+  isolation_type: [microvm]
+  capabilities:
+    - Each sandbox is a Firecracker microVM with its own kernel
+    - First Python command 221 ms after the create request (vendor, server-side median; method at https://withruntime.com/docs/speed)
+    - Pause and wake with memory kept; wake from pause in 76 ms (vendor)
+    - E2B and Daytona SDK-compatible
+    - JavaScript, Python, Go, Ruby and Java SDKs, a CLI and an MCP server
+  requirements:
+    - Runtime account (100 free hours of a 1 GB machine in the first 30 days, no card)
+  limitations:
+    - Platform proprietary; the withruntime/runtime repo (Apache-2.0) holds the SDKs, CLI and MCP server, not the service
+    - Startup and wake figures are vendor statements, not measured
+  notes: >-
+    Closest to E2B in isolation (Firecracker microVMs) and API shape; the
+    SDKs accept code written for E2B and Daytona. Billing is on active CPU
+    ($0.025 per vCPU-hour) with no plan fee. Author-submitted by the Runtime
+    team.
+  isolation_tier: microvm
+  adoption_effort: sign-up
+  deployment_model: cloud
+
 - name: Tensorlake
   category: cloud-managed
   maintainer: Tensorlake

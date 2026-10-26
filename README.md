@@ -510,7 +510,7 @@ Three views of the same landscape to help you find what fits.
 | Tier | Mechanism | Examples | Trade-off |
 |------|-----------|----------|-----------|
 | **Hardware VM (KVM)** | Full hardware virtualization with separate kernel per sandbox. | Box (ascii.dev), Freestyle, Morph Cloud, Alibaba Cloud AgentBay, locki, +12 more | Higher overhead and resource use; requires KVM/hypervisor. |
-| **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +33 more | Slightly weaker than full VMs; Linux-only for most options. |
+| **MicroVM** | Lightweight VMs (e.g., Firecracker) with fast startup and low overhead. | E2B, Modal, Runloop, Northflank, Fly Sprites, +34 more | Slightly weaker than full VMs; Linux-only for most options. |
 | **Container / User-space Kernel** | Shared kernel with namespace or syscall isolation (Docker, gVisor). | Daytona, Beam, OpenAI Codex Sandbox, OneCLI, agent-infra/sandbox, +38 more | Shared kernel means a kernel exploit can bypass isolation. |
 | **Process-level** | OS-level restrictions on a process (namespaces, LSMs, Seatbelt). | Claude Code Sandbox, pi-sandbox, loop, nono, Anthropic sandbox-runtime (srt), +29 more | Weakest containment boundary; not for adversarial workloads. |
 | **Wasm / Language Runtime** | WebAssembly or V8 isolate sandboxing. | Cloudflare Dynamic Workers, monty, gbash, Wasmtime, WasmEdge, +6 more | Limited to specific runtimes; can't run arbitrary binaries. |
@@ -520,7 +520,7 @@ Three views of the same landscape to help you find what fits.
 | Effort | What it means | Examples |
 |--------|---------------|----------|
 | **Zero-config** | Built into the agent — sandboxing is on by default with no setup. | Claude Code Sandbox, OpenAI Codex Sandbox |
-| **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +25 more |
+| **Sign up for a service** | Create an account and use a cloud API/SDK. No local infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +26 more |
 | **Install a tool** | Install a standalone tool or runtime on your machine. | pi-sandbox, loop, OneCLI, Docker Sandboxes, nono, +84 more |
 | **Compose building blocks** | Assemble from OS primitives or VM runtimes. Requires systems knowledge. | axern, mcp-runner, k7, cocoon sandbox, netclode, +17 more |
 
@@ -529,7 +529,7 @@ Three views of the same landscape to help you find what fits.
 | Model | What it means | Examples |
 |-------|---------------|----------|
 | **Built into agent** | Sandboxing ships with the agent itself. | Claude Code Sandbox, OpenAI Codex Sandbox, pi-sandbox |
-| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +27 more |
+| **Cloud managed** | Runs on someone else's infrastructure. | E2B, Daytona, Modal, Runloop, Northflank, +28 more |
 | **Local** | Runs on your machine, data stays local. | loop, Docker Sandboxes, nono, Anthropic sandbox-runtime (srt), NVIDIA OpenShell, +70 more |
 | **Self-hosted** | You host and manage the infrastructure. | OneCLI, temps, axern, mcp-runner, OpenSandbox, +19 more |
 | **Kubernetes** | Runs on a Kubernetes cluster. | Agent Sandbox (kubernetes-sigs), GKE Agent Sandbox, treadstone, openkruise/agents, sandbox0, +4 more |
@@ -564,6 +564,7 @@ Managed cloud services that provide sandbox environments via API/SDK. You sign u
 | [Novita Sandbox](https://novita.ai/sandbox) | No | microvm, kvm | Positioned like E2B (Firecracker, E2B-style SDK/CLI, templates) with two additions: an Agent Runtime deployment layer for framework agents and an open-source local edition (NovitaBox, Apache-2.0) that shares the SDK, a pairing similar to Tencent Cloud AGS with CubeSandbox. Free tier limits are 5 concurrent sandboxes, 1-hour sessions, 2 vCPU / 4 GB each. Provider press release is datelined San Francisco; the brief's "Asia-based" was not confirmed from public pages. |
 | [OmniRun](https://omnirun.io) | No | microvm, kvm | Overlaps with Tensorlake as a Claude Managed Agents execution backend, but OmniRun's worker is the open-source piece (AGPL-3.0) and runs on the customer's own KVM host, while Tensorlake hosts the sandbox. Statelessness is a deliberate contrast with Morph Cloud and Leap0, whose snapshots carry state forward. Platform proprietary; SDKs (MIT) at github.com/a14a-org. |
 | [Runloop](https://runloop.ai) | No | microvm | Enterprise compliance focus (SOC 2) differentiates from developer-oriented alternatives. GA May 2025. |
+| [Runtime Cloud](https://withruntime.com) | No | microvm | Closest to E2B in isolation (Firecracker microVMs) and API shape; the SDKs accept code written for E2B and Daytona. Billing is on active CPU ($0.025 per vCPU-hour) with no plan fee. Author-submitted by the Runtime team. |
 | [Superserve](https://github.com/superserve-ai/superserve) | Yes (Apache-2.0) | microvm | Firecracker-based like E2B. SDK is open source (Apache-2.0) but the sandbox backend infrastructure is in a separate private repo. Beta — evaluate maturity before committing to production use. |
 | [Tencent Cloud Agent Sandbox (AGS)](https://cloud.tencent.com/product/ags) | No | microvm, kvm | The only cloud-managed entry offering managed Android and Windows sandboxes. Press coverage indicates the engine is Tencent's open-source CubeSandbox (also listed) — inferred, not stated on the product page. Samples at github.com/TencentCloudAgentRuntime/ags-cookbook. |
 | [Tensorlake](https://tensorlake.ai) | No | microvm, kvm | Closest to Modal in scope (compute plus orchestration) and to E2B/Daytona in the sandbox API, with the Harbor eval integration and hosted Git as distinguishing pieces. SOC 2 Type II, HIPAA, EU data residency, and zero data retention are stated on the docs introduction. Backed by Redpoint and Amplify per the landing page; repo has 996 stars and daily commits at inclusion. Open-source components are the SDKs/CLI (Apache-2.0); platform proprietary. |
