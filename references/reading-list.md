@@ -36,3 +36,4 @@ Curated articles, papers, and discussions on sandboxing AI agents.
 ## Related Lists
 
 - [awesome-ai-coding-sandboxes](https://github.com/fhiltscher/awesome-ai-coding-sandboxes) — Security-posture-first peer list: a 37-provider comparison matrix ranking on isolation tier, egress control (deny-default vs configurable vs open), and secrets brokering (credentials kept out via proxy vs injected). Complementary scope to this repo — it covers many hosted/proprietary providers with no GitHub presence — and a useful cross-check for coverage gaps.
+- [Boxyard](https://boxyard.dev) — Directory of cloud sandbox providers for AI agents. Lists each provider's published prices, limits, and features, with a cost calculator and side-by-side comparisons. Hosted providers only, so it complements the self-hosted and local tools in this repo.
