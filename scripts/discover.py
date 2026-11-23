@@ -329,6 +329,8 @@ def crosscheck_peer_lists(token: str | None, known_urls: set[str]) -> tuple[list
                 })
                 continue
             item = r.json()
+            if normalize_url(item["html_url"]) in known_urls:
+                continue  # peer list links an old name of a repo we track
             github_candidates.append({
                 "name": item["name"],
                 "full_name": item["full_name"],
@@ -352,6 +354,31 @@ def filter_new_candidates(candidates: list[dict], known_repos: set[str]) -> list
         if url_lower not in known_repos:
             new.append(c)
     return new
+
+
+def detect_repo_move(repo_url: str, api_full_name: str | None) -> str | None:
+    """Return the repo's current URL if GitHub reports it under another name.
+
+    GET /repos/OWNER/REPO follows a rename or transfer and returns the new
+    full_name, so a mismatch with the owner/repo stored in our YAML means the
+    repo moved. Without this, the moved repo resurfaces under its new name as
+    a fresh discovery candidate (srt, Capsule and forkd did in 2026-11).
+    Case-only differences are not moves: GitHub URLs are case-insensitive.
+    """
+    if not api_full_name:
+        return None
+    parts = repo_url.rstrip("/").removesuffix(".git").split("/")
+    if len(parts) < 2:
+        return None
+    stored = f"{parts[-2]}/{parts[-1]}"
+    if stored.lower() == api_full_name.lower():
+        return None
+    return f"https://github.com/{api_full_name}"
+
+
+def moved_repo_urls(stale: list[dict]) -> set[str]:
+    """Current URLs of listed repos that moved, from check_staleness() output."""
+    return {s["moved_to"] for s in stale if s.get("moved_to")}
 
 
 def check_staleness(token: str | None, yaml_path: Path) -> list[dict]:
@@ -395,6 +422,14 @@ def check_staleness(token: str | None, yaml_path: Path) -> list[dict]:
             continue
 
         data = resp.json()
+        moved_to = detect_repo_move(repo_url, data.get("full_name"))
+        if moved_to:
+            stale.append({
+                "name": entry["name"],
+                "url": repo_url,
+                "reason": f"Repository moved to {moved_to}; update url and repo_url",
+                "moved_to": moved_to,
+            })
         pushed_at = data.get("pushed_at")
         if pushed_at:
             last_push = datetime.fromisoformat(pushed_at.replace("Z", "+00:00"))
@@ -524,15 +559,24 @@ def main():
     import os
     token = args.token or os.environ.get("GITHUB_TOKEN")
 
+    # Staleness runs first: its per-repo API calls also detect repos that
+    # moved, and their new URLs must count as known before candidates are
+    # filtered.
+    print("Checking staleness of existing entries...")
+    stale = check_staleness(token, YAML_PATH)
+    moved = moved_repo_urls(stale)
+    staleness_md = format_staleness_md(stale)
+    print(f"Found {len(stale)} staleness issue(s), {len(moved)} moved repo(s).")
+
     if not args.staleness_only:
-        print("Searching for new sandbox repos...")
+        print("\nSearching for new sandbox repos...")
         candidates = search_github(token)
-        known = load_existing_repos(YAML_PATH)
+        known = load_existing_repos(YAML_PATH) | {u.lower() for u in moved}
         excluded = load_excluded_repos(EXCLUDED_PATH)
         new_candidates = filter_new_candidates(candidates, known | excluded)
 
         print("Cross-checking peer lists...")
-        all_known_urls = load_all_entry_urls(YAML_PATH, EXCLUDED_PATH)
+        all_known_urls = load_all_entry_urls(YAML_PATH, EXCLUDED_PATH) | {normalize_url(u) for u in moved}
         peer_candidates, peer_links = crosscheck_peer_lists(token, all_known_urls)
         # Merge peer repos not already surfaced by search
         surfaced = {c["url"].rstrip("/").lower() for c in new_candidates}
@@ -556,11 +600,6 @@ def main():
             (out / "candidates.md").write_text(candidates_md)
             (out / "candidates.json").write_text(json.dumps(new_candidates, indent=2))
             print(f"Wrote candidates to {out}")
-
-    print("\nChecking staleness of existing entries...")
-    stale = check_staleness(token, YAML_PATH)
-    staleness_md = format_staleness_md(stale)
-    print(f"Found {len(stale)} staleness issue(s).")
 
     if args.dry_run:
         print("\n--- Staleness ---")

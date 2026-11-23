@@ -9,6 +9,8 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from discover import (
+    check_staleness,
+    detect_repo_move,
     extract_peer_links,
     filter_new_candidates,
     format_candidates_md,
@@ -17,6 +19,7 @@ from discover import (
     is_known_url,
     load_excluded_repos,
     load_existing_repos,
+    moved_repo_urls,
     normalize_url,
 )
 
@@ -347,6 +350,77 @@ class TestIsKnownUrl:
     def test_sibling_path_is_not_a_prefix_match(self):
         known = {"a.dev/product/sandbox"}
         assert not is_known_url("https://a.dev/product/sandbox-v2", known)
+
+
+class TestDetectRepoMove:
+    def test_org_move_returns_new_url(self):
+        assert detect_repo_move(
+            "https://github.com/anthropic-experimental/sandbox-runtime", "anthropics/sandbox-runtime"
+        ) == "https://github.com/anthropics/sandbox-runtime"
+
+    def test_repo_rename_returns_new_url(self):
+        assert detect_repo_move(
+            "https://github.com/deeplethe/forkd", "deeplethe/sandstorm"
+        ) == "https://github.com/deeplethe/sandstorm"
+
+    def test_same_name_is_not_a_move(self):
+        assert detect_repo_move("https://github.com/org/tool", "org/tool") is None
+
+    def test_case_only_difference_is_not_a_move(self):
+        assert detect_repo_move("https://github.com/Org/Tool", "org/tool") is None
+
+    def test_trailing_slash_and_git_suffix_ignored(self):
+        assert detect_repo_move("https://github.com/org/tool.git/", "org/tool") is None
+
+    def test_missing_full_name_is_not_a_move(self):
+        assert detect_repo_move("https://github.com/org/tool", None) is None
+
+
+class FakeResponse:
+    def __init__(self, status_code, payload=None):
+        self.status_code = status_code
+        self._payload = payload or {}
+
+    def json(self):
+        return self._payload
+
+
+class TestCheckStalenessMoves:
+    def write_yaml(self, tmp_path, repo_url):
+        path = tmp_path / "sandboxes.yaml"
+        path.write_text(yaml.dump([{"name": "srt", "url": repo_url, "repo_url": repo_url}]))
+        return path
+
+    def test_moved_repo_reported_with_new_url(self, tmp_path, monkeypatch):
+        path = self.write_yaml(tmp_path, "https://github.com/anthropic-experimental/sandbox-runtime")
+        payload = {"full_name": "anthropics/sandbox-runtime", "pushed_at": "2026-11-13T00:00:00Z", "archived": False}
+        monkeypatch.setattr("discover.requests.get", lambda *a, **k: FakeResponse(200, payload))
+        stale = check_staleness(None, path)
+        assert len(stale) == 1
+        assert stale[0]["moved_to"] == "https://github.com/anthropics/sandbox-runtime"
+        assert "moved" in stale[0]["reason"]
+        assert moved_repo_urls(stale) == {"https://github.com/anthropics/sandbox-runtime"}
+
+    def test_unmoved_fresh_repo_not_reported(self, tmp_path, monkeypatch):
+        path = self.write_yaml(tmp_path, "https://github.com/org/tool")
+        payload = {"full_name": "org/tool", "pushed_at": "2099-01-01T00:00:00Z", "archived": False}
+        monkeypatch.setattr("discover.requests.get", lambda *a, **k: FakeResponse(200, payload))
+        assert check_staleness(None, path) == []
+
+    def test_404_reported_without_moved_to(self, tmp_path, monkeypatch):
+        path = self.write_yaml(tmp_path, "https://github.com/gone/tool")
+        monkeypatch.setattr("discover.requests.get", lambda *a, **k: FakeResponse(404))
+        stale = check_staleness(None, path)
+        assert len(stale) == 1 and "404" in stale[0]["reason"]
+        assert moved_repo_urls(stale) == set()
+
+    def test_moved_url_filters_candidate_under_new_name(self):
+        """main() adds moved URLs to the known set; the new name must not resurface."""
+        stale = [{"name": "forkd", "url": "https://github.com/deeplethe/forkd", "reason": "moved",
+                  "moved_to": "https://github.com/deeplethe/sandstorm"}]
+        known = {"https://github.com/deeplethe/forkd"} | {u.lower() for u in moved_repo_urls(stale)}
+        candidates = [make_candidate(url="https://github.com/deeplethe/sandstorm")]
+        assert filter_new_candidates(candidates, known) == []
 
 
 # ---------------------------------------------------------------------------
