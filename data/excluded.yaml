@@ -1298,3 +1298,63 @@
   reason: "Self-hosted Kubernetes agent platform with governance features; isolation is restricted pod security only, no gVisor/Kata/microVM"
 - url: https://www.linkedin.com/in/franz-hiltscher
   reason: "Peer-list maintainer's profile link, not a project"
+
+# --- 2026-11-23 review, group 1 of 10 (issues #63-#92) ---
+- url: https://github.com/paradigmxyz/iron-proxy
+  reason: "Egress MITM proxy with default-deny allowlist and boundary secret injection; confines no process or filesystem, and enforcement depends on the user routing all traffic through it. A component, not a sandbox"
+- url: https://github.com/docker/sbx-releases
+  reason: "Release-binaries repo for Docker Sandboxes (listed, closed source)"
+- url: https://github.com/koyeb/koyeb-sandbox-sdk-js
+  reason: "JS SDK for Koyeb (listed)"
+- url: https://github.com/denoland/sandbox-py
+  reason: "Python SDK for Deno Sandbox (listed 2026-11-23)"
+- url: https://github.com/aws/bedrock-agentcore-sdk-python
+  reason: "Python SDK for Amazon Bedrock AgentCore (Code Interpreter listed 2026-11-23)"
+- url: https://github.com/ripienaar/free-for-dev
+  reason: "List of SaaS free tiers"
+- url: https://github.com/bilawalsidhu/gods-eye-view
+  reason: "Unrelated (satellite simulator)"
+- url: https://github.com/NVIDIA/SkillSpector
+  reason: "Static security scanner for agent skills; no isolation"
+- url: https://github.com/langchain-ai/open-swe
+  reason: "Coding agent"
+- url: https://github.com/britecharts/britecharts
+  reason: "Unrelated (charting library)"
+- url: https://github.com/tintinweb/pi-subagents
+  reason: "Sub-agent orchestration extension for the pi agent"
+- url: https://github.com/peters/horizon
+  reason: "Terminal session board"
+- url: https://github.com/w01fb0ss/PiBot
+  reason: "Desktop multi-agent app"
+- url: https://github.com/ARUNAGIRINATHAN-K/ai-agent-registry
+  reason: "Agent discovery registry"
+- url: https://github.com/prime-radiant-inc/evener
+  reason: "Coding agent"
+- url: https://github.com/varun1505/awesome-software-factories
+  reason: "Awesome-list"
+- url: https://github.com/PierrunoYT/awesome-ai-dev-tools
+  reason: "Awesome-list"
+- url: https://github.com/cogitator-ai/Cogitator-AI
+  reason: "Agent runtime framework"
+- url: https://github.com/ever-works/awesome-vector-databases
+  reason: "Awesome-list"
+- url: https://github.com/mserajnik/tortoise-deploy
+  reason: "Unrelated (game server Docker setup)"
+- url: https://github.com/Intense-Visions/harness-engineering
+  reason: "Agent harness constraints (lint/workflow rules); no isolation"
+- url: https://github.com/kiskaserver/interactive_assistent
+  reason: "Unrelated (desktop companion app)"
+- url: https://github.com/jitokim/oh-my-graph
+  reason: "Agent workflow graph runner"
+- url: https://github.com/MorrisKM/Tuma
+  reason: "Unrelated (API client)"
+- url: https://github.com/Alpha-Park/awesome-ai-agent-skills
+  reason: "Skills index"
+- url: https://github.com/khalidsaidi/ragmap
+  reason: "MCP server directory"
+- url: https://github.com/GuiBibeau/solos-swarm
+  reason: "Governed control plane for agent swarms; governance-orchestrator pattern (audit chain over delegated isolation)"
+- url: https://github.com/MrWangJustToDo/MyAgent
+  reason: "Coding agent (repo now MrWangJustToDo/Codent)"
+- url: https://github.com/BerSecHub/awesome-ai-red-team
+  reason: "Awesome-list"

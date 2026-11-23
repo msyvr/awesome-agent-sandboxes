@@ -199,7 +199,7 @@
     - agentbox
     - mcp-runner
     - Kilntainers
-    - forkd
+    - Sandstorm
     - AgentENV
     - k7
     - Arrakis
@@ -237,3 +237,17 @@
     - Novita Sandbox
     - OmniRun
     - Tensorlake
+
+- date: "2026-09-07"
+  entries:
+    - LiteBox
+    - Amazon Bedrock AgentCore Code Interpreter
+    - Deno Sandbox
+
+- date: "2026-09-14"
+  entries:
+    - quicksand
+
+- date: "2026-10-12"
+  entries:
+    - Strands Box

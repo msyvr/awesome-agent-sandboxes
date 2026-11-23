@@ -18,6 +18,20 @@ Managed Alibaba Cloud service running each agent session in a virtual machine wi
 
 _Notes: Direct peer of Tencent Cloud Agent Sandbox (AGS), the only other managed offering with Android and Windows sandbox types; AgentBay's isolation is a full VM derived from Wuying cloud desktops rather than AGS's microVM engine. Unlike cua and pixels, the desktop VMs are hosted and billed per concurrent session license. SDK open-source (Apache-2.0, 1,147 stars, last push 2026-06); platform proprietary. Not to be confused with Alibaba Cloud's separate Kubernetes-based Agent Sandbox in Container Compute Service (ACS)._
 
+<a id="ref-amazon-bedrock-agentcore-code-interpreter"></a>
+### Amazon Bedrock AgentCore Code Interpreter
+
+**Maintainer:** Amazon Web Services · **License:** Closed source · [Home](https://aws.amazon.com/bedrock/agentcore/)
+
+AWS-managed sandbox in which agents write and run Python, JavaScript and TypeScript, one microVM per session, with sandbox, public-internet or VPC network modes and AWS access scoped by an IAM execution role.
+
+- **Isolation:** microvm
+- **Capabilities:** "Each tool session runs in a dedicated microVM with isolated CPU, memory, and filesystem resources"; memory is sanitized when the session ends (session-characteristics docs); Network modes are sandbox (limited access to AWS services only), public internet, or a customer VPC; An IAM execution role defines which AWS resources the session's code can reach; Sessions default to 15 minutes and are configurable up to 8 hours; multiple concurrent sessions per interpreter; Inline file upload up to 100 MB; up to 5 GB through S3 from the session terminal; Pre-installed Python (pandas, numpy, scikit-learn, torch, boto3, duckdb) and Node.js (axios, lodash, zod) libraries; Same service offers a Browser tool sandbox and AgentCore Runtime, which also gives each agent session its own microVM; Per-second billing at $0.0895 per vCPU-hour and $0.00945 per GB-hour; I/O wait is not billed when no background process runs; Python SDK aws/bedrock-agentcore-sdk-python (Apache-2.0)
+- **Requirements:** AWS account with Bedrock AgentCore access and an IAM execution role
+- **Limitations:** AWS documentation conflicts on the boundary: the Code Interpreter overview says it "runs in a containerized environment", the session-characteristics page says "dedicated microVM" (checked 2026-11-23); AWS-provided runtimes only; no custom images are documented; Proprietary; only the SDKs are open source; AgentCore Runtime enforces session-to-user mapping only on platform V2 microVM runtimes; on V1 the client backend must enforce it
+
+_Notes: Surfaced via the awesome-sandbox peer list. AWS access is granted through the session's IAM execution role; the documentation read does not say whether role credentials are readable by code in the sandbox, which decides how much a compromised session can exfiltrate in public-network mode. Declaw and Deno Sandbox instead keep secrets outside the VM and substitute them at a proxy. The sandbox network mode (AWS services only) is a fixed preset where other cloud-managed entries offer per-domain allowlists._
+
 <a id="ref-beam"></a>
 ### Beam
 
@@ -129,6 +143,20 @@ Firecracker microVM sandboxes fronted by a host-side egress proxy in each sandbo
 - **Limitations:** Platform is proprietary; only SDKs, CLI, MCP server and cagecheck are open; Homepage advertises Terraform modules for AWS and GCP self-hosting, but the deployment docs describe on-prem as a sales-led enterprise engagement; SOC 2 and HIPAA appear only in a sales contact card; no certification is stated; Response bodies are passed through without injection scanning (security-proxy docs); guardrails fall back to a regex scanner if the guardrails service is unreachable
 
 _Notes: The proxy-side secret injection resembles sandcat (Docker tier) and the credential proxy in nono, but Declaw pairs it with Firecracker isolation and moves the proxy off the guest entirely, adding TLS interception, PII redaction and a queryable audit trail. cagecheck, a static binary that reports escape vectors from inside any sandbox, is usable independently of the platform. All GitHub org repositories date from 2026; young vendor._
+
+<a id="ref-deno-sandbox"></a>
+### Deno Sandbox
+
+**Maintainer:** Deno · **License:** Closed source · [Home](https://deno.com/deploy/sandbox)
+
+Linux microVM sandboxes on Deno Deploy, each in its own Firecracker VM, with an egress allowlist and secrets substituted at an outbound proxy only on requests to approved hosts.
+
+- **Isolation:** microvm
+- **Capabilities:** Firecracker microVM per sandbox, "isolated at the hypervisor level" (security docs); allowNet egress allowlist enforced at a proxy that all outbound connections route through; Secrets never enter sandbox environment variables; the sandbox holds a placeholder and Deno Deploy substitutes the value only on requests to approved hosts; Commands, HTTP requests and SSH sessions traced in the Deno Deploy dashboard; Read-write volumes (300 MB to 20 GB) and read-only snapshots a sandbox can boot from as its root; sandbox.deploy() promotes a sandbox to a Deno Deploy app; JavaScript/TypeScript SDK (@deno/sandbox on JSR, MIT) and Python SDK (denoland/sandbox-py, MIT)
+- **Requirements:** Deno Deploy account
+- **Limitations:** Pre-release; defaults of 5 concurrent sandboxes per organization, 30-minute maximum lifetime, 2 vCPU, 768 MB to 4 GB memory, 10 GB ephemeral disk; Regions ams and ord only; volumes in ord only; Egress is unrestricted unless allowNet is set; Boot-time claims disagree across vendor pages (93 ms, under 200 ms, under a second); Sandbox pricing is absent from the Deno Deploy pricing page (checked 2026-11-23); Deno announced on 2026-10-09 (deno.com/blog/cloudflare) that it is joining Cloudflare and that Deno Deploy will shut down after six more months; the post does not say what happens to Deno Sandbox
+
+_Notes: Secret substitution at the egress proxy is the same property Declaw and the local credential proxies (nono, sandcat) provide; Deno pairs it with Firecracker isolation as a hosted service. Listed with its host platform scheduled to shut down around 2027-04, since Deno's announcement moves future development to Cloudflare Workers. Re-check status before then. Surfaced via the awesome-sandbox peer list._
 
 <a id="ref-e2b"></a>
 ### E2B
@@ -585,7 +613,7 @@ _Notes: From AkihiroSuda (maintainer of Lima, nerdctl). Deliberately positioned 
 <a id="ref-anthropic-sandbox-runtime-srt"></a>
 ### Anthropic sandbox-runtime (srt)
 
-**Maintainer:** Anthropic · **License:** Apache-2.0 · [Home](https://github.com/anthropic-experimental/sandbox-runtime)
+**Maintainer:** Anthropic · **License:** Apache-2.0 · [Home](https://github.com/anthropics/sandbox-runtime)
 
 Lightweight sandboxing for arbitrary processes using bubblewrap (Linux) and Seatbelt (macOS), no container required.
 
@@ -1072,6 +1100,20 @@ Disposable Incus container sandboxes for AI coding agents with ZFS-backed snapsh
 
 _Notes: Second Incus-based entry alongside code-on-incus, but distinct differentiators: ZFS snapshot fan-out makes spinning up N task containers from a "ready" base a first-class primitive, and the built-in MCP server fits the "MCP server sandboxing" specialized use case called out in the raised-bar criteria. Has a SECURITY.md with documented threat model._
 
+<a id="ref-quicksand"></a>
+### quicksand
+
+**Maintainer:** Microsoft · **License:** MIT · [Home](https://github.com/microsoft/quicksand)
+
+Async Python API that launches, controls and snapshots QEMU virtual machines for sandboxing agents, with prebuilt Ubuntu and Alpine images, on macOS, Linux and Windows hosts without root or Docker.
+
+- **Isolation:** kvm
+- **Capabilities:** Full QEMU guest per sandbox, accelerated by KVM (Linux), HVF (macOS) or WHPX (Windows), with TCG emulation as fallback; Network-isolated by default (SLIRP with restrict=on); NetworkMode.FULL opts in to internet access; port forwards in either direction, including host services exposed to an otherwise offline guest; Host directories mounted at boot or hot-mounted into a running VM (CIFS or 9p); Checkpoints and reverts via qcow2 overlays and savevm; saved disk state loads on another machine; Separate guest Linux users for multiple agents in one VM; Desktop images (Xfce with Chromium or Firefox) with screenshot, keyboard and mouse control over VNC and QMP for computer-use agents
+- **Requirements:** Python; pip install 'quick-sandbox[qemu,alpine]' bundles QEMU and an image on supported platforms; x86_64 or ARM64 host; a hardware hypervisor for near-native speed
+- **Limitations:** Repository created 2026-04-14; one human committer accounts for most commits (157; the next has 8); Without a hardware accelerator QEMU falls back to TCG, which emulates every instruction; The README documents two network modes, isolated (default) and full; no per-domain allowlist is described
+
+_Notes: Published under the microsoft GitHub org. The local VM launchers already listed (SmolVM, boxlite, smolvm, microsandbox) boot microVMs through KVM or Hypervisor.framework; quicksand runs full QEMU machines instead, and supports Windows hosts (WHPX), desktop guests for computer-use agents, and multiple guest users in one VM. 51 GitHub stars at inclusion (2026-11)._
+
 <a id="ref-sand"></a>
 ### sand
 
@@ -1198,6 +1240,20 @@ Python SDK and CLI launching agent sandboxes as microVMs through pluggable VMM b
 
 _Notes: Name collision with smol-machines/smolvm (listed as "smolvm"); the two projects share no code or authors. Compared with E2B or Daytona it is local-first with no hosted control plane, and compared with the other local microVM launchers here (smolvm, boxlite, shuru, matchlock) it is the only one offering Windows guests and a built-in browser sandbox with live view. Backend choice per host OS (QEMU on macOS) means macOS runs a full emulator-based VM rather than a microVM; the microvm tier reflects the Linux Firecracker path. Roughly 870 GitHub stars at inclusion (2026-09)._
 
+<a id="ref-strands-box"></a>
+### Strands Box
+
+**Maintainer:** strands-agents (AWS) · **License:** Apache-2.0 · [Home](https://github.com/strands-agents/box)
+
+Rust CLI and embeddable engine that runs a coding agent under namespaces and seccomp on Linux or Seatbelt on macOS, and checks each shell command, network request and MCP tool call against a Dogwood policy evaluated outside the model.
+
+- **Isolation:** user-namespace, seccomp, seatbelt
+- **Capabilities:** Linux containment trampoline builds user, mount, PID, IPC and UTS namespaces, drops setup privileges and installs seccomp filters before the workload starts; startup aborts if any step fails; macOS Seatbelt profile generated per process with default refusal; child processes inherit it; Policy in the Dogwood language; rules can depend on prior actions (for example 60 calls to a server per hour) and edits apply to a running agent; Credentials stay outside the box; the agent holds a placeholder that Box replaces with the real key as the request leaves, including for remote MCP servers; Strands Shell, a built-in shell interpreter that checks policy before acting for the agent; Profiles for Claude Code, Codex, Kiro CLI and pi; Box Core runs from box.toml on a workstation or cloud host, or embeds as a Rust library
+- **Requirements:** Apple silicon Mac with macOS 15 or later, or Linux on ARM64 or x86-64; Install script, or build from source with rustup and just
+- **Limitations:** Preview (v0.3.0); repository created 2026-10-02; Contained programs cannot listen on any port, including 127.0.0.1, so Jupyter kernels and local dev servers fail (docs/cli/limitations.md); On macOS, FSEvents reveals the names of files the agent cannot read; MCP servers started by the box reach every file the profile grants, and the run history does not show that access
+
+_Notes: From the Strands Agents team at AWS. Nearest entries are nono and vetto (Landlock or Seatbelt wrappers with credential handling) and srt/fence (bwrap or Seatbelt with a domain proxy). Box adds a policy decision per action (shell command, outbound request, MCP tool call) made by a trusted process outside the agent, with stateful rules such as rate limits. The kernel layer and the policy layer are documented separately in docs/design (linux-enforcement.md, macos-enforcement.md), and the limitations page lists what the box does not protect. 548 GitHub stars at inclusion (2026-11)._
+
 <a id="ref-temps"></a>
 ### temps
 
@@ -1254,7 +1310,7 @@ Distributed Firecracker microVM environment platform, built to serve agentic RL 
 - **Requirements:** Linux kernel 6.8+ with /dev/kvm on sandbox hosts (a PVM deployment guide covers hosts without KVM); API key generated on first server start; Docker Compose or Kubernetes for cluster deployment
 - **Limitations:** Vendor claims from the Kimi K3 tech report: 1.5 million images in production, 9.6x memory overcommit, boot or resume under 50 ms, incremental snapshot under 100 ms; none independently verified; README warns the API authenticates but does not encrypt traffic; HTTPS must be terminated at a reverse proxy; Created 2026-07; open-source release is recent relative to its claimed internal production use
 
-_Notes: Provenance is the kvcache-ai group (KTransformers, Mooncake) at Moonshot AI; the README states it powers Kimi K3 agentic RL training. It is the second open-source E2B-API-compatible Firecracker control plane in this list after E2B's own infra, and unlike Dormice (single machine, gVisor) and k8e (Kubernetes) it targets multi-host clusters with object-storage-backed snapshots. The lazy overlaybd image path and balloon-driven overcommit are the design points that distinguish it from CubeSandbox and forkd, both of which assume images resident on the node._
+_Notes: Provenance is the kvcache-ai group (KTransformers, Mooncake) at Moonshot AI; the README states it powers Kimi K3 agentic RL training. It is the second open-source E2B-API-compatible Firecracker control plane in this list after E2B's own infra, and unlike Dormice (single machine, gVisor) and k8e (Kubernetes) it targets multi-host clusters with object-storage-backed snapshots. The lazy overlaybd image path and balloon-driven overcommit are the design points that distinguish it from CubeSandbox and Sandstorm (formerly forkd), both of which assume images resident on the node._
 
 <a id="ref-arrakis"></a>
 ### Arrakis
@@ -1268,7 +1324,7 @@ Self-hosted Cloud Hypervisor microVM sandbox server with overlayfs-protected roo
 - **Requirements:** Linux host with /dev/kvm (Cloud Hypervisor); GCP setup guide provided; Root to run arrakis-restserver
 - **Limitations:** Last commit 2025-06; 15 months idle at inclusion; AGPL-3.0 with a commercial license offered by email; contributors must sign a CLA granting dual licensing; Restored VMs reuse the original IP, so the original must be stopped or destroyed before restoring on the same host; Solo maintainer (239 of 240 commits); guest ships a default ssh password in the rootfs Dockerfile
 
-_Notes: One of the earliest (2024-08) self-hosted microVM sandboxes built specifically around agent backtracking; its snapshot-and-restore predates the fork primitives in forkd, k7 and cocoon sandbox. It pairs a code-execution sandbox with a GUI desktop in one VM, which puts it nearer cua and pixels than E2B. The 15-month gap in commits and the AGPL plus CLA arrangement are the two reasons to prefer an actively maintained alternative for new deployments._
+_Notes: One of the earliest (2024-08) self-hosted microVM sandboxes built specifically around agent backtracking; its snapshot-and-restore predates the fork primitives in Sandstorm (formerly forkd), k7 and cocoon sandbox. It pairs a code-execution sandbox with a GUI desktop in one VM, which puts it nearer cua and pixels than E2B. The 15-month gap in commits and the AGPL plus CLA arrangement are the two reasons to prefer an actively maintained alternative for new deployments._
 
 <a id="ref-cocoon-sandbox"></a>
 ### cocoon sandbox
@@ -1282,7 +1338,7 @@ Bare-metal microVM control plane (sandboxd) with an in-guest Rust daemon (silkd)
 - **Requirements:** Linux bare-metal node with KVM running cocoon (cocoonstack/cocoon, MIT) and Cloud Hypervisor; Go toolchain (or prebuilt sandboxd) for the node; Docker to build boot and OS images
 - **Limitations:** Created 2026-07; ~50 stars and two contributors (one with 316 of 321 commits) at inclusion; Vendor claims: warm pool hit 0.2-0.7 ms, golden clone 26-39 ms, cold boot 215-400 ms, measured by the maintainers on a 16-core AMD bare-metal node; docs state nested-virt hosts are much slower; Server stack (sandboxd, silkd, boot chain, OS images, MCP server) is AGPL-3.0; only the client SDKs are Apache-2.0; Node pool retuning is Go-SDK only; Python SDK covers the guest and data-plane surface
 
-_Notes: The vsock-only default is the distinguishing security posture: a sandbox with no network device at all, with every byte relayed through sandboxd, whereas Arrakis, forkd and k7 give each guest a tap or CNI NIC by default. The underlying cocoon engine (Cloud Hypervisor, reflink snapshot and clone, MIT) is a separate repo created 2026-02. Fork and checkpoint branching from LangChain tools overlap Arrakis's snapshot-and-restore backtracking, on a much newer and less adopted codebase._
+_Notes: The vsock-only default is the distinguishing security posture: a sandbox with no network device at all, with every byte relayed through sandboxd, whereas Arrakis, Sandstorm (formerly forkd) and k7 give each guest a tap or CNI NIC by default. The underlying cocoon engine (Cloud Hypervisor, reflink snapshot and clone, MIT) is a separate repo created 2026-02. Fork and checkpoint branching from LangChain tools overlap Arrakis's snapshot-and-restore backtracking, on a much newer and less adopted codebase._
 
 <a id="ref-containarium"></a>
 ### Containarium
@@ -1326,20 +1382,6 @@ Single-machine sandbox daemon running agent sandboxes as Docker containers under
 
 _Notes: Created 2026-07 with one primary committer (182 of 197 commits). The design inverts the disposable-sandbox model of E2B, Daytona and Modal: sandboxes are permanent and get cheaper the longer they idle, which suits one resident agent per user. Compared with AgentENV and k8e, the other E2B-API-compatible self-hosted entries, Dormice uses gVisor containers rather than microVMs and runs on one box; the README's measured figures (freeze to ~5 MiB RSS, ~50 ms wake) are the maintainers' own._
 
-<a id="ref-forkd"></a>
-### forkd
-
-**Maintainer:** deeplethe · **License:** Apache-2.0 · [Home](https://github.com/deeplethe/forkd)
-
-Firecracker fork server that spawns child microVMs from a paused, warmed parent snapshot via MAP_PRIVATE kernel copy-on-write, for fan-out of KVM-isolated agent sandboxes.
-
-- **Isolation:** microvm, kvm
-- **Capabilities:** Children mmap the parent memory image MAP_PRIVATE; pages are shared until written; BRANCH pauses a running sandbox, snapshots in-flight state, and forks it mid-execution (Diff and v0.4 live modes); Diff-snapshot chains with parent_tag and content-hash edges; snapshot-compact flattens a chain; Per-child network namespace, cgroup v2 memory.max, vmgenid-reseeded /dev/urandom; REST API with bearer-token auth, Python and TypeScript SDKs, MCP server (pip install forkd-mcp); Prometheus /metrics, append-only JSON audit log, systemd unit; Snapshot Hub registry for pulling prebuilt portable snapshots
-- **Requirements:** x86_64 Linux with KVM (Ubuntu 22.04 or newer); cgroup v2; Live BRANCH: Linux >= 5.7 with vm.unprivileged_userfaultfd=1 (or CAP_SYS_PTRACE) and the vendored deeplethe/firecracker fork; Root (sudo) for fork and network setup
-- **Limitations:** Vendor claims: 100 microVMs forked in 101 ms wall-clock and live BRANCH pause window of 56 ms p50 on a 1.5 GiB source; measured by the maintainers on their own host, not independently reproduced; Diff-snapshot chains add a per-link spawn cost the maintainers measure at roughly 450-700 ms per layer on a 512 MiB base (SHA-256 verification); flat spawn is 59 ms; Snapshots are not portable across Firecracker versions or host CPU microarchitectures; live BRANCH requires a patched Firecracker rather than upstream; CLI daemon-side spawn and live BRANCH do not yet compose (README cites issue 209); default branch is dev
-
-_Notes: Created 2026-05; two primary committers account for nearly all commits. The distinguishing primitive is fork-from-warm at the VMM level: Modal offers the same primitive as a closed service, and CubeSandbox and Firecracker itself offer only cold boot. Compared with microsandbox (libkrun, local-first) and agent-glovebox (Docker sbx microVM), forkd targets many short-lived children sharing one warmed parent rather than one long-lived sandbox per user. The README publishes its own comparison benchmark against CubeSandbox, OpenSandbox, gVisor and Docker; treat all figures as vendor-run._
-
 <a id="ref-judge0"></a>
 ### Judge0
 
@@ -1366,7 +1408,7 @@ Self-hosted K3s-based platform provisioning lightweight VM sandboxes through thr
 - **Requirements:** Ubuntu host (amd64 or arm64; k7d is amd64 only) with /dev/kvm; kfd needs a spare raw disk for the devmapper thin-pool; Ansible for the installer; Docker and Docker Compose for the API
 - **Limitations:** README: Katakate is currently in beta and under security review. Use with caution for highly sensitive workloads; Vendor claims: k7d VM CoW fork in ~5 ms at the VMM and ~2.4 s end-to-end to a Ready pod; kql fork 46.7 s; measured by the maintainer on one Hetzner AX41 node; Installation may overwrite existing K3s, Kata, Firecracker, QEMU/Kata, or Longhorn installations on the node; Single primary committer (26 of 29 contributions)
 
-_Notes: Reached number one on Show HN in 2025-10. It sits between kubernetes-sigs Agent Sandbox (CRDs only, bring your own cluster) and netclode (a fixed Kata+Cloud Hypervisor stack for coding agents): k7 installs the cluster itself and lets the operator pick the VMM per sandbox. The k7d backend (separate Katakate/k7d repo) is a custom KVM VMM added for warm fork, the same primitive forkd builds on Firecracker; k7 wraps it in a containerd shim so Kubernetes still schedules the sandbox._
+_Notes: Reached number one on Show HN in 2025-10. It sits between kubernetes-sigs Agent Sandbox (CRDs only, bring your own cluster) and netclode (a fixed Kata+Cloud Hypervisor stack for coding agents): k7 installs the cluster itself and lets the operator pick the VMM per sandbox. The k7d backend (separate Katakate/k7d repo) is a custom KVM VMM added for warm fork, the same primitive Sandstorm (formerly forkd) builds on Firecracker; k7 wraps it in a containerd shim so Kubernetes still schedules the sandbox._
 
 <a id="ref-opensandbox"></a>
 ### OpenSandbox
@@ -1381,6 +1423,20 @@ Universal sandbox for AI apps with multi-language SDKs, Docker + K8s runtimes, c
 - **Limitations:** Very new (created December 2025)
 
 _Notes: Broadest scope of any sandbox — covers evaluation and RL training environments, not just agent sandboxing._
+
+<a id="ref-sandstorm"></a>
+### Sandstorm
+
+**Maintainer:** deeplethe · **License:** Apache-2.0 · [Home](https://github.com/deeplethe/sandstorm)
+
+Single-binary master/node fleet that runs agent sandboxes as gVisor containers or Firecracker microVMs and moves idle ones through frozen, snapshot and detached tiers so one machine holds more sandboxes than it can run at once.
+
+- **Isolation:** gvisor, microvm, kvm
+- **Capabilities:** Backend chosen per node; gVisor runsc (default, no /dev/kvm needed) or Firecracker (KVM, or PVM on cloud VMs without nested virtualization); Four lifecycle tiers; hot, frozen (paused, cold pages in zswap, about 0.1 s to wake), snapshot (checkpointed to disk, about 0.2 s), detached (volume only, cold start); A gateway on each node wakes a sandbox on incoming traffic and forwards the request; Branch a running sandbox into a snapshot tag and start clones from it (maintainer-measured 30 ms snapshot, 20 clones in 361 ms); Per-sandbox network namespace, cgroup and writable layer; per-sandbox and default egress rules via the API; HTTP API (v1) with bearer tokens and a private CA, Prometheus metrics, web console; Nodes join by address and pairing code or dial out from behind NAT; the master keeps desired state in SQLite
+- **Requirements:** Linux with cgroup v2; root; runsc on PATH for the gVisor backend; KVM (or a PVM host kernel) and a guest kernel image for Firecracker; Rust to build; Node 22.12 or later for the console
+- **Limitations:** Alpha per its SECURITY.md; v0.6.0 (2026-11-01) replaced the v0.5.3 Firecracker fork runtime and changed the default backend; Under gVisor all sandboxes on a node share the host kernel, so a Sentry escape reaches the host and the other sandboxes (SECURITY.md); All latency and density figures are maintainer-run; when 10 or more sandboxes were woken at once, a gVisor node answered 6 and returned 503 to the rest; Default branch is dev; one committer accounts for most commits (432 of about 530)
+
+_Notes: Renamed from forkd (listed 2026-08) with v0.6. forkd was listed for fork-from-warm at the VMM level; Sandstorm keeps a branch-and-clone API but now targets density, holding many mostly-idle agent sandboxes per host, and made gVisor the default so nodes need no KVM. The README benchmarks against CubeSandbox (listed), microsandbox, Kata, Docker, Podman and bubblewrap; CubeSandbox is the nearest entry, and every figure is vendor-run._
 
 <a id="ref-warren"></a>
 ### warren
@@ -1798,6 +1854,20 @@ Library-based KVM virtualization with container-competitive startup, supporting 
 
 _Notes: macOS support via Apple Virtualization.framework is unique among VM runtimes — Firecracker and Kata are Linux-only. Used by microsandbox._
 
+<a id="ref-litebox"></a>
+#### LiteBox
+
+**Maintainer:** Microsoft · **License:** MIT · [Home](https://github.com/microsoft/litebox)
+
+Security-focused library OS in Rust that runs programs against a narrowed host interface, pairing "North" shims (Linux, OP-TEE) with "South" platforms (Linux and Windows userland, Linux kernel, LVBS, AMD SEV-SNP).
+
+- **Isolation:** seccomp
+- **Capabilities:** Linux userland platform installs a seccomp-BPF filter that traps the program's system calls into the library OS; Optional ELF syscall rewriter (--rewrite-syscalls) hooks syscall instructions ahead of time to cut trap overhead; Runs unmodified Linux programs on Windows, sandboxed Linux programs on Linux, and OP-TEE trusted applications on Linux; Platforms for AMD SEV-SNP confidential VMs and Virtualization-Based Security (LVBS)
+- **Requirements:** Rust toolchain; build from source
+- **Limitations:** README warns that APIs and interfaces may change and recommends waiting for a stable release for long-term use; First release v0.1.0 on 2026-10-07; no agent-facing CLI, SDK or policy layer; No threat model or escape analysis in the README
+
+_Notes: Listed as a building block in the same position as gVisor (listed): both shrink the host attack surface by servicing a program's system calls in a user-space OS. What differs is portability of the boundary: the same library OS sits on Windows, Linux userland, a Linux kernel, or confidential-computing hardware. Repository created 2024-12; three committers with more than 100 commits each. Surfaced via the dloss awesome-agent-sandboxes peer list._
+
 <a id="ref-zeroboot"></a>
 #### Zeroboot
 
@@ -1931,7 +2001,7 @@ _Notes: Inverts the Wassette model: there the tools are compiled to Wasm and the
 <a id="ref-capsule"></a>
 #### Capsule
 
-**Maintainer:** Capsule (capsulerun) · **License:** Apache-2.0 · [Home](https://github.com/capsulerun/capsule)
+**Maintainer:** Capsule (capsulerun) · **License:** Apache-2.0 · [Home](https://github.com/capsulerun/runtime)
 
 CLI and SDK that compile Python or TypeScript/JavaScript tasks to WebAssembly and run them on Wasmtime/WASI under CPU-fuel, memory and timeout limits with filesystem and domain allowlists.
 

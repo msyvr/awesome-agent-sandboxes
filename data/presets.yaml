@@ -17,7 +17,7 @@
     - openkruise/agents
     - OpenSandbox
     - agent_sandbox
-    - forkd
+    - Sandstorm
     - smolvm
     - Beam
     - AgentENV

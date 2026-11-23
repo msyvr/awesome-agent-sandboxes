@@ -221,7 +221,7 @@ Do you already use an agent with built-in sandboxing?
     │   └── CubeSandbox — copy-on-write snapshot, clone, and rollback
     │
     ├── Parallel runs (fork a *running* sandbox for tree search / RL)
-    │   ├── forkd — Firecracker fork server, CoW children from a warm parent
+    │   ├── Sandstorm — branch a running gVisor or Firecracker sandbox and clone it
     │   ├── smolvm — CoW fork of a live libkrun machine, single binary
     │   └── Morph Cloud — hosted memory+disk branching of a running VM
     │
@@ -250,7 +250,7 @@ Do you already use an agent with built-in sandboxing?
     │
     ├── Serve sandboxes to your own users (API + control plane you run)
     │   ├── E2B-compatible API → CubeSandbox, Dormice, AgentENV, k8e
-    │   ├── Bare metal, no Kubernetes → cocoon sandbox, k7, forkd
+    │   ├── Bare metal, no Kubernetes → cocoon sandbox, k7, Sandstorm
     │   └── Code execution for many languages → Judge0
     │
     └── Kubernetes
