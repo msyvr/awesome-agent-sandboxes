@@ -45,6 +45,8 @@
     - Islo
     - Leash
     - Morph Cloud
+    - Strands Box
+    - Deno Sandbox
 
 - name: Adversarial red-teaming
   description: Hardware VM containment, escape detection, network monitoring
