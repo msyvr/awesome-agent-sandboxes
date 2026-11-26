@@ -116,6 +116,20 @@ SDK for giving agents sandboxed MicroVM environments with parallel execution sup
 
 _Notes: Well-established brand from the browser IDE space, expanding to agent use._
 
+<a id="ref-createos-sandbox"></a>
+### CreateOS Sandbox
+
+**Maintainer:** NodeOps · **License:** Apache-2.0 · [Home](https://createos.sh/products/sandbox) · [Repo](https://github.com/NodeOps-app/createos-sandbox)
+
+Firecracker microVM sandboxes for AI agents, hosted or self-hosted, with pause, resume and fork, egress allowlists and private networks between sandboxes.
+
+- **Isolation:** microvm
+- **Capabilities:** One Firecracker microVM per sandbox with its own kernel; on the host each runs as its own unprivileged user, in its own cgroup, behind a seccomp filter; Restores from pre-booted snapshots, with a warm pool of ready sandboxes; ~210 ms median time to interactive (create plus first command) on the hosted service (Limits docs); Pause snapshots memory and disk to object storage; resume on any host; fork a paused sandbox into copies; Egress allowlists by domain (matched on TLS SNI and HTTP Host) and IP; Private networks between sandboxes across hosts over WireGuard, with eBPF deciding which sandboxes can talk; Public URLs for any port, SSH port forwarding, PTYs, file upload and download; Templates built from a Dockerfile; S3-compatible buckets mounted as disks; SDKs for TypeScript, Python, Go, Rust, C# and Java, plus a CLI and an MCP server
+- **Requirements:** Hosted: account and API key; new accounts get 500 free credits; Self-hosted: Linux hosts with KVM, PostgreSQL and S3-compatible object storage
+- **Limitations:** Free plan allows 1 concurrent sandbox and shapes up to 1 vCPU / 1 GB; Egress is open until a sandbox has at least one allow rule; No GPU shapes; Self-hosted boot and resume are 6-10x slower where nested virtualization is in the path (Limits docs)
+
+_Notes: The server side (control plane, host service, in-VM agent and image build tools) was open-sourced in October 2026 under Apache-2.0; the SDKs and CLI live in separate repositories._
+
 <a id="ref-daytona"></a>
 ### Daytona
 
